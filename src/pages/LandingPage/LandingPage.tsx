@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { PrimaryButton, SimpleButton } from '../../components/Button';
 import { ping } from '../../services/ping';
 import colors from '../../styles/colors';
 
@@ -10,27 +11,6 @@ const Container = styled.div`
 const AtypDisplayFont = styled.div`
   font-family: 'Atyp Display';
   margin-bottom: 0.5rem;
-`;
-
-const PrimaryButton = styled.button`
-  background-image: ${colors.gradient};
-  border: none;
-  color: #fff;
-  padding: 0.75rem 3rem;
-  font-weight: 600;
-  position: relative;
-  span {
-    background-color: rgba(17, 20, 24, 0.16);
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    opacity: 0;
-  }
-  :hover > span {
-    opacity: 1;
-  }
 `;
 
 type Props = Record<string, never>;
@@ -51,10 +31,13 @@ const LandingPage: React.FC<Props> = () => {
         <p style={{ fontWeight: 500 }}>Medium font weight.</p>
         <p style={{ fontWeight: 700 }}>Bold font weight.</p>
       </div>
-      <PrimaryButton onClick={ping}>
-        <div>Ping!</div>
-        <span></span>
-      </PrimaryButton>
+      <PrimaryButton onClick={ping}>Ping!</PrimaryButton>
+      <SimpleButton onClick={ping}>Ping!</SimpleButton>
+      <div style={{ backgroundColor: 'gray' }}>
+        <SimpleButton outlined onClick={ping}>
+          Ping!
+        </SimpleButton>
+      </div>
     </Container>
   );
 };
