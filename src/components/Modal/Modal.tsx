@@ -25,7 +25,7 @@ export const ModalContainer = styled.div`
 
 export const ModalContent = styled.div`
   background-color: ${colors.white};
-  padding: 3.125rem 2.5rem 2.5rem 2.5rem;
+  padding: 1rem;
   width: 100vw;
   height: 100vh;
   animation: ${scale} 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
@@ -60,13 +60,13 @@ const CloseButton = styled.button`
   }
 `;
 
-type Props = {
+export type ModalProps = {
   show: boolean;
   closeModal?: () => void;
   children?: React.ReactNode;
 };
 
-const Modal: React.FC<Props> = ({ show, closeModal, children }) => {
+const Modal: React.FC<ModalProps> = ({ show, closeModal, children }) => {
   return (
     <>
       {show && (

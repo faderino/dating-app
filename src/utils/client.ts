@@ -1,7 +1,7 @@
 import axios, {
   AxiosError,
   AxiosRequestConfig,
-  AxiosRequestHeaders,
+  RawAxiosRequestHeaders,
 } from 'axios';
 import { ResponseAPI } from '../types/api';
 import { HttpStatusCode } from '../types/httpStatus';
@@ -14,7 +14,7 @@ type ClientConfig = {
   body?: any;
   token?: string;
   method?: 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE';
-  headers?: AxiosRequestHeaders;
+  headers?: RawAxiosRequestHeaders;
 };
 
 type ClientFn = <T = any>(
@@ -26,7 +26,7 @@ const client: ClientFn = async (
   endpoint,
   { body: data, ...customConfig } = {},
 ) => {
-  const headers = {} as AxiosRequestHeaders;
+  const headers = {} as RawAxiosRequestHeaders;
 
   if (customConfig.token) {
     headers.Authorization = `Bearer ${customConfig.token}`;
