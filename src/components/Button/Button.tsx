@@ -12,7 +12,7 @@ const ButtonOverlay = styled.span`
   opacity: 0;
 `;
 
-const ButtonContainer = styled.button`
+const ButtonContainer = styled.button<Pick<ButtonProps, 'block'>>`
   cursor: pointer;
   position: relative;
   font-weight: 600;
@@ -24,11 +24,17 @@ const ButtonContainer = styled.button`
   :hover > ${ButtonOverlay} {
     opacity: 1;
   }
+  ${(props) =>
+    props.block &&
+    css`
+      width: 100%;
+    `}
 `;
 
 type ButtonProps = {
   children?: React.ReactNode;
   outlined?: boolean;
+  block?: boolean;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   className?: string;
 };

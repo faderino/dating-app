@@ -43,5 +43,6 @@ export const GlobalStyles = createGlobalStyle`
 
   button {
     font-size: 1rem;
+    background-color: transparent;
   }
 `;
