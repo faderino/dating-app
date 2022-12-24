@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { SimpleButton } from '../../components/Button';
+import LoginModal from '../../components/LoginModal/LoginModal';
 import { Logo } from '../../components/Logo/Logo';
-import Modal, { ModalProps } from '../../components/Modal/Modal';
 import useModal from '../../hooks/modal';
 import colors from '../../styles/colors';
 
@@ -45,31 +45,9 @@ const LandingPage: React.FC<Props> = () => {
           Log in
         </ActionButton>
       </Container>
-      <LoginModal show={showModal} closeModal={closeModal} />
+      {showModal && <LoginModal closeModal={closeModal} />}
     </Background>
   );
 };
 
 export default LandingPage;
-
-const LoginModal: React.FC<ModalProps> = ({ show, closeModal }) => {
-  const Container = styled.div`
-    text-align: center;
-  `;
-  const Title = styled.div`
-    font-size: 1.5rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    font-style: italic;
-    margin: 4rem 0 1rem 0rem;
-    font-family: 'Atyp Display';
-  `;
-  return (
-    <Modal show={show} closeModal={closeModal}>
-      <Container>
-        <Logo color={colors.primary} size={1.2} />
-        <Title>Get Started</Title>
-      </Container>
-    </Modal>
-  );
-};
