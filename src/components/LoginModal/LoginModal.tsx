@@ -6,6 +6,8 @@ import { Logo } from '../Logo';
 import Modal, { ModalProps } from '../Modal/Modal';
 import { MdEmail, MdLock } from 'react-icons/md';
 import { PrimaryButton } from '../Button';
+import { LoginRequest, useLoginMutation } from '../../services/auth';
+import { isEmail, isEmpty } from '../../utils/validation';
 
 const Container = styled.div`
   text-align: center;
@@ -31,13 +33,14 @@ const LoginButton = styled(PrimaryButton)`
   font-size: 1.25rem;
 `;
 
-const LoginModal: React.FC<ModalProps> = ({ closeModal }) => {
+const LoginModal: React.FC<ModalProps> = ({ show, closeModal }) => {
   const emailInputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
-  const [data, setData] = useState({ email: '', password: '' });
+  const [data, setData] = useState<LoginRequest>({ email: '', password: '' });
   const [errors, setErrors] = useState({} as typeof data);
+  const [login, { isLoading }] = useLoginMutation();
 
   useEffect(() => {
-    emailInputRef.current.focus();
+    if (emailInputRef.current) emailInputRef.current.focus();
   }, []);
 
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -47,34 +50,37 @@ const LoginModal: React.FC<ModalProps> = ({ closeModal }) => {
     });
   };
 
-  const isEmail = (email: string) =>
-    /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email);
-
-  const validateForm = () => {
+  const validateForm = (): boolean => {
     setErrors({ email: '', password: '' });
     const currentErrors = {} as typeof errors;
     if (!isEmail(data.email)) {
       currentErrors.email = 'Invalid email';
     }
-    if (!data.email) {
+    if (isEmpty(data.email)) {
       currentErrors.email = 'Please enter your email';
     }
-    if (!data.password) {
+    if (isEmpty(data.password)) {
       currentErrors.password = 'Please enter your password';
     }
-    return currentErrors;
+    setErrors(currentErrors);
+    return Boolean(Object.keys(currentErrors).length === 0);
   };
 
-  const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
-    setErrors(validateForm());
-    if (!Object.keys(errors).length) return;
 
-    console.log(data);
+    const valid = validateForm();
+    if (!valid) return;
+
+    try {
+      await login(data).unwrap();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
-    <Modal closeModal={closeModal}>
+    <Modal show={show} closeModal={closeModal}>
       <Container>
         <Logo color={colors.primary} size={1.2} />
         <Title>Get Started</Title>
@@ -99,7 +105,9 @@ const LoginModal: React.FC<ModalProps> = ({ closeModal }) => {
             prepend={<MdLock size={28} />}
             onChange={handleChange}
           />
-          <LoginButton block>Log in</LoginButton>
+          <LoginButton block>
+            {isLoading ? 'Logging in...' : 'Log in'}
+          </LoginButton>
         </form>
       </Container>
     </Modal>
