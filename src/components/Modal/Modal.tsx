@@ -1,34 +1,51 @@
-import React from 'react';
-import styled, { keyframes } from 'styled-components';
+import React, { useState } from 'react';
+import styled, { css, keyframes } from 'styled-components';
 import colors from '../../styles/colors';
 import { FaTimes } from 'react-icons/fa';
 
-export const scale = keyframes`
+export const scaleUp = keyframes`
   0% {
-    transform:scale(0.5);
+    opacity: 0.2;
+    transform: scale(0.5);
   }
   100% {
-    transform:scale(1);
+    opacity: 1;
+    transform: scale(1);
   }
 `;
 
-export const ModalContainer = styled.div`
+export const scaleDown = keyframes`
+  0% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.25);
+  }
+`;
+
+export const Backdrop = styled.div`
   position: fixed;
   z-index: 1;
   left: 0;
   top: 0;
-  right: 0;
-  bottom: 0;
-  overflow: auto;
+  width: 100vw;
+  height: 100vh;
   background-color: rgba(0, 0, 0, 0.4);
 `;
 
-export const ModalContent = styled.div`
+export const ModalContent = styled.div<{ closing: boolean }>`
   background-color: ${colors.white};
   padding: 1rem;
-  width: 100vw;
-  height: 100vh;
-  animation: ${scale} 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+  width: 100%;
+  height: 100%;
+  animation: ${scaleUp} 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+  ${(props) =>
+    props.closing &&
+    css`
+      animation: ${scaleDown} 0.25s ease-out forwards;
+    `}
 `;
 
 export const ModalAction = styled.div`
@@ -61,25 +78,26 @@ const CloseButton = styled.button`
 `;
 
 export type ModalProps = {
-  show: boolean;
-  closeModal?: () => void;
+  closeModal: () => void;
   children?: React.ReactNode;
 };
 
-const Modal: React.FC<ModalProps> = ({ show, closeModal, children }) => {
+const Modal: React.FC<ModalProps> = ({ closeModal, children }) => {
+  const [closing, setClosing] = useState(false);
+
+  const handleClose = () => {
+    if (closing) closeModal();
+  };
+
   return (
-    <>
-      {show && (
-        <ModalContainer>
-          <ModalContent>
-            {children}
-            <CloseButton onClick={closeModal}>
-              <FaTimes size={16} color="inherit" />
-            </CloseButton>
-          </ModalContent>
-        </ModalContainer>
-      )}
-    </>
+    <Backdrop>
+      <ModalContent closing={closing} onAnimationEnd={handleClose}>
+        {children}
+        <CloseButton onClick={() => setClosing(true)}>
+          <FaTimes size={16} color="inherit" />
+        </CloseButton>
+      </ModalContent>
+    </Backdrop>
   );
 };
 
