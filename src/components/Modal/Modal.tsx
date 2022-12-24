@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled, { css, keyframes } from 'styled-components';
 import colors from '../../styles/colors';
 import { FaTimes } from 'react-icons/fa';
@@ -78,27 +78,41 @@ const CloseButton = styled.button`
 `;
 
 export type ModalProps = {
+  show: boolean;
   closeModal: () => void;
   children?: React.ReactNode;
 };
 
-const Modal: React.FC<ModalProps> = ({ closeModal, children }) => {
-  const [closing, setClosing] = useState(false);
+type ModalState = 'show' | 'closing' | 'close';
+
+const Modal: React.FC<ModalProps> = ({ show, closeModal, children }) => {
+  const [modalState, setModalState] = useState<ModalState>('close');
+
+  useEffect(() => {
+    if (modalState === 'show' && !show) {
+      return setModalState('closing');
+    }
+    if (!show) return setModalState('close');
+    return setModalState('show');
+  }, [show]);
 
   const handleClose = () => {
-    if (closing) closeModal();
+    if (modalState === 'closing') setModalState('close');
   };
 
-  return (
+  return modalState !== 'close' ? (
     <Backdrop>
-      <ModalContent closing={closing} onAnimationEnd={handleClose}>
+      <ModalContent
+        closing={modalState === 'closing'}
+        onAnimationEnd={handleClose}
+      >
         {children}
-        <CloseButton onClick={() => setClosing(true)}>
+        <CloseButton onClick={closeModal}>
           <FaTimes size={16} color="inherit" />
         </CloseButton>
       </ModalContent>
     </Backdrop>
-  );
+  ) : null;
 };
 
 export default Modal;

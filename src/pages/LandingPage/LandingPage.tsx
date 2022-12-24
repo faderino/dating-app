@@ -45,7 +45,7 @@ const LandingPage: React.FC<Props> = () => {
           Log in
         </ActionButton>
       </Container>
-      {showModal && <LoginModal closeModal={closeModal} />}
+      <LoginModal show={showModal} closeModal={closeModal} />
     </Background>
   );
 };
