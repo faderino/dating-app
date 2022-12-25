@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { SimpleButton } from '../../components/Button';
 import LoginModal from '../../components/LoginModal/LoginModal';
-import RegisterModal from '../../components/Register/RegisterModal';
+import RegisterModal from '../../pages/Register/RegisterModal';
 import useModal from '../../hooks/modal';
 import colors from '../../styles/colors';
 

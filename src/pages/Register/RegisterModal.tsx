@@ -2,6 +2,10 @@ import React, { useRef, useState } from 'react';
 import { MdEmail, MdLock } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import InputField from '../../components/InputField/InputField';
+import { Logo } from '../../components/Logo';
+import { ModalProps } from '../../components/Modal';
+import Modal from '../../components/Modal/Modal';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import {
   changeData,
@@ -9,11 +13,7 @@ import {
 } from '../../store/registerForm/registerFormSlice';
 import colors from '../../styles/colors';
 import { isEmail, isEmpty } from '../../utils/validation';
-import { PrimaryButton } from '../Button';
-import InputField from '../InputField/InputField';
-import { Logo } from '../Logo';
-import { ModalProps } from '../Modal';
-import Modal from '../Modal/Modal';
+import { ContinueButton } from './RegisterForm';
 
 const Container = styled.div`
   text-align: center;
@@ -61,12 +61,6 @@ const RegisterModal: React.FC<ModalProps> = ({ show, closeModal }) => {
 
 export default RegisterModal;
 
-const ContinueButton = styled(PrimaryButton)`
-  margin-top: 2rem;
-  padding: 0.8rem 0;
-  font-size: 1.25rem;
-`;
-
 const CreateAccountForm: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -89,7 +83,7 @@ const CreateAccountForm: React.FC = () => {
       currentErrors.email = 'Please enter your email';
     }
     if (isEmpty(formData.password)) {
-      currentErrors.password = 'Please enter your password';
+      currentErrors.password = 'Create a password, minimum 8 characters';
     }
     setErrors(currentErrors);
     return Boolean(Object.keys(currentErrors).length === 0);
@@ -130,7 +124,7 @@ const CreateAccountForm: React.FC = () => {
         onChange={handleChange}
       />
       <ContinueButton block>
-        {loading ? 'Processing...' : 'Continue'}
+        {loading ? 'Processing...' : 'CONTINUE'}
       </ContinueButton>
     </form>
   );
