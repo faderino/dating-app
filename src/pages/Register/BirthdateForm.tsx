@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { MdPerson } from 'react-icons/md';
+import { MdDateRange } from 'react-icons/md';
 import InputField from '../../components/InputField/InputField';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { ContinueButton } from './RegisterForm';
@@ -9,8 +9,9 @@ import {
   selectFormData,
 } from '../../store/registerForm/registerFormSlice';
 import { isEmpty } from '../../utils/validation';
+import moment from 'moment';
 
-const UsernameForm: React.FC = () => {
+const BirthdateForm: React.FC = () => {
   const dispatch = useAppDispatch();
   const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
   const formData = useAppSelector(selectFormData);
@@ -25,10 +26,14 @@ const UsernameForm: React.FC = () => {
   };
 
   const validateForm = (): boolean => {
-    setError({ name: '' });
+    setError({ birthdate: '' });
     const currentError = {} as typeof error;
-    if (isEmpty(formData.name)) {
-      currentError.name = 'Please enter your name';
+    if (moment().diff(formData.birthdate, 'years') < 17) {
+      currentError.birthdate =
+        'You must be older than 17 years old to continue';
+    }
+    if (isEmpty(formData.birthdate)) {
+      currentError.birthdate = 'Please enter your birthday';
     }
     setError(currentError);
     return Boolean(Object.keys(currentError).length === 0);
@@ -43,16 +48,16 @@ const UsernameForm: React.FC = () => {
 
   return (
     <form onSubmit={handleContinue}>
-      <h1>My first name is</h1>
+      <h1>My birthday is</h1>
       <InputField
         ref={inputRef}
-        placeholder="Example Name"
-        type="text"
-        name="name"
-        value={formData.name}
-        error={error.name}
-        hint="This is how it will apear in Digidate"
-        prepend={<MdPerson size={28} />}
+        placeholder="example@mail.com"
+        type="date"
+        name="birthdate"
+        value={formData.birthdate}
+        error={error.birthdate}
+        hint="Your age will be public"
+        prepend={<MdDateRange size={28} />}
         onChange={handleChange}
       />
       <ContinueButton block>CONTINUE</ContinueButton>
@@ -60,4 +65,4 @@ const UsernameForm: React.FC = () => {
   );
 };
 
-export default UsernameForm;
+export default BirthdateForm;

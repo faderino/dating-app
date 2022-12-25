@@ -46,10 +46,16 @@ const registerFormSlice = createSlice({
     changeData: (state, action: PayloadAction<Partial<RegisterFormData>>) => {
       state.formData = { ...state.formData, ...action.payload };
     },
+    nextStep: (state) => {
+      state.step++;
+    },
+    previousStep: (state) => {
+      state.step--;
+    },
   },
 });
 
-export const { changeData } = registerFormSlice.actions;
+export const { changeData, nextStep, previousStep } = registerFormSlice.actions;
 
 export const selectFormData = (
   state: RootState,

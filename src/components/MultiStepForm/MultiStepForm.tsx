@@ -2,8 +2,11 @@ import React from 'react';
 import { MdArrowBackIosNew, MdClose } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { useAppSelector } from '../../hooks/store';
-import { selectStep } from '../../store/registerForm/registerFormSlice';
+import { useAppDispatch, useAppSelector } from '../../hooks/store';
+import {
+  previousStep,
+  selectStep,
+} from '../../store/registerForm/registerFormSlice';
 import colors from '../../styles/colors';
 
 const Container = styled.div`
@@ -33,6 +36,7 @@ const ProgressBar = styled.div<{ progress: number }>`
   height: 0.75rem;
   width: ${(props) => props.progress}%;
   background-image: ${colors.gradient};
+  transition: width 0.5s ease;
 `;
 
 type Props = {
@@ -41,6 +45,7 @@ type Props = {
 
 const MultiStepForm: React.FC<Props> = ({ forms }) => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const step = useAppSelector(selectStep);
 
   return (
@@ -53,7 +58,7 @@ const MultiStepForm: React.FC<Props> = ({ forms }) => {
               <MdClose size={28} />
             </HeaderButton>
           ) : (
-            <HeaderButton>
+            <HeaderButton onClick={() => dispatch(previousStep())}>
               <MdArrowBackIosNew size={28} />
             </HeaderButton>
           )}

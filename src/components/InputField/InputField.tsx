@@ -41,6 +41,11 @@ const Input = styled.input`
   :focus {
     outline: none;
   }
+  ::-webkit-inner-spin-button,
+  ::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+  }
 `;
 
 const ErrorText = styled.p`
