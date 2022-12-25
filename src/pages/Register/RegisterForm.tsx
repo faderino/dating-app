@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { PrimaryButton } from '../../components/Button';
 import MultiStepForm from '../../components/MultiStepForm/MultiStepForm';
 import BirthdateForm from './BirthdateForm';
+import GenderForm from './GenderForm';
 import UsernameForm from './UsernameForm';
 
 export const ContinueButton = styled(PrimaryButton)`
@@ -12,7 +13,11 @@ export const ContinueButton = styled(PrimaryButton)`
 `;
 
 const RegisterForm: React.FC = () => {
-  const forms = [<UsernameForm key={0} />, <BirthdateForm key={1} />];
+  const forms = [
+    <UsernameForm key={0} />,
+    <BirthdateForm key={1} />,
+    <GenderForm key={2} />,
+  ];
 
   return (
     <div>

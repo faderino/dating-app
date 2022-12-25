@@ -11,6 +11,8 @@ import colors from '../../styles/colors';
 
 const Container = styled.div`
   padding: 1rem;
+  max-width: 500px;
+  margin: 0 auto;
 `;
 
 const Header = styled.div`
