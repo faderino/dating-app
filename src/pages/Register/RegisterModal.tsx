@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { MdEmail, MdLock } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -68,6 +68,10 @@ const CreateAccountForm: React.FC = () => {
   const emailInputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
   const [errors, setErrors] = useState({} as Partial<typeof formData>);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    emailInputRef.current.focus();
+  }, []);
 
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     dispatch(changeData({ [e.target.name]: e.target.value }));
