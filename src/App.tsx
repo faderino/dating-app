@@ -1,11 +1,18 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import LandingPage from './pages/LandingPage';
+import Swipe from './pages/Swipe/Swipe';
+import ProtectedRoutes from './ProtectedRoutes';
 
 function App(): JSX.Element {
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
+      <Route element={<ProtectedRoutes />}>
+        <Route path="/app">
+          <Route index element={<Swipe />} />
+        </Route>
+      </Route>
     </Routes>
   );
 }
