@@ -52,7 +52,7 @@ const MultiStepForm: React.FC<Props> = ({ forms }) => {
 
   return (
     <>
-      <ProgressBar progress={((step + 1) / forms.length) * 100} />
+      <ProgressBar progress={(step / forms.length) * 100} />
       <Container>
         <Header>
           {step === 0 ? (
@@ -72,7 +72,3 @@ const MultiStepForm: React.FC<Props> = ({ forms }) => {
 };
 
 export default MultiStepForm;
-
-// const ProgressBar: React.FC = () => {
-//   return <div>Progress Bar</div>;
-// };
