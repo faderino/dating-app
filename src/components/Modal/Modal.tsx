@@ -33,6 +33,11 @@ export const Backdrop = styled.div`
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.4);
+  @media screen and (min-width: 896px) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 `;
 
 export const ModalContent = styled.div<{ closing: boolean }>`
@@ -46,6 +51,11 @@ export const ModalContent = styled.div<{ closing: boolean }>`
     css`
       animation: ${scaleDown} 0.25s ease-out forwards;
     `}
+  @media screen and (min-width: 896px) {
+    max-width: 600px;
+    height: auto;
+    border-radius: 0.75rem;
+  }
 `;
 
 export const ModalAction = styled.div`
