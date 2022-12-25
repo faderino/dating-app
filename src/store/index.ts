@@ -3,6 +3,7 @@ import { api } from '../services/api';
 import authReducer from './auth/authSlice';
 import { handleUnauthorized } from './middlewares/errorHandler';
 import logger from 'redux-logger';
+import registerFormReducer from './registerForm/registerFormSlice';
 
 const middlewares = [api.middleware, handleUnauthorized];
 if (process.env.NODE_ENV !== 'production') {
@@ -13,6 +14,7 @@ export const store = configureStore({
   reducer: {
     [api.reducerPath]: api.reducer,
     auth: authReducer,
+    registerForm: registerFormReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(middlewares),
