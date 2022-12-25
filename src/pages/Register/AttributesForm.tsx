@@ -52,7 +52,7 @@ const AttributesForm: React.FC = () => {
         placeholder="Height"
         type="number"
         name="height"
-        value={formData.height}
+        value={formData.height ?? ''}
         error={error.height}
         hint="Your height in centimeters (cm)."
         prepend={<MdHeight size={28} />}
@@ -60,11 +60,10 @@ const AttributesForm: React.FC = () => {
         onChange={handleChange}
       />
       <InputField
-        ref={inputRef}
         placeholder="Weight"
         type="number"
         name="weight"
-        value={formData.weight}
+        value={formData.weight ?? ''}
         error={error.weight}
         hint="Your height in kilograms (kg)."
         prepend={<MdMonitorWeight size={28} />}

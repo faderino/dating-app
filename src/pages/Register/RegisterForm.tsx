@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { PrimaryButton } from '../../components/Button';
 import MultiStepForm from '../../components/MultiStepForm/MultiStepForm';
 import AttributesForm from './AttributesForm';
+import BioForm from './BioForm';
 import BirthdateForm from './BirthdateForm';
 import GenderForm from './GenderForm';
 import UsernameForm from './UsernameForm';
@@ -19,6 +20,7 @@ const RegisterForm: React.FC = () => {
     <BirthdateForm key={1} />,
     <GenderForm key={2} />,
     <AttributesForm key={3} />,
+    <BioForm key={4} />,
   ];
 
   return (
