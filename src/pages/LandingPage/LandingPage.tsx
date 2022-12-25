@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { SimpleButton } from '../../components/Button';
 import LoginModal from '../../components/LoginModal/LoginModal';
-import { Logo } from '../../components/Logo/Logo';
 import useModal from '../../hooks/modal';
 import colors from '../../styles/colors';
 
@@ -12,7 +11,7 @@ const Background = styled.div`
 `;
 
 const Container = styled.div`
-  padding: 0 3rem;
+  padding: 0 2rem;
   height: 100vh;
 `;
 
@@ -22,28 +21,48 @@ const TitleSection = styled.div`
   align-items: center;
   justify-content: center;
   height: 75%;
+  @media screen and (min-width: 896px) {
+    height: 45%;
+    justify-content: end;
+    margin-bottom: 3rem;
+  }
+`;
+
+const Title = styled.h1`
+  font-family: 'Atyp Display';
+  font-weight: 700;
+  font-size: 3rem;
+  color: ${colors.white};
+  @media screen and (min-width: 896px) {
+    font-size: 5rem;
+  }
+`;
+
+const ActionContainer = styled.div`
+  margin: 0 auto;
+  max-width: 500px;
 `;
 
 const ActionButton = styled(SimpleButton)`
   font-size: 1.2rem;
   padding: 0.75rem 0;
-  margin-bottom: 1.25rem;
+  margin: 0 auto 1.25rem auto;
 `;
 
-type Props = Record<string, never>;
-
-const LandingPage: React.FC<Props> = () => {
+const LandingPage: React.FC = () => {
   const { closeModal, openModal, showModal } = useModal();
   return (
     <Background>
       <Container>
         <TitleSection>
-          <Logo color={colors.white} size={3} />
+          <Title>digidate</Title>
         </TitleSection>
-        <ActionButton block>Create account</ActionButton>
-        <ActionButton block outlined onClick={openModal}>
-          Log in
-        </ActionButton>
+        <ActionContainer>
+          <ActionButton block>Create account</ActionButton>
+          <ActionButton block outlined onClick={openModal}>
+            Log in
+          </ActionButton>
+        </ActionContainer>
       </Container>
       <LoginModal show={showModal} closeModal={closeModal} />
     </Background>
