@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { MdEmail, MdLock } from 'react-icons/md';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { LoginRequest, useLoginMutation } from '../../services/auth';
 import { isEmail, isEmpty } from '../../utils/validation';
@@ -58,8 +59,11 @@ const LoginForm: React.FC = () => {
     try {
       await login(data).unwrap();
       navigate(location.state?.from?.pathname || '/app', { replace: true });
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      toast.error(error.data.message, {
+        theme: 'colored',
+      });
+      setData({ ...data, password: '' });
     }
   };
 
@@ -71,6 +75,7 @@ const LoginForm: React.FC = () => {
         placeholder="example@mail.com"
         type="text"
         name="email"
+        value={data.email}
         error={errors.email}
         prepend={<MdEmail size={28} />}
         onChange={handleChange}
@@ -80,6 +85,7 @@ const LoginForm: React.FC = () => {
         placeholder="example p@ssw0rd"
         type="password"
         name="password"
+        value={data.password}
         error={errors.password}
         prepend={<MdLock size={28} />}
         onChange={handleChange}
