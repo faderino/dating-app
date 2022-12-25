@@ -81,9 +81,11 @@ const CloseButton = styled.button`
   right: 0;
   z-index: 2;
   margin: 1rem;
+  transition: all 0.3s ease;
   :hover {
     color: ${colors.gray60};
     border-color: ${colors.gray60};
+    transform: rotate(90deg);
   }
 `;
 

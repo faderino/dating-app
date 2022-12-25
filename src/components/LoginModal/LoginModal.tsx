@@ -26,6 +26,11 @@ const Info = styled.p`
   margin-bottom: 2rem;
 `;
 
+const FormContainer = styled.div`
+  max-width: 450px;
+  margin: 0 auto;
+`;
+
 const LoginModal: React.FC<ModalProps> = ({ show, closeModal }) => {
   return (
     <Modal show={show} closeModal={closeModal}>
@@ -33,7 +38,9 @@ const LoginModal: React.FC<ModalProps> = ({ show, closeModal }) => {
         <Logo color={colors.primary} size={1.2} />
         <Title>Get Started</Title>
         <Info>Please enter below details to contine.</Info>
-        <LoginForm />
+        <FormContainer>
+          <LoginForm />
+        </FormContainer>
       </Container>
     </Modal>
   );
