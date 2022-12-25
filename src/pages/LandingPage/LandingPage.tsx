@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { SimpleButton } from '../../components/Button';
 import LoginModal from '../../components/LoginModal/LoginModal';
+import RegisterModal from '../../components/Register/RegisterModal';
 import useModal from '../../hooks/modal';
 import colors from '../../styles/colors';
 
@@ -50,6 +51,11 @@ const ActionButton = styled(SimpleButton)`
 `;
 
 const LandingPage: React.FC = () => {
+  const {
+    closeModal: closeRegisterModal,
+    openModal: openRegisterModal,
+    showModal: showRegisterModal,
+  } = useModal();
   const { closeModal, openModal, showModal } = useModal();
   return (
     <Background>
@@ -58,12 +64,15 @@ const LandingPage: React.FC = () => {
           <Title>digidate</Title>
         </TitleSection>
         <ActionContainer>
-          <ActionButton block>Create account</ActionButton>
+          <ActionButton block onClick={openRegisterModal}>
+            Create account
+          </ActionButton>
           <ActionButton block outlined onClick={openModal}>
             Log in
           </ActionButton>
         </ActionContainer>
       </Container>
+      <RegisterModal show={showRegisterModal} closeModal={closeRegisterModal} />
       <LoginModal show={showModal} closeModal={closeModal} />
     </Background>
   );
