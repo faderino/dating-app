@@ -37,6 +37,7 @@ type ButtonProps = {
   block?: boolean;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   className?: string;
+  type?: 'button' | 'submit' | 'reset';
 };
 
 export const Button: React.FC<ButtonProps> = ({ children, ...props }) => {
@@ -51,6 +52,20 @@ export const Button: React.FC<ButtonProps> = ({ children, ...props }) => {
 export const PrimaryButton = styled(Button)<Pick<ButtonProps, 'outlined'>>`
   background-image: ${colors.gradient};
   color: #fff;
+`;
+
+export const SecondaryButton = styled(Button)`
+  color: ${colors.gray50};
+  border: 2px solid ${colors.gray50};
+  border-radius: 2rem;
+  :hover > ${ButtonOverlay} {
+    opacity: 0;
+  }
+  :hover,
+  :focus {
+    color: ${colors.primary};
+    border-color: ${colors.primary};
+  }
 `;
 
 export const SimpleButton = styled(Button)<Pick<ButtonProps, 'outlined'>>`
