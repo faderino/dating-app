@@ -4,6 +4,7 @@ import { RootState } from '..';
 export interface RegisterFormData {
   email: string;
   password: string;
+  name: string;
   gender: number | null;
   birthdate: string;
   city_id: number | null;
@@ -25,6 +26,7 @@ const initialState: RegisterFormState = {
   formData: {
     email: '',
     password: '',
+    name: '',
     gender: null,
     birthdate: '',
     city_id: null,
@@ -52,5 +54,7 @@ export const { changeData } = registerFormSlice.actions;
 export const selectFormData = (
   state: RootState,
 ): RegisterFormState['formData'] => state.registerForm.formData;
+export const selectStep = (state: RootState): RegisterFormState['step'] =>
+  state.registerForm.step;
 
 export default registerFormSlice.reducer;

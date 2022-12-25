@@ -49,6 +49,11 @@ const ErrorText = styled.p`
   font-size: 0.9rem;
 `;
 
+const HintText = styled.p`
+  color: ${colors.textSecondary};
+  font-size: 0.9rem;
+`;
+
 type InputFieldProps = {
   label?: string;
   placeholder?: string;
@@ -56,13 +61,14 @@ type InputFieldProps = {
   type?: string;
   name?: string;
   error?: string;
+  hint?: string;
   prepend?: React.ReactNode;
   append?: React.ReactNode;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
 };
 
 const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
-  ({ label, prepend, append, error, ...props }, ref) => {
+  ({ label, prepend, append, error, hint, ...props }, ref) => {
     const inputId = useId();
     return (
       <Container>
@@ -73,6 +79,7 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
           {append}
         </StyledInput>
         {error && <ErrorText>{error}</ErrorText>}
+        {!error && hint && <HintText>{hint}</HintText>}
       </Container>
     );
   },
