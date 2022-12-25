@@ -8,6 +8,8 @@ import { MdEmail, MdLock } from 'react-icons/md';
 import { PrimaryButton } from '../Button';
 import { LoginRequest, useLoginMutation } from '../../services/auth';
 import { isEmail, isEmpty } from '../../utils/validation';
+import { useAppSelector } from '../../hooks/store';
+import { selectToken } from '../../store/auth/authSlice';
 
 const Container = styled.div`
   text-align: center;
@@ -38,9 +40,10 @@ const LoginModal: React.FC<ModalProps> = ({ show, closeModal }) => {
   const [data, setData] = useState<LoginRequest>({ email: '', password: '' });
   const [errors, setErrors] = useState({} as typeof data);
   const [login, { isLoading }] = useLoginMutation();
+  const token = useAppSelector(selectToken);
 
   useEffect(() => {
-    if (emailInputRef.current) emailInputRef.current.focus();
+    emailInputRef.current?.focus();
   }, []);
 
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -70,6 +73,7 @@ const LoginModal: React.FC<ModalProps> = ({ show, closeModal }) => {
     e.preventDefault();
 
     const valid = validateForm();
+    console.log(valid);
     if (!valid) return;
 
     try {
@@ -85,6 +89,7 @@ const LoginModal: React.FC<ModalProps> = ({ show, closeModal }) => {
         <Logo color={colors.primary} size={1.2} />
         <Title>Get Started</Title>
         <Info>Please enter below details to contine.</Info>
+        {token}
         <form onSubmit={handleSubmit}>
           <InputField
             ref={emailInputRef}
