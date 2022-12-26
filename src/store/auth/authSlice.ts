@@ -3,10 +3,10 @@ import { RootState } from '..';
 import { authApi } from '../../services/auth';
 
 export interface LoggedInUser {
-  user_id: string;
+  user_id: number;
   email: string;
   role_id: number;
-  role: number;
+  role: string;
 }
 
 export interface AuthState {
@@ -44,7 +44,22 @@ export const authSlice = createSlice({
       })
       .addMatcher(authApi.endpoints.getUser.matchFulfilled, (state, action) => {
         state.user = action.payload.data;
-      });
+      })
+      .addMatcher(
+        authApi.endpoints.register.matchFulfilled,
+        (state, action) => {
+          const token = action.payload.data.auth_token;
+          state.token = token;
+          state.isAuthenticated = true;
+          state.user = {
+            user_id: action.payload.data.user_id,
+            email: action.payload.data.email,
+            role_id: action.payload.data.role_id,
+            role: action.payload.data.role,
+          };
+          localStorage.setItem(tokenKey, token);
+        },
+      );
   },
 });
 

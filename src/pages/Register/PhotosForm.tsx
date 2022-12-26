@@ -108,7 +108,7 @@ const PhotosForm: React.FC = () => {
     try {
       const resp = await register(form).unwrap();
       toast(resp.message);
-      navigate('/', { replace: true });
+      navigate('/app', { replace: true });
       dispatch(resetState());
     } catch (error: any) {
       toast.error(error.data.message, {
