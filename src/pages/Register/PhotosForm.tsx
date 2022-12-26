@@ -3,11 +3,16 @@ import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import {
   changeData,
   selectFormData,
+  resetState,
 } from '../../store/registerForm/registerFormSlice';
 import styled, { css } from 'styled-components';
 import colors from '../../styles/colors';
 import PhotoInput from '../../components/PhotoInput';
 import { ContinueButton } from '../../components/Button/ContinueButton';
+import { useRegisterMutation } from '../../services/auth';
+import { toast } from 'react-toastify';
+import moment from 'moment';
+import { useNavigate } from 'react-router-dom';
 
 const FormTitle = styled.h1`
   margin-bottom: 1rem;
@@ -42,8 +47,10 @@ const SignUpButton = styled(ContinueButton)<{ disabled?: boolean }>`
 
 const PhotosForm: React.FC = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const formData = useAppSelector(selectFormData);
   const [previews, setPreviews] = useState<string[]>([]);
+  const [register, { isLoading }] = useRegisterMutation();
 
   useEffect(() => {
     if (formData.photos.length <= 0) {
@@ -73,9 +80,41 @@ const PhotosForm: React.FC = () => {
     );
   };
 
-  const handleSignUp: React.FormEventHandler<HTMLFormElement> = (e) => {
+  const handleSignUp: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
-    console.log(formData);
+
+    const form = new FormData();
+    form.append('name', formData.name);
+    form.append('email', formData.email);
+    form.append('password', formData.password);
+    form.append('gender', '' + formData.gender!);
+    form.append(
+      'birthdate',
+      moment(formData.birthdate, 'YYYY-MM-DD').toDate().toISOString(),
+    );
+    form.append('city_id', '' + formData.city_id!);
+    formData.photos.forEach(({ file, caption }) => {
+      form.append('files', file);
+      form.append('captions', caption);
+    });
+
+    formData.hobby_ids?.forEach((hobbyId) => {
+      form.append('hobby_ids', hobbyId.toString());
+    });
+    form.append('height', formData.height!.toString());
+    form.append('weight', formData.weight!.toString());
+    form.append('bio', formData.bio);
+
+    try {
+      const resp = await register(form).unwrap();
+      toast(resp.message);
+      navigate('/', { replace: true });
+      dispatch(resetState());
+    } catch (error: any) {
+      toast.error(error.data.message, {
+        theme: 'colored',
+      });
+    }
   };
 
   const deleteFile = (fileIndex: number) => {
@@ -99,8 +138,8 @@ const PhotosForm: React.FC = () => {
           />
         ))}
       </PhotoInputContainer>
-      <SignUpButton block disabled={formData.photos.length <= 0}>
-        SIGN UP
+      <SignUpButton block disabled={formData.photos.length <= 0 || isLoading}>
+        {isLoading ? 'PROCESSING...' : 'SIGN UP'}
       </SignUpButton>
     </form>
   );

@@ -19,11 +19,7 @@ const RegisterForm: React.FC = () => {
     <PhotosForm key={6} />,
   ];
 
-  return (
-    <div>
-      <MultiStepForm forms={forms} />
-    </div>
-  );
+  return <MultiStepForm forms={forms} />;
 };
 
 export default RegisterForm;
