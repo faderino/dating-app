@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { MdEmail, MdLock } from 'react-icons/md';
+import { MdEmail, MdLocationOn, MdLock } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import InputField from '../../components/InputField/InputField';
@@ -14,6 +14,8 @@ import {
 import colors from '../../styles/colors';
 import { isEmail, isEmpty } from '../../utils/validation';
 import { ContinueButton } from '../../components/Button/ContinueButton';
+import { useGetCitiesQuery } from '../../services/cities';
+import Select from '../../components/Select';
 
 const Container = styled.div`
   text-align: center;
@@ -66,19 +68,29 @@ const CreateAccountForm: React.FC = () => {
   const navigate = useNavigate();
   const formData = useAppSelector(selectFormData);
   const emailInputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
-  const [errors, setErrors] = useState({} as Partial<typeof formData>);
+  const [errors, setErrors] = useState(
+    {} as { email: string; password: string; city_id: string },
+  );
   const [loading, setLoading] = useState(false);
+  const { data: cities } = useGetCitiesQuery();
 
   useEffect(() => {
     emailInputRef.current.focus();
   }, []);
 
-  const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    dispatch(changeData({ [e.target.name]: e.target.value }));
+  const handleChange: React.ChangeEventHandler<
+    HTMLInputElement | HTMLSelectElement
+  > = (e) => {
+    dispatch(
+      changeData({
+        [e.target.name]:
+          e.target.name === 'city_id' ? +e.target.value : e.target.value,
+      }),
+    );
   };
 
   const validateForm = (): boolean => {
-    setErrors({ email: '', password: '' });
+    setErrors({ email: '', password: '', city_id: '' });
     const currentErrors = {} as typeof errors;
     if (!isEmail(formData.email)) {
       currentErrors.email = 'Invalid email';
@@ -88,6 +100,9 @@ const CreateAccountForm: React.FC = () => {
     }
     if (isEmpty(formData.password)) {
       currentErrors.password = 'Create a password, minimum 8 characters';
+    }
+    if (isEmpty(formData.city_id)) {
+      currentErrors.city_id = 'Select your city';
     }
     setErrors(currentErrors);
     return Boolean(Object.keys(currentErrors).length === 0);
@@ -125,6 +140,20 @@ const CreateAccountForm: React.FC = () => {
         value={formData.password}
         error={errors.password}
         prepend={<MdLock size={28} />}
+        onChange={handleChange}
+      />
+      <Select
+        options={
+          cities?.map((city) => ({
+            value: city.city_id,
+            text: city.name,
+          })) || []
+        }
+        label="Select City"
+        name="city_id"
+        value={formData.city_id}
+        error={errors.city_id}
+        prepend={<MdLocationOn size={28} />}
         onChange={handleChange}
       />
       <ContinueButton block>
