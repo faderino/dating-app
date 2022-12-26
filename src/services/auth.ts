@@ -17,9 +17,11 @@ type LoginResponse = ResponseAPI<{
 type GetUserResponse = ResponseAPI<LoggedInUser>;
 
 type RegisterResponse = {
+  auth_token: string;
   user_id: number;
   email: string;
   role_id: number;
+  role: string;
   name: string;
   gender: number;
   birthdate: Date;
