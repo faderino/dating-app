@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { MdPerson } from 'react-icons/md';
+import { ContinueButton } from '../../components/Button/ContinueButton';
 import InputField from '../../components/InputField/InputField';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
-import { ContinueButton } from './RegisterForm';
 import {
   changeData,
   nextStep,

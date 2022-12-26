@@ -8,8 +8,7 @@ export interface RegisterFormData {
   gender: number | null;
   birthdate: string;
   city_id: number | null;
-  files: any[];
-  captions: string[];
+  photos: PhotoAndCaption[];
   hobby_ids: number[];
   height: number | null;
   weight: number | null;
@@ -21,6 +20,11 @@ export interface RegisterFormState {
   formData: RegisterFormData;
 }
 
+type PhotoAndCaption = {
+  file: any;
+  caption: string;
+};
+
 const initialState: RegisterFormState = {
   step: 0,
   formData: {
@@ -30,8 +34,7 @@ const initialState: RegisterFormState = {
     gender: null,
     birthdate: '',
     city_id: null,
-    files: [],
-    captions: [],
+    photos: [],
     hobby_ids: [],
     height: null,
     weight: null,

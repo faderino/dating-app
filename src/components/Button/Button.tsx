@@ -38,18 +38,23 @@ type ButtonProps = {
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   className?: string;
   type?: 'button' | 'submit' | 'reset';
+  disabled?: boolean;
 };
 
-export const Button: React.FC<ButtonProps> = ({ children, ...props }) => {
+export const Button: React.FC<ButtonProps> = ({
+  children,
+  disabled,
+  ...props
+}) => {
   return (
-    <ButtonContainer {...props}>
+    <ButtonContainer disabled={disabled} {...props}>
       {children}
       <ButtonOverlay />
     </ButtonContainer>
   );
 };
 
-export const PrimaryButton = styled(Button)<Pick<ButtonProps, 'outlined'>>`
+export const PrimaryButton = styled(Button)<Partial<ButtonProps>>`
   background-image: ${colors.gradient};
   color: #fff;
 `;
