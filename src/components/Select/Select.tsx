@@ -90,7 +90,7 @@ const Select: React.FC<SelectProps> = ({
       <StyledInput error={error}>
         {prepend}
         <SelectInput id={inputId} {...props}>
-          <option disabled value={-1}>
+          <option disabled value={0}>
             Select a city...
           </option>
           {options?.map((option) => (
