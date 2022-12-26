@@ -151,7 +151,7 @@ const CreateAccountForm: React.FC = () => {
         }
         label="Select City"
         name="city_id"
-        value={formData.city_id}
+        value={formData.city_id ?? 0}
         error={errors.city_id}
         prepend={<MdLocationOn size={28} />}
         onChange={handleChange}

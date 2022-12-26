@@ -44,6 +44,9 @@ const StyledInput = styled.div<Pick<PhotoInputProps, 'error' | 'preview'>>`
     overflow: hidden;
     background-color: ${props.preview ? 'transparent' : colors.gray10};
     transition: all 0.3s ease;
+    :focus-within {
+      border-color: ${colors.gray50};
+    }
     ${props.preview &&
     css`
       background-image: url(${props.preview});

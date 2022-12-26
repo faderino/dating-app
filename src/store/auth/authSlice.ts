@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '..';
 import { authApi } from '../../services/auth';
 
@@ -15,8 +15,8 @@ export interface AuthState {
   isAuthenticated: boolean;
 }
 
-const tokenKey = 'accessToken';
-const token = localStorage.getItem(tokenKey) || null;
+export const TOKEN_KEY = 'accessToken';
+const token = localStorage.getItem(TOKEN_KEY) || null;
 const initialState: AuthState = {
   user: null,
   token: token,
@@ -27,10 +27,20 @@ export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    logout: () => {
-      localStorage.removeItem(tokenKey);
-      window.location.reload();
-      return initialState;
+    setAuth: (
+      state,
+      action: PayloadAction<{ token: string; user: LoggedInUser }>,
+    ) => {
+      state.token = action.payload.token;
+      state.isAuthenticated = true;
+      state.user = action.payload.user;
+      localStorage.setItem(TOKEN_KEY, action.payload.token);
+    },
+    logout: (state) => {
+      localStorage.removeItem(TOKEN_KEY);
+      state.token = null;
+      state.isAuthenticated = false;
+      state.user = null;
     },
   },
   extraReducers: (builder) => {
@@ -40,30 +50,15 @@ export const authSlice = createSlice({
         state.token = token;
         state.isAuthenticated = true;
         state.user = action.payload.data.user;
-        localStorage.setItem(tokenKey, token);
+        localStorage.setItem(TOKEN_KEY, token);
       })
       .addMatcher(authApi.endpoints.getUser.matchFulfilled, (state, action) => {
-        state.user = action.payload.data;
-      })
-      .addMatcher(
-        authApi.endpoints.register.matchFulfilled,
-        (state, action) => {
-          const token = action.payload.data.auth_token;
-          state.token = token;
-          state.isAuthenticated = true;
-          state.user = {
-            user_id: action.payload.data.user_id,
-            email: action.payload.data.email,
-            role_id: action.payload.data.role_id,
-            role: action.payload.data.role,
-          };
-          localStorage.setItem(tokenKey, token);
-        },
-      );
+        state.user = action.payload;
+      });
   },
 });
 
-export const { logout } = authSlice.actions;
+export const { setAuth, logout } = authSlice.actions;
 
 export const selectAuthState = (state: RootState): AuthState => state.auth;
 export const selectIsAuthenticated = (

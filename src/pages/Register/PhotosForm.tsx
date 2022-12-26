@@ -13,6 +13,7 @@ import { useRegisterMutation } from '../../services/auth';
 import { toast } from 'react-toastify';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
+import { setAuth } from '../../store/auth/authSlice';
 
 const FormTitle = styled.h1`
   margin-bottom: 1rem;
@@ -88,10 +89,7 @@ const PhotosForm: React.FC = () => {
     form.append('email', formData.email);
     form.append('password', formData.password);
     form.append('gender', '' + formData.gender!);
-    form.append(
-      'birthdate',
-      moment(formData.birthdate, 'YYYY-MM-DD').toDate().toISOString(),
-    );
+    form.append('birthdate', moment(formData.birthdate, 'YYYY-MM-DD').format());
     form.append('city_id', '' + formData.city_id!);
     formData.photos.forEach(({ file, caption }) => {
       form.append('files', file);
@@ -108,8 +106,19 @@ const PhotosForm: React.FC = () => {
     try {
       const resp = await register(form).unwrap();
       toast(resp.message);
-      navigate('/app', { replace: true });
+      dispatch(
+        setAuth({
+          token: resp.data.auth_token,
+          user: {
+            email: resp.data.email,
+            role: resp.data.role,
+            role_id: resp.data.role_id,
+            user_id: resp.data.user_id,
+          },
+        }),
+      );
       dispatch(resetState());
+      navigate('/app', { replace: true });
     } catch (error: any) {
       toast.error(error.data.message, {
         theme: 'colored',

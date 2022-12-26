@@ -44,11 +44,12 @@ export const authApi = api.injectEndpoints({
         body,
       }),
     }),
-    getUser: builder.query<GetUserResponse, void>({
+    getUser: builder.query<LoggedInUser, void>({
       query: () => ({
         url: '/users',
         method: 'GET',
       }),
+      transformResponse: (response: GetUserResponse) => response.data,
     }),
     register: builder.mutation<ResponseAPI<RegisterResponse>, RegisterRequest>({
       query: (body) => ({
