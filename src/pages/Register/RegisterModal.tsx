@@ -13,7 +13,7 @@ import {
 } from '../../store/registerForm/registerFormSlice';
 import colors from '../../styles/colors';
 import { isEmail, isEmpty } from '../../utils/validation';
-import { ContinueButton } from './RegisterForm';
+import { ContinueButton } from '../../components/Button/ContinueButton';
 
 const Container = styled.div`
   text-align: center;

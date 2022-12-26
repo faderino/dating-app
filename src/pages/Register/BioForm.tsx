@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { MdPersonSearch } from 'react-icons/md';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
-import { ContinueButton } from './RegisterForm';
+import { ContinueButton } from '../../components/Button/ContinueButton';
 import {
   changeData,
   nextStep,

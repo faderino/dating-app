@@ -17,7 +17,7 @@ export const store = configureStore({
     registerForm: registerFormReducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(middlewares),
+    getDefaultMiddleware({ serializableCheck: false }).concat(middlewares),
   devTools: process.env.NODE_ENV !== 'production',
 });
 
