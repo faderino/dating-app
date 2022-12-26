@@ -1,6 +1,8 @@
 import { ResponseAPI } from '../types/api';
 import { api } from '../services/api';
 import { LoggedInUser } from '../store/auth/authSlice';
+import { Photo } from '../types/profile';
+import { Hobby } from './hobbies';
 
 export type LoginRequest = {
   email: string;
@@ -13,6 +15,23 @@ type LoginResponse = ResponseAPI<{
 }>;
 
 type GetUserResponse = ResponseAPI<LoggedInUser>;
+
+type RegisterResponse = {
+  user_id: number;
+  email: string;
+  role_id: number;
+  name: string;
+  gender: number;
+  birthdate: Date;
+  city_id: number;
+  photos: Photo[];
+  hobbies: Hobby[];
+  height: number;
+  weight: number;
+  bio: string;
+};
+
+export type RegisterRequest = FormData;
 
 export const authApi = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -29,7 +48,15 @@ export const authApi = api.injectEndpoints({
         method: 'GET',
       }),
     }),
+    register: builder.mutation<ResponseAPI<RegisterResponse>, RegisterRequest>({
+      query: (body) => ({
+        url: '/register',
+        method: 'POST',
+        body,
+      }),
+    }),
   }),
 });
 
-export const { useLoginMutation, useGetUserQuery } = authApi;
+export const { useLoginMutation, useGetUserQuery, useRegisterMutation } =
+  authApi;

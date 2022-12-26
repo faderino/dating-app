@@ -9,6 +9,8 @@ export interface RegisterFormData {
   birthdate: string;
   city_id: number | null;
   photos: PhotoAndCaption[];
+  files?: any[];
+  captions?: string[];
   hobby_ids: number[];
   height: number | null;
   weight: number | null;
@@ -46,6 +48,7 @@ const registerFormSlice = createSlice({
   name: 'registerForm',
   initialState,
   reducers: {
+    resetState: () => initialState,
     changeData: (state, action: PayloadAction<Partial<RegisterFormData>>) => {
       state.formData = { ...state.formData, ...action.payload };
     },
@@ -58,7 +61,8 @@ const registerFormSlice = createSlice({
   },
 });
 
-export const { changeData, nextStep, previousStep } = registerFormSlice.actions;
+export const { resetState, changeData, nextStep, previousStep } =
+  registerFormSlice.actions;
 
 export const selectFormData = (
   state: RootState,
