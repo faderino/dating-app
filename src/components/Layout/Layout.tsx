@@ -7,19 +7,19 @@ import colors from '../../styles/colors';
 import BottomNav from '../BottomNav/BottomNav';
 import { Logo } from '../Logo';
 
-const Container = styled.div`
-  height: 100vh;
-`;
+const Container = styled.div``;
 
 const Header = styled.div`
+  position: fixed;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 0.5rem 0;
 `;
 
-const Content = styled.div`
-  flex: 1;
+export const Content = styled.div`
+  padding: 62px 0 54px 0;
 `;
 
 const Footer = styled(BottomNav)`
@@ -29,16 +29,19 @@ const Footer = styled(BottomNav)`
 `;
 
 type Props = {
+  hideHeader?: boolean;
   children?: React.ReactNode;
 };
 
-const Layout: React.FC<Props> = ({ children }) => {
+const Layout: React.FC<Props> = ({ children, hideHeader }) => {
   return (
     <Container>
-      <Header>
-        <Logo color={colors.primary} />
-      </Header>
-      <Content>{children}</Content>
+      {!hideHeader && (
+        <Header>
+          <Logo color={colors.primary} />
+        </Header>
+      )}
+      {children}
       <Footer
         items={[
           { to: '/app/matches', icon: <RiHeartsFill size={30} /> },

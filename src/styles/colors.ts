@@ -4,6 +4,7 @@ export default {
   primary: '#ff4458',
   gradient: 'linear-gradient(45deg, #fd267a, #ff6036)',
   text: '#2e2835',
+  backgroundSecondary: '#f0f2f4',
   textSecondary: '#505965',
   buttonOverlay: 'rgba(17, 20, 24, 0.16)',
   gray05: '#f8f8f9',

@@ -83,3 +83,10 @@ export const SimpleButton = styled(Button)<Pick<ButtonProps, 'outlined'>>`
       border: 2px solid ${colors.white};
     `}
 `;
+
+export const CircleButton = styled(Button)`
+  border-radius: 999px;
+  padding: 1rem;
+  aspect-ratio: 1;
+  box-shadow: 1px 2px 2px 1px rgba(0, 0, 0, 0.26);
+`;
