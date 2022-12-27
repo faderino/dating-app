@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
+import Layout from './components/Layout';
 import LandingPage from './pages/LandingPage';
 import Register from './pages/Register';
 import Swipe from './pages/Swipe/Swipe';
@@ -12,8 +13,18 @@ function App(): JSX.Element {
       <Route path="/">
         <Route index element={<LandingPage />} />
         <Route path="register" element={<Register />} />
-        <Route element={<AuthorizeUserRoute allowedRole={RoleID.User} />}>
-          <Route path="app" element={<Swipe />} />
+        <Route
+          path="app"
+          element={<AuthorizeUserRoute allowedRole={RoleID.User} />}
+        >
+          <Route
+            path="recommendations"
+            element={
+              <Layout>
+                <Swipe />
+              </Layout>
+            }
+          />
         </Route>
       </Route>
     </Routes>

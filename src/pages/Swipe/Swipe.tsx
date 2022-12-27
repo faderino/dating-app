@@ -9,7 +9,6 @@ const Swipe: React.FC<Props> = () => {
   const dispatch = useAppDispatch();
   return (
     <div>
-      <div>Swipe</div>
       <PrimaryButton onClick={() => dispatch(logout())}>Log out</PrimaryButton>
     </div>
   );
