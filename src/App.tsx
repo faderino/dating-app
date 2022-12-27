@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
 import LandingPage from './pages/LandingPage';
 import Profile from './pages/Profile';
@@ -18,6 +18,10 @@ function App(): JSX.Element {
           path="app"
           element={<AuthorizeUserRoute allowedRole={RoleID.User} />}
         >
+          <Route
+            index
+            element={<Navigate to="/app/recommendations" replace />}
+          />
           <Route
             path="recommendations"
             element={
