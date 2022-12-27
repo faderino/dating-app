@@ -11,7 +11,6 @@ const Container = styled.div`
 `;
 
 const Label = styled.label`
-  font-weight: 500;
   display: block;
   position: absolute;
   bottom: -0.75rem;
@@ -20,25 +19,21 @@ const Label = styled.label`
 `;
 
 const DeletePhotoBtn = styled.div`
-  font-weight: 500;
-  display: block;
+  display: flex;
   position: absolute;
-  bottom: -0.75rem;
-  right: -0.5rem;
+  bottom: -0.4rem;
+  right: -0.4rem;
   border-radius: 50%;
-  background-color: ${colors.white};
+  background-color: ${colors.primary};
   cursor: pointer;
 `;
 
 const StyledInput = styled.div<Pick<PhotoInputProps, 'error' | 'preview'>>`
   ${(props) => css`
     aspect-ratio: 2/3;
-    border: 2px dashed
-      ${props.error
-        ? colors.red50
-        : props.preview
-        ? colors.gray50
-        : colors.gray20};
+    border: ${props.preview
+      ? 'none'
+      : `2px dashed ${props.error ? colors.red50 : colors.gray20}`};
     color: ${props.error ? colors.red50 : colors.gray30};
     border-radius: 0.6rem;
     overflow: hidden;
@@ -106,7 +101,7 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
     <Container className={className}>
       {preview ? (
         <DeletePhotoBtn onClick={deleteFile}>
-          <FaTimesCircle color={colors.red60} size={24} />
+          <FaTimesCircle color={colors.white} size={24} />
         </DeletePhotoBtn>
       ) : (
         <Label htmlFor={inputId}>
