@@ -1,10 +1,6 @@
 import { ResponseAPI } from '../types/api';
 import { api } from '../services/api';
-
-export interface City {
-  city_id: number;
-  name: string;
-}
+import { City } from '../types/location';
 
 type GetCitiesReponse = ResponseAPI<City[]>;
 

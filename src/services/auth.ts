@@ -1,8 +1,7 @@
 import { ResponseAPI } from '../types/api';
 import { api } from '../services/api';
 import { LoggedInUser } from '../store/auth/authSlice';
-import { Photo } from '../types/profile';
-import { Hobby } from './hobbies';
+import { Hobby, Photo } from '../types/profile';
 
 export type LoginRequest = {
   email: string;

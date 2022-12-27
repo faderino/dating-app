@@ -1,7 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { Hobby } from '../../services/hobbies';
 import colors from '../../styles/colors';
+import { Hobby } from '../../types/profile';
 
 const Badge = styled.div<Pick<Props, 'active'>>`
   display: inline-block;
