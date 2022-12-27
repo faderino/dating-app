@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
 import LandingPage from './pages/LandingPage';
+import Profile from './pages/Profile';
 import Register from './pages/Register';
 import Swipe from './pages/Swipe/Swipe';
 import { AuthorizeUserRoute } from './ProtectedRoutes';
@@ -22,6 +23,14 @@ function App(): JSX.Element {
             element={
               <Layout>
                 <Swipe />
+              </Layout>
+            }
+          />
+          <Route
+            path="profile"
+            element={
+              <Layout hideHeader>
+                <Profile />
               </Layout>
             }
           />

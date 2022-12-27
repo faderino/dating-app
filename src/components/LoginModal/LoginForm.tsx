@@ -58,7 +58,9 @@ const LoginForm: React.FC = () => {
 
     try {
       await login(data).unwrap();
-      navigate(location.state?.from?.pathname || '/app', { replace: true });
+      navigate(location.state?.from?.pathname || '/app/recommendations', {
+        replace: true,
+      });
     } catch (error: any) {
       toast.error(error.data.message, {
         theme: 'colored',
