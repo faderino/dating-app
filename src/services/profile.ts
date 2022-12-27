@@ -1,16 +1,26 @@
 import { ResponseAPI } from '../types/api';
-import { api } from '../services/api';
-import { Hobby } from '../types/profile';
+import { baseApi } from '../services/api';
+import { Profile } from '../types/profile';
+import { IRole } from '../types/user';
 
-type GetHobbiesReponse = ResponseAPI<Hobby[]>;
+type GetProfileResponseData = {
+  user_id: number;
+  email: string;
+  role: IRole;
+  profile: Profile;
+};
 
-export const profileApi = api.injectEndpoints({
+type GetProfileResponse = ResponseAPI<GetProfileResponseData>;
+
+export const profileApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getProfile: builder.query<GetHobbiesReponse, void>({
+    getProfile: builder.query<GetProfileResponseData, void>({
       query: () => ({
-        url: '/hobbies',
+        url: '/profiles',
         method: 'GET',
       }),
+      transformResponse: (response: GetProfileResponse) => response.data,
+      providesTags: ['Profile'],
     }),
   }),
 });

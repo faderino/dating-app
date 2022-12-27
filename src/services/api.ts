@@ -24,7 +24,8 @@ const baseQuery = fetchBaseQuery({
 //   return result;
 // };
 
-export const api = createApi({
+export const baseApi = createApi({
   baseQuery: baseQuery,
   endpoints: () => ({}),
+  tagTypes: ['Profile'],
 });

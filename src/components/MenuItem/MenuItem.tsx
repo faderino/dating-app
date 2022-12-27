@@ -32,7 +32,7 @@ const MenuItemValue = styled.div`
   color: ${colors.textSecondary};
 `;
 
-const MenuItem: React.FC<{ title: string; value: string }> = ({
+const MenuItem: React.FC<{ title: string; value?: string }> = ({
   title,
   value,
 }) => {

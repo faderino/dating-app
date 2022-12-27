@@ -2,6 +2,7 @@ import { isRejectedWithValue } from '@reduxjs/toolkit';
 import type { MiddlewareAPI, Middleware } from '@reduxjs/toolkit';
 import { logout } from '../auth/authSlice';
 import { HttpStatusCode } from '../../types/httpStatus';
+import { baseApi } from '../../services/api';
 
 export const handleUnauthorized: Middleware =
   (api: MiddlewareAPI) => (next) => (action) => {
@@ -12,6 +13,7 @@ export const handleUnauthorized: Middleware =
       if (action.meta.arg.endpointName === 'login') {
         return next(action);
       }
+      api.dispatch(baseApi.util.resetApiState());
       api.dispatch(logout());
     }
 
