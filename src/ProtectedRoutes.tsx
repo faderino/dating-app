@@ -12,7 +12,6 @@ export const AuthorizeUserRoute: React.FC<Props> = () => {
   const { isAuthenticated, token } = useAppSelector(selectAuthState);
 
   if (!isAuthenticated || !token) {
-    console.log('masuk1');
     return <Navigate to="/" state={{ from: location }} replace />;
   }
 

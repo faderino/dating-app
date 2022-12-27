@@ -1,18 +1,18 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
-import { api } from '../services/api';
+import { baseApi } from '../services/api';
 import authReducer from './auth/authSlice';
 import { handleUnauthorized } from './middlewares/errorHandler';
 import logger from 'redux-logger';
 import registerFormReducer from './registerForm/registerFormSlice';
 
-const middlewares = [api.middleware, handleUnauthorized];
+const middlewares = [baseApi.middleware, handleUnauthorized];
 if (process.env.NODE_ENV !== 'production') {
   middlewares.push(logger);
 }
 
 export const store = configureStore({
   reducer: {
-    [api.reducerPath]: api.reducer,
+    [baseApi.reducerPath]: baseApi.reducer,
     auth: authReducer,
     registerForm: registerFormReducer,
   },

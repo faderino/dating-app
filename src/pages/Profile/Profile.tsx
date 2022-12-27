@@ -8,8 +8,11 @@ import MenuItem, {
   MenuTitle,
 } from '../../components/MenuItem/MenuItem';
 import { useAppDispatch } from '../../hooks/store';
+import { baseApi } from '../../services/api';
+import { useGetProfileQuery } from '../../services/profile';
 import { logout } from '../../store/auth/authSlice';
 import colors from '../../styles/colors';
+import { getAge } from '../../utils/date';
 
 const PageContent = styled(Content)`
   display: flex;
@@ -27,7 +30,7 @@ const ProfilePhotoContainer = styled.div`
   margin-bottom: 1rem;
 `;
 
-const ProfilePhoto = styled.div<{ img: string }>`
+const ProfilePhoto = styled.div<{ img?: string }>`
   background-image: url(${(props) => props.img});
   background-size: cover;
   width: 100%;
@@ -87,13 +90,22 @@ const MenuItemLogout = styled(MenuItemContainer)`
 
 const Profile: React.FC = () => {
   const dispatch = useAppDispatch();
+  const { data: user } = useGetProfileQuery();
+  const profilePhoto = user?.profile.photos[0].image_url;
+
+  const handleLogout = () => {
+    dispatch(baseApi.util.resetApiState());
+    dispatch(logout());
+  };
 
   return (
     <PageContent>
       <ProfilePhotoContainer>
-        <ProfilePhoto img="https://res.cloudinary.com/dovwy5iam/image/upload/v1672074071/dating_apps/np39vx50uw9hudvdqdc7.jpg" />
+        <ProfilePhoto img={profilePhoto} />
       </ProfilePhotoContainer>
-      <NameAge>Kamisato, 22</NameAge>
+      <NameAge>
+        {user?.profile.name}, {user ? getAge(user!.profile.birthdate) : null}
+      </NameAge>
       <ActionContainer>
         <EditProfileBtn>
           <CircleButton>
@@ -105,8 +117,8 @@ const Profile: React.FC = () => {
       <AccountSection>
         <MenuTitle>Account Info</MenuTitle>
         <MenuItems>
-          <MenuItem title="Email" value="kamisatoheroku@mail.com"></MenuItem>
-          <MenuItemLogout as="button" onClick={() => dispatch(logout())}>
+          <MenuItem title="Email" value={user?.email}></MenuItem>
+          <MenuItemLogout as="button" onClick={handleLogout}>
             Logout
           </MenuItemLogout>
         </MenuItems>

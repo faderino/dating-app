@@ -1,5 +1,5 @@
 import { ResponseAPI } from '../types/api';
-import { api } from '../services/api';
+import { baseApi } from '../services/api';
 import { LoggedInUser } from '../store/auth/authSlice';
 import { Hobby, Photo } from '../types/profile';
 
@@ -34,7 +34,7 @@ type RegisterResponse = {
 
 export type RegisterRequest = FormData;
 
-export const authApi = api.injectEndpoints({
+export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation<LoginResponse, LoginRequest>({
       query: (body) => ({
