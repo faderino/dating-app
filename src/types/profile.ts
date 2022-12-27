@@ -10,3 +10,23 @@ export interface Photo {
   image_url: string;
   caption: string;
 }
+
+export interface Hobby {
+  hobby_id: number;
+  title: string;
+}
+
+export interface Profile {
+  profile_id: number;
+  name: string;
+  gender: number;
+  birthdate: Date;
+  location: Location;
+  photos: Photo[];
+  gold_profile: boolean;
+  gold_expiry_date: null | Date;
+  height: number;
+  weight: number;
+  hobbies: Hobby[];
+  bio: string;
+}

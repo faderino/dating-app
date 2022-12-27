@@ -7,3 +7,8 @@ export enum Role {
   User = 'user',
   Admin = 'admin',
 }
+
+export interface IRole {
+  role_id: number;
+  name: string;
+}
