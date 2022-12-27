@@ -9,7 +9,7 @@ import {
   selectFormData,
 } from '../../store/registerForm/registerFormSlice';
 import { isEmpty } from '../../utils/validation';
-import moment from 'moment';
+import { getAge } from '../../utils/date';
 
 const BirthdateForm: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -28,7 +28,7 @@ const BirthdateForm: React.FC = () => {
   const validateForm = (): boolean => {
     setError({ birthdate: '' });
     const currentError = {} as typeof error;
-    if (moment().diff(formData.birthdate, 'years') < 17) {
+    if (getAge(formData.birthdate) < 17) {
       currentError.birthdate =
         'You must be older than 17 years old to continue';
     }
