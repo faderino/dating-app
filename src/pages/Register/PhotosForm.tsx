@@ -35,6 +35,16 @@ const PhotoInputContainer = styled.div`
   }
 `;
 
+const SignUpBtnContainer = styled.div`
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  padding: 1rem;
+  max-width: 450px;
+  margin: 0 auto;
+`;
+
 const SignUpButton = styled(ContinueButton)<{ disabled?: boolean }>`
   margin-top: 4rem;
   ${(props) =>
@@ -147,9 +157,11 @@ const PhotosForm: React.FC = () => {
           />
         ))}
       </PhotoInputContainer>
-      <SignUpButton block disabled={formData.photos.length <= 0 || isLoading}>
-        {isLoading ? 'PROCESSING...' : 'SIGN UP'}
-      </SignUpButton>
+      <SignUpBtnContainer>
+        <SignUpButton block disabled={formData.photos.length <= 0 || isLoading}>
+          {isLoading ? 'PROCESSING...' : 'SIGN UP'}
+        </SignUpButton>
+      </SignUpBtnContainer>
     </form>
   );
 };
