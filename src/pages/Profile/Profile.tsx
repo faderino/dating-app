@@ -9,7 +9,7 @@ import MenuItem, {
   MenuTitle,
 } from '../../components/MenuItem/MenuItem';
 import { useAppDispatch } from '../../hooks/store';
-import { baseApi } from '../../services/api';
+import { baseApi } from '../../services/baseApi';
 import { useGetProfileQuery } from '../../services/profile';
 import { logout } from '../../store/auth/authSlice';
 import colors from '../../styles/colors';
@@ -160,8 +160,8 @@ const Profile: React.FC = () => {
             </MenuItem>
           </InfoItem>
         </div>
-        <MenuItem border="y">
-          <LogoutBtn onClick={handleLogout}>Logout</LogoutBtn>
+        <MenuItem border="y" onClick={handleLogout}>
+          <LogoutBtn>Logout</LogoutBtn>
         </MenuItem>
       </AccountSection>
     </PageContent>

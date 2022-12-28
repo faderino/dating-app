@@ -1,5 +1,5 @@
 import { ResponseAPI } from '../types/api';
-import { baseApi } from '../services/api';
+import { baseApi } from './baseApi';
 import { LoggedInUser } from '../store/auth/authSlice';
 import { Hobby, Photo } from '../types/profile';
 
