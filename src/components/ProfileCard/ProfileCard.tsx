@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { AiOutlineHome } from 'react-icons/ai';
 import { MdInfo } from 'react-icons/md';
-import colors from '../../styles/colors';
 import { Profile } from '../../types/profile';
 import { getAge, getFirstName } from '../../utils/format';
 import ProfileDetail from './ProfileDetail';
@@ -25,7 +24,7 @@ type Props = {
   handleSwipe?: () => void;
 };
 
-const ProfileCard: React.FC<Props> = ({ profile, handleSwipe }) => {
+const ProfileCard: React.FC<Props> = ({ profile }) => {
   const [showDetails, setShowDetails] = useState(false);
   const [photoIndex, setPhotoIndex] = useState(0);
 
@@ -88,9 +87,6 @@ const ProfileCard: React.FC<Props> = ({ profile, handleSwipe }) => {
             <MdInfo size={'100%'} />
           </InfoBtn>
         </Info>
-        <button style={{ color: colors.white }} onClick={handleSwipe}>
-          NEXT
-        </button>
       </CardContent>
     </Card>
   );
