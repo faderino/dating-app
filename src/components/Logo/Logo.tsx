@@ -7,6 +7,7 @@ const StyledLogo = styled(Link)<Props>`
   font-family: 'Atyp Display';
   font-size: ${(props) => props.size}rem;
   font-weight: 700;
+  user-select: none;
   color: ${(props) => (props.color ? props.color : 'inherit')};
   ${(props) =>
     props.disabled &&
