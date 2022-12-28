@@ -5,7 +5,7 @@ import EditProfile from './pages/EditProfile';
 import LandingPage from './pages/LandingPage';
 import Profile from './pages/Profile';
 import Register from './pages/Register';
-import Swipe from './pages/Swipe/Swipe';
+import Swipe from './pages/Recommendations/Recommendations';
 import { AuthorizeUserRoute } from './ProtectedRoutes';
 import { RoleID } from './types/user';
 

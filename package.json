@@ -13,6 +13,7 @@
     "@types/react-dom": "^18.0.9",
     "@types/redux-logger": "^3.0.9",
     "axios": "^1.2.1",
+    "framer-motion": "^8.0.2",
     "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
