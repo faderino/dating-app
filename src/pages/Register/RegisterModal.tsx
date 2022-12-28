@@ -43,26 +43,6 @@ const FormContainer = styled.div`
   margin: 0 auto;
 `;
 
-const RegisterModal: React.FC<ModalProps> = ({ show, closeModal }) => {
-  return (
-    <Modal show={show} closeModal={closeModal}>
-      <Container>
-        <Logo color={colors.primary} size={1.2} />
-        <Title>Create Account</Title>
-        <Info>
-          Please enter your <b>email</b> and create a <b>password</b> to get
-          started.
-        </Info>
-        <FormContainer>
-          <CreateAccountForm />
-        </FormContainer>
-      </Container>
-    </Modal>
-  );
-};
-
-export default RegisterModal;
-
 const CreateAccountForm: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -162,3 +142,23 @@ const CreateAccountForm: React.FC = () => {
     </form>
   );
 };
+
+const RegisterModal: React.FC<ModalProps> = ({ show, closeModal }) => {
+  return (
+    <Modal show={show} closeModal={closeModal}>
+      <Container>
+        <Logo color={colors.primary} size={1.2} />
+        <Title>Create Account</Title>
+        <Info>
+          Please enter your <b>email</b> and create a <b>password</b> to get
+          started.
+        </Info>
+        <FormContainer>
+          <CreateAccountForm />
+        </FormContainer>
+      </Container>
+    </Modal>
+  );
+};
+
+export default RegisterModal;
