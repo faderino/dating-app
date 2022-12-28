@@ -16,6 +16,7 @@ const Header = styled.div`
   justify-content: center;
   align-items: center;
   padding: 0.5rem 0;
+  background-color: ${colors.white};
 `;
 
 export const Content = styled.div`

@@ -24,6 +24,13 @@ const PageContent = styled(Content)`
   display: flex;
   flex-direction: column;
   height: 100vh;
+  background-color: ${colors.backgroundSecondary};
+`;
+
+const ProfileSection = styled.div`
+  background-color: ${colors.white};
+  box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+    rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
 `;
 
 const ProfilePhotoContainer = styled.div`
@@ -76,7 +83,6 @@ const EditProfileBtn = styled.div`
 `;
 
 const AccountSection = styled.div`
-  background-color: ${colors.backgroundSecondary};
   padding: 1rem 0;
   flex: 1 1 auto;
   display: flex;
@@ -107,20 +113,22 @@ const Profile: React.FC = () => {
 
   return (
     <PageContent>
-      <ProfilePhotoContainer>
-        <ProfilePhoto img={profilePhoto} />
-      </ProfilePhotoContainer>
-      <NameAge>
-        {user?.profile.name}, {getAge(user?.profile.birthdate || '')}
-      </NameAge>
-      <ActionContainer>
-        <EditProfileBtn>
-          <CircleButton onClick={() => navigate('edit')}>
-            <MdEdit size={24} color={colors.textSecondary} />
-          </CircleButton>
-          <p>EDIT PROFILE</p>
-        </EditProfileBtn>
-      </ActionContainer>
+      <ProfileSection>
+        <ProfilePhotoContainer>
+          <ProfilePhoto img={profilePhoto} />
+        </ProfilePhotoContainer>
+        <NameAge>
+          {user?.profile.name}, {getAge(user?.profile.birthdate || '')}
+        </NameAge>
+        <ActionContainer>
+          <EditProfileBtn>
+            <CircleButton onClick={() => navigate('edit')}>
+              <MdEdit size={24} color={colors.textSecondary} />
+            </CircleButton>
+            <p>EDIT PROFILE</p>
+          </EditProfileBtn>
+        </ActionContainer>
+      </ProfileSection>
       <AccountSection>
         <div>
           <InfoItem>
@@ -138,7 +146,7 @@ const Profile: React.FC = () => {
           </InfoItem>
           <InfoItem>
             <MenuTitle>Gender & Preference</MenuTitle>
-            <MenuItem border="bottom">
+            <MenuItem border="y">
               <p>Gender</p>
               <MenuItemValue>
                 {displayGender(user?.profile.gender)}
