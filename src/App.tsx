@@ -1,6 +1,7 @@
 import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
+import EditProfile from './pages/EditProfile';
 import LandingPage from './pages/LandingPage';
 import Profile from './pages/Profile';
 import Register from './pages/Register';
@@ -38,6 +39,7 @@ function App(): JSX.Element {
               </Layout>
             }
           />
+          <Route path="profile/edit" element={<EditProfile />} />
         </Route>
       </Route>
     </Routes>

@@ -9,7 +9,9 @@ import {
   selectFormData,
 } from '../../store/registerForm/registerFormSlice';
 import { isEmpty } from '../../utils/validation';
-import { getAge } from '../../utils/date';
+import { getAge } from '../../utils/format';
+
+const MIN_AGE_REGISTER = 17;
 
 const BirthdateForm: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -28,9 +30,8 @@ const BirthdateForm: React.FC = () => {
   const validateForm = (): boolean => {
     setError({ birthdate: '' });
     const currentError = {} as typeof error;
-    if (getAge(formData.birthdate) < 17) {
-      currentError.birthdate =
-        'You must be older than 17 years old to continue';
+    if (getAge(formData.birthdate) < MIN_AGE_REGISTER) {
+      currentError.birthdate = `You must be older than ${MIN_AGE_REGISTER} years old to continue`;
     }
     if (isEmpty(formData.birthdate)) {
       currentError.birthdate = 'Please enter your birthday';
