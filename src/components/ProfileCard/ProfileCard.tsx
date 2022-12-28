@@ -21,7 +21,7 @@ import {
 
 type Props = {
   profile?: Profile;
-  handleSwipe?: () => void;
+  handleSwipe?: (action: 'like' | 'skip') => void;
 };
 
 const ProfileCard: React.FC<Props> = ({ profile }) => {
