@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { AiOutlineHome } from 'react-icons/ai';
 import { MdInfo } from 'react-icons/md';
 import styled from 'styled-components';
 import colors from '../../styles/colors';
+import { Profile } from '../../types/profile';
+import { getAge, getFirstName } from '../../utils/format';
 
 const Card = styled.div`
   width: 100%;
@@ -43,9 +45,17 @@ const CardContent = styled.div`
   bottom: 0;
   background-image: linear-gradient(
     to top,
-    rgb(0, 0, 0) 0%,
+    rgb(0, 0, 0) 5%,
     rgba(255, 255, 255, 0) 100%
   );
+`;
+
+const PhotoCaption = styled.div`
+  text-align: center;
+  margin-bottom: 2rem;
+  color: ${colors.text};
+  background-color: rgba(255, 255, 255, 65%);
+  padding: 0.5rem;
 `;
 
 const NameAge = styled.h1`
@@ -61,8 +71,21 @@ const Info = styled.div`
   justify-content: space-between;
 `;
 
+const Location = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+const Bio = styled.div`
+  padding: 0.8rem 0;
+`;
+
 const InfoBtn = styled.button`
   color: ${colors.white};
+  align-self: flex-end;
+  margin-bottom: 0.5rem;
+  display: flex;
   border: none;
   cursor: pointer;
   width: 2.75rem;
@@ -71,31 +94,41 @@ const InfoBtn = styled.button`
   }
 `;
 
-const Location = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-`;
+type Props = {
+  profile?: Profile;
+};
 
-type Props = Record<string, never>;
+const ProfileCard: React.FC<Props> = ({ profile }) => {
+  const [showDetails, setShowDetails] = useState(false);
 
-const ProfileCard: React.FC<Props> = () => {
   return (
     <Card>
-      <PhotoBarContainer>
-        <PhotoBar active />
-        <PhotoBar />
-        <PhotoBar />
-      </PhotoBarContainer>
+      {profile ? (
+        <PhotoBarContainer>
+          {profile.photos.length > 1
+            ? profile.photos.map((photo) => (
+                <PhotoBar key={photo.photo_id} active />
+              ))
+            : null}
+        </PhotoBarContainer>
+      ) : null}
+
       <CardContent>
+        {profile?.photos[0]?.caption ? (
+          <PhotoCaption>{profile.photos[0].caption}</PhotoCaption>
+        ) : null}
         <NameAge>
-          Chiselliya <span>20</span>
+          {getFirstName(profile?.name || '')}{' '}
+          <span>{getAge(profile?.birthdate || '')}</span>
         </NameAge>
         <Info>
-          <Location>
-            <AiOutlineHome />
-            <p>Lives in Kota Batu</p>
-          </Location>
+          <div>
+            <Location>
+              <AiOutlineHome />
+              <p>Lives in {profile?.location.city}</p>
+            </Location>
+            <Bio>{profile?.bio}</Bio>
+          </div>
           <InfoBtn>
             <MdInfo size={'100%'} />
           </InfoBtn>

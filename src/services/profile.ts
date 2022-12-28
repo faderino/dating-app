@@ -1,5 +1,5 @@
 import { ResponseAPI } from '../types/api';
-import { baseApi } from '../services/api';
+import { baseApi } from './baseApi';
 import { Profile } from '../types/profile';
 import { IRole } from '../types/user';
 

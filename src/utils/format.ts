@@ -7,6 +7,8 @@ export const getAge = (birthdate: string | Date): number =>
 export const displayDate = (date: string | Date): string =>
   moment(date).format('LL');
 
+export const getFirstName = (name: string): string => name.split(' ')[0];
+
 export const displayGender = (gender?: Gender): string => {
   if (gender === Gender.Male) {
     return 'Man';

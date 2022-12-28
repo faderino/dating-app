@@ -1,5 +1,5 @@
 import { ResponseAPI } from '../types/api';
-import { baseApi } from '../services/api';
+import { baseApi } from './baseApi';
 import { City } from '../types/location';
 
 type GetCitiesReponse = ResponseAPI<City[]>;

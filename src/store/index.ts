@@ -1,5 +1,5 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
-import { baseApi } from '../services/api';
+import { baseApi } from '../services/baseApi';
 import authReducer from './auth/authSlice';
 import { handleUnauthorized } from './middlewares/errorHandler';
 import logger from 'redux-logger';

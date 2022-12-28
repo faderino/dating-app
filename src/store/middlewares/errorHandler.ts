@@ -2,7 +2,7 @@ import { isRejectedWithValue } from '@reduxjs/toolkit';
 import type { MiddlewareAPI, Middleware } from '@reduxjs/toolkit';
 import { logout } from '../auth/authSlice';
 import { HttpStatusCode } from '../../types/httpStatus';
-import { baseApi } from '../../services/api';
+import { baseApi } from '../../services/baseApi';
 
 export const handleUnauthorized: Middleware =
   (api: MiddlewareAPI) => (next) => (action) => {
