@@ -26,6 +26,7 @@ const Footer = styled(BottomNav)`
   position: fixed;
   width: 100%;
   bottom: 0;
+  background-color: ${colors.white};
 `;
 
 type Props = {

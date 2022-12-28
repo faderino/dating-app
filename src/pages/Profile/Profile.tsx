@@ -1,10 +1,11 @@
 import React from 'react';
 import { MdEdit } from 'react-icons/md';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { CircleButton } from '../../components/Button';
 import { Content } from '../../components/Layout/Layout';
 import MenuItem, {
-  MenuItemContainer,
+  MenuItemValue,
   MenuTitle,
 } from '../../components/MenuItem/MenuItem';
 import { useAppDispatch } from '../../hooks/store';
@@ -12,7 +13,12 @@ import { baseApi } from '../../services/api';
 import { useGetProfileQuery } from '../../services/profile';
 import { logout } from '../../store/auth/authSlice';
 import colors from '../../styles/colors';
-import { getAge } from '../../utils/date';
+import {
+  displayDate,
+  displayGender,
+  getAge,
+  displayPreference,
+} from '../../utils/format';
 
 const PageContent = styled(Content)`
   display: flex;
@@ -21,13 +27,13 @@ const PageContent = styled(Content)`
 `;
 
 const ProfilePhotoContainer = styled.div`
-  margin: 0 auto;
+  margin: 2rem auto 1rem auto;
   overflow: hidden;
   height: 175px;
   width: 175px;
   border-radius: 50%;
-  border: 5px solid ${colors.primary};
-  margin-bottom: 1rem;
+  border: 6px solid ${colors.primary};
+  flex-shrink: 0;
 `;
 
 const ProfilePhoto = styled.div<{ img?: string }>`
@@ -36,7 +42,7 @@ const ProfilePhoto = styled.div<{ img?: string }>`
   width: 100%;
   aspect-ratio: 1;
   background-position: 50% 50%;
-  border: 6px solid ${colors.white};
+  border: 7px solid ${colors.white};
   border-radius: 50%;
 `;
 
@@ -53,6 +59,7 @@ const ActionContainer = styled.div`
   justify-content: center;
   gap: 2rem;
   padding-bottom: 2rem;
+  border-bottom: 1px doub ${colors.gray20};
 `;
 
 const EditProfileBtn = styled.div`
@@ -72,24 +79,24 @@ const AccountSection = styled.div`
   background-color: ${colors.backgroundSecondary};
   padding: 1rem 0;
   flex: 1 1 auto;
-`;
-
-const MenuItems = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 95%;
 `;
 
-const MenuItemLogout = styled(MenuItemContainer)`
-  justify-content: center;
+const InfoItem = styled.div`
+  margin-bottom: 1rem;
+`;
+
+const LogoutBtn = styled.button`
+  margin: 0 auto;
   cursor: pointer;
-  border-left: none;
-  border-right: none;
+  border: none;
 `;
 
 const Profile: React.FC = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { data: user } = useGetProfileQuery();
   const profilePhoto = user?.profile.photos[0].image_url;
 
@@ -104,24 +111,50 @@ const Profile: React.FC = () => {
         <ProfilePhoto img={profilePhoto} />
       </ProfilePhotoContainer>
       <NameAge>
-        {user?.profile.name}, {user ? getAge(user!.profile.birthdate) : null}
+        {user?.profile.name}, {getAge(user?.profile.birthdate || '')}
       </NameAge>
       <ActionContainer>
         <EditProfileBtn>
-          <CircleButton>
+          <CircleButton onClick={() => navigate('edit')}>
             <MdEdit size={24} color={colors.textSecondary} />
           </CircleButton>
           <p>EDIT PROFILE</p>
         </EditProfileBtn>
       </ActionContainer>
       <AccountSection>
-        <MenuTitle>Account Info</MenuTitle>
-        <MenuItems>
-          <MenuItem title="Email" value={user?.email}></MenuItem>
-          <MenuItemLogout as="button" onClick={handleLogout}>
-            Logout
-          </MenuItemLogout>
-        </MenuItems>
+        <div>
+          <InfoItem>
+            <MenuTitle>Account Info</MenuTitle>
+            <MenuItem border="y">
+              <p>Email</p>
+              <MenuItemValue>{user?.email}</MenuItemValue>
+            </MenuItem>
+            <MenuItem border="bottom">
+              <p>Birthdate</p>
+              <MenuItemValue>
+                {displayDate(user?.profile.birthdate || '')}
+              </MenuItemValue>
+            </MenuItem>
+          </InfoItem>
+          <InfoItem>
+            <MenuTitle>Gender & Preference</MenuTitle>
+            <MenuItem border="bottom">
+              <p>Gender</p>
+              <MenuItemValue>
+                {displayGender(user?.profile.gender)}
+              </MenuItemValue>
+            </MenuItem>
+            <MenuItem border="bottom">
+              <p>Preference</p>
+              <MenuItemValue>
+                {displayPreference(user?.profile.gender)}
+              </MenuItemValue>
+            </MenuItem>
+          </InfoItem>
+        </div>
+        <MenuItem border="y">
+          <LogoutBtn onClick={handleLogout}>Logout</LogoutBtn>
+        </MenuItem>
       </AccountSection>
     </PageContent>
   );
