@@ -5,13 +5,14 @@ import styled from 'styled-components';
 import colors from '../../styles/colors';
 import { Profile } from '../../types/profile';
 import { getAge, getFirstName } from '../../utils/format';
+import ProfileDetail from './ProfileDetail';
 
-const Card = styled.div`
+const Card = styled.div<{ img?: string }>`
   width: 100%;
   height: 100%;
   position: relative;
   background-color: ${colors.black};
-  background-image: url(https://res.cloudinary.com/dovwy5iam/image/upload/v1672112777/dating_apps/pommu3oasymipdb7dcqz.jpg);
+  background-image: url(${(props) => props.img});
   background-repeat: no-repeat;
   background-position: 50% 50%;
   background-size: cover;
@@ -34,7 +35,8 @@ const PhotoBarContainer = styled.div`
 const PhotoBar = styled.div<{ active?: boolean }>`
   width: 100%;
   height: 100%;
-  background-color: ${(props) => (props.active ? colors.white : colors.gray50)};
+  background-color: ${(props) =>
+    props.active ? colors.white : 'rgba(0,0,0,50%)'};
 `;
 
 const CardContent = styled.div`
@@ -94,34 +96,70 @@ const InfoBtn = styled.button`
   }
 `;
 
+const Overlay = styled.div`
+  height: 80%;
+  width: 50%;
+  position: absolute;
+`;
+
+const PreviousPhoto = styled(Overlay)`
+  left: 0;
+`;
+
+const NextPhoto = styled(Overlay)`
+  right: 0;
+`;
+
 type Props = {
   profile?: Profile;
+  handleSwipe?: () => void;
 };
 
-const ProfileCard: React.FC<Props> = ({ profile }) => {
+const ProfileCard: React.FC<Props> = ({ profile, handleSwipe }) => {
   const [showDetails, setShowDetails] = useState(false);
+  const [photoIndex, setPhotoIndex] = useState(0);
+
+  const hideDetails = () => {
+    setShowDetails(false);
+  };
+
+  const nextPhoto = () => {
+    setPhotoIndex((photoIndex + 1) % profile!.photos.length);
+  };
+
+  const prevPhoto = () => {
+    if (photoIndex === 0) {
+      return setPhotoIndex(profile!.photos.length - 1);
+    }
+    return setPhotoIndex(photoIndex - 1);
+  };
+
+  if (showDetails)
+    return <ProfileDetail profile={profile} hideDetails={hideDetails} />;
 
   return (
-    <Card>
+    <Card img={profile?.photos[photoIndex]?.image_url}>
+      <PreviousPhoto onClick={prevPhoto} />
+      <NextPhoto onClick={nextPhoto} />
       {profile ? (
         <PhotoBarContainer>
           {profile.photos.length > 1
-            ? profile.photos.map((photo) => (
-                <PhotoBar key={photo.photo_id} active />
+            ? profile.photos.map((photo, i) => (
+                <PhotoBar key={photo.photo_id} active={photoIndex === i} />
               ))
             : null}
         </PhotoBarContainer>
       ) : null}
 
       <CardContent>
-        {profile?.photos[0]?.caption ? (
-          <PhotoCaption>{profile.photos[0].caption}</PhotoCaption>
+        {profile?.photos[photoIndex]?.caption ? (
+          <PhotoCaption>{profile.photos[photoIndex].caption}</PhotoCaption>
         ) : null}
         <NameAge>
           {getFirstName(profile?.name || '')}{' '}
           <span>{getAge(profile?.birthdate || '')}</span>
         </NameAge>
-        <Info>
+        <Info onClick={handleSwipe}>
           <div>
             <Location>
               <AiOutlineHome />
@@ -129,7 +167,7 @@ const ProfileCard: React.FC<Props> = ({ profile }) => {
             </Location>
             <Bio>{profile?.bio}</Bio>
           </div>
-          <InfoBtn>
+          <InfoBtn onClick={() => setShowDetails(true)}>
             <MdInfo size={'100%'} />
           </InfoBtn>
         </Info>

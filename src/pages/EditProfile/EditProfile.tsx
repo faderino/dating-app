@@ -1,17 +1,9 @@
 import React from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import PhotoInput from '../../components/PhotoInput';
 import { useGetProfileQuery } from '../../services/profile';
+import { slideUp } from '../../styles/animations';
 import colors from '../../styles/colors';
-
-export const slideUp = keyframes`
-  0% {
-    transform: translateY(100%)
-  }
-  100% {
-    transform: translate(0)
-  }
-`;
 
 const PageContainer = styled.div`
   width: 100%;

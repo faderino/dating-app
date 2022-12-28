@@ -30,7 +30,7 @@ const Recommendations: React.FC = () => {
   useEffect(() => {
     if (recommendations) {
       const data = [...recommendations.data].reverse();
-      setStack(data);
+      setStack([...data, ...stack]);
 
       if (recommendations.total_pages === page) {
         setPage(1);
@@ -38,11 +38,11 @@ const Recommendations: React.FC = () => {
     }
   }, [recommendations]);
 
-  const handleClick = () => {
+  const handleSwipe = () => {
     const copyStack = [...stack];
     copyStack.pop();
     setStack(copyStack);
-    if (copyStack.length === 0) {
+    if (copyStack.length === 3) {
       setPage((page) => page + 1);
     }
   };
@@ -51,8 +51,8 @@ const Recommendations: React.FC = () => {
     <PageContent>
       <StackList>
         {stack.map((profile) => (
-          <StackItem key={profile.profile_id} onClick={handleClick}>
-            <ProfileCard profile={profile} />
+          <StackItem key={profile.profile_id}>
+            <ProfileCard profile={profile} handleSwipe={handleSwipe} />
           </StackItem>
         ))}
       </StackList>
