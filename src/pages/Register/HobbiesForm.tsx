@@ -27,7 +27,7 @@ const ErrorText = styled.p`
   margin: -2rem 0 2rem 0;
 `;
 
-const HobbiesContainer = styled.div`
+export const HobbiesContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
