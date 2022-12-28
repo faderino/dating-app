@@ -88,9 +88,9 @@ const ProfileCard: React.FC<Props> = ({ profile, handleSwipe }) => {
             <MdInfo size={'100%'} />
           </InfoBtn>
         </Info>
-        {/* <button style={{ color: colors.white }} onClick={handleSwipe}>
+        <button style={{ color: colors.white }} onClick={handleSwipe}>
           NEXT
-        </button> */}
+        </button>
       </CardContent>
     </Card>
   );

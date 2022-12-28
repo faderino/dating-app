@@ -104,7 +104,7 @@ const Profile: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { data: user } = useGetProfileQuery();
-  const profilePhoto = user?.profile.photos[0].image_url;
+  const profilePhoto = user?.profile.photos[0]?.image_url;
 
   const handleLogout = () => {
     dispatch(baseApi.util.resetApiState());

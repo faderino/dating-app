@@ -6,7 +6,6 @@ import colors from '../../styles/colors';
 import { Profile } from '../../types/profile';
 import { getAge, getFirstName } from '../../utils/format';
 import {
-  Bio,
   Card,
   Location,
   NameAge,
