@@ -34,7 +34,7 @@ function App(): JSX.Element {
           <Route
             path="profile"
             element={
-              <Layout hideHeader>
+              <Layout>
                 <Profile />
               </Layout>
             }
