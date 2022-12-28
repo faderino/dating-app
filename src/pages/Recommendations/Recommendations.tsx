@@ -7,6 +7,10 @@ import { Profile } from '../../types/profile';
 
 const PageContent = styled(Content)`
   height: 100vh;
+  @media screen and (min-width: 896px) {
+    max-width: 500px;
+    margin: 0 auto;
+  }
 `;
 
 const StackList = styled.div`
