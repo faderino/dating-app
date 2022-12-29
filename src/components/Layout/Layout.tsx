@@ -7,7 +7,9 @@ import colors from '../../styles/colors';
 import BottomNav from '../BottomNav/BottomNav';
 import { Logo } from '../Logo';
 
-const Container = styled.div``;
+const Container = styled.div`
+  overflow-x: hidden;
+`;
 
 const Header = styled.div`
   position: fixed;

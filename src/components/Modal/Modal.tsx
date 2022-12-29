@@ -66,7 +66,7 @@ export const ModalAction = styled.div`
   margin-top: 2.5rem;
 `;
 
-const CloseButton = styled.button`
+export const CloseModalBtn = styled.button`
   cursor: pointer;
   background-color: transparent;
   border-radius: 50%;
@@ -93,11 +93,17 @@ export type ModalProps = {
   show: boolean;
   closeModal: () => void;
   children?: React.ReactNode;
+  className?: string;
 };
 
 type ModalState = 'show' | 'closing' | 'close';
 
-const Modal: React.FC<ModalProps> = ({ show, closeModal, children }) => {
+const Modal: React.FC<ModalProps> = ({
+  show,
+  closeModal,
+  children,
+  className,
+}) => {
   const [modalState, setModalState] = useState<ModalState>('close');
 
   useEffect(() => {
@@ -115,13 +121,14 @@ const Modal: React.FC<ModalProps> = ({ show, closeModal, children }) => {
   return modalState !== 'close' ? (
     <Backdrop>
       <ModalContent
+        className={className}
         closing={modalState === 'closing'}
         onAnimationEnd={handleClose}
       >
         {children}
-        <CloseButton onClick={closeModal}>
+        <CloseModalBtn onClick={closeModal}>
           <FaTimes size={16} color="inherit" />
-        </CloseButton>
+        </CloseModalBtn>
       </ModalContent>
     </Backdrop>
   ) : null;

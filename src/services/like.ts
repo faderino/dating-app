@@ -5,14 +5,14 @@ type LikeRequest = {
   liked_user_id: number;
 };
 
-type LikeResponseData = {
+export type LikeResponseData = {
   likes_remaining: number;
   match: boolean;
   liked_user_name: string;
   liked_user_photo: string;
 };
 
-type LikeResponse = ResponseAPI<LikeResponseData>;
+export type LikeResponse = ResponseAPI<LikeResponseData>;
 
 export const likesApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
