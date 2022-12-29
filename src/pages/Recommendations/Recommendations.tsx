@@ -12,6 +12,7 @@ import {
   StackItem,
 } from './styles';
 import { useLikeMutation } from '../../services/like';
+import { AnimatePresence } from 'framer-motion';
 
 const Recommendations: React.FC = () => {
   const [page, setPage] = useState(1);
@@ -52,11 +53,13 @@ const Recommendations: React.FC = () => {
   return (
     <PageContent>
       <Stack>
-        {stack.map((profile, i) => (
-          <StackItem key={i}>
-            <ProfileCard profile={profile} handleSwipe={handleSwipe} />
-          </StackItem>
-        ))}
+        <AnimatePresence>
+          {stack.map((profile, i) => (
+            <StackItem key={i} handleSwipe={handleSwipe}>
+              <ProfileCard profile={profile} />
+            </StackItem>
+          ))}
+        </AnimatePresence>
       </Stack>
       <ActionButtons>
         <SkipButton onClick={() => handleSwipe('skip')}>

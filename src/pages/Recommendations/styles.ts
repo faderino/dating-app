@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Content } from '../../components/Layout';
+import SwipeCard from '../../components/SwipeCard';
 import colors from '../../styles/colors';
 
 export const PageContent = styled(Content)`
@@ -19,7 +20,7 @@ export const Stack = styled.div`
   position: relative;
 `;
 
-export const StackItem = styled.div`
+export const StackItem = styled(SwipeCard)`
   position: absolute;
   width: 100%;
   height: 100%;
