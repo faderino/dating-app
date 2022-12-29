@@ -15,7 +15,7 @@ export const PageContent = styled(Content)`
 
 export const Stack = styled.div`
   width: 98%;
-  flex: 1;
+  height: 98%;
   margin: auto;
   position: relative;
 `;

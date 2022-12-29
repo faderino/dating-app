@@ -4,6 +4,7 @@ import authReducer from './auth/authSlice';
 import { handleUnauthorized } from './middlewares/errorHandler';
 import logger from 'redux-logger';
 import registerFormReducer from './registerForm/registerFormSlice';
+import profileReducer from './profile/profileSlice';
 
 const middlewares = [baseApi.middleware, handleUnauthorized];
 if (process.env.NODE_ENV !== 'production') {
@@ -15,6 +16,7 @@ export const store = configureStore({
     [baseApi.reducerPath]: baseApi.reducer,
     auth: authReducer,
     registerForm: registerFormReducer,
+    profile: profileReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }).concat(middlewares),
