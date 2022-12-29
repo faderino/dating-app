@@ -8,9 +8,15 @@ type Props = {
   children: React.ReactNode;
   className?: string;
   handleSwipe: (action: 'like' | 'skip') => void;
+  active?: boolean;
 };
 
-const SwipeCard: React.FC<Props> = ({ className, handleSwipe, children }) => {
+const SwipeCard: React.FC<Props> = ({
+  className,
+  handleSwipe,
+  children,
+  active,
+}) => {
   const [leaveX, setLeaveX] = useState(0);
 
   const onDragEnd = (
@@ -30,7 +36,7 @@ const SwipeCard: React.FC<Props> = ({ className, handleSwipe, children }) => {
   return (
     <Swipe
       className={className}
-      drag={true}
+      drag={active}
       dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
       onDragEnd={onDragEnd}
       exit={{
