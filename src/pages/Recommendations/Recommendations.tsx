@@ -34,6 +34,8 @@ const Recommendations: React.FC = () => {
   const handleSwipe = async (action: 'like' | 'skip') => {
     const copyStack = [...stack];
     const currentProfile = copyStack[copyStack.length - 1];
+    copyStack.pop();
+    setStack(copyStack);
     console.log(currentProfile);
     if (action === 'like') {
       try {
@@ -43,8 +45,6 @@ const Recommendations: React.FC = () => {
         console.log(error);
       }
     }
-    copyStack.pop();
-    setStack(copyStack);
     if (copyStack.length === 3) {
       setPage((page) => page + 1);
     }
@@ -55,7 +55,11 @@ const Recommendations: React.FC = () => {
       <Stack>
         <AnimatePresence>
           {stack.map((profile, i) => (
-            <StackItem key={i} handleSwipe={handleSwipe}>
+            <StackItem
+              key={i}
+              handleSwipe={handleSwipe}
+              active={i === stack.length - 1}
+            >
               <ProfileCard profile={profile} />
             </StackItem>
           ))}

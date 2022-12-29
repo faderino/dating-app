@@ -22,7 +22,6 @@ export const likesApi = baseApi.injectEndpoints({
         method: 'POST',
         body,
       }),
-      invalidatesTags: ['Recommendations'],
     }),
   }),
 });
