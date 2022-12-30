@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from '..';
-import { profileApi } from '../../services/profile';
+import { profileApi } from '../../services/profile.service';
 import { Profile } from '../../types/profile';
 
 export interface ProfileState {

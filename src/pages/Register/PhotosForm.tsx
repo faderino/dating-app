@@ -9,7 +9,7 @@ import styled, { css } from 'styled-components';
 import colors from '../../styles/colors';
 import PhotoInput from '../../components/PhotoInput';
 import { ContinueButton } from '../../components/Button/ContinueButton';
-import { useRegisterMutation } from '../../services/auth';
+import { useRegisterMutation } from '../../services/auth.service';
 import { toast } from 'react-toastify';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';

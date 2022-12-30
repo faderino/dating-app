@@ -10,7 +10,7 @@ import MenuItem, {
 } from '../../components/MenuItem/MenuItem';
 import { useAppDispatch } from '../../hooks/store';
 import { baseApi } from '../../services/baseApi';
-import { useGetProfileQuery } from '../../services/profile';
+import { useGetProfileQuery } from '../../services/profile.service';
 import { logout } from '../../store/auth/authSlice';
 import colors from '../../styles/colors';
 import {

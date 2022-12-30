@@ -14,7 +14,7 @@ import {
 import colors from '../../styles/colors';
 import { isEmail, isEmpty } from '../../utils/validation';
 import { ContinueButton } from '../../components/Button/ContinueButton';
-import { useGetCitiesQuery } from '../../services/cities';
+import { useGetCitiesQuery } from '../../services/cities.service';
 import Select from '../../components/Select';
 
 const Container = styled.div`

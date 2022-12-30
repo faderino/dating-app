@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '..';
-import { authApi } from '../../services/auth';
+import { authApi } from '../../services/auth.service';
 
 export interface LoggedInUser {
   user_id: number;
