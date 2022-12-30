@@ -1,8 +1,5 @@
-import { PanInfo, motion } from 'framer-motion';
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-
-const Swipe = styled(motion.div)``;
+import { PanInfo, motion, useAnimationControls } from 'framer-motion';
+import React, { useEffect } from 'react';
 
 type Props = {
   children: React.ReactNode;
@@ -17,54 +14,72 @@ const SwipeCard: React.FC<Props> = ({
   children,
   active,
 }) => {
-  const [leaveX, setLeaveX] = useState(0);
+  const controls = useAnimationControls();
+
+  const swipeLeft = () =>
+    controls.start({
+      x: -1000,
+      opacity: 0,
+      transition: { duration: 0.3 },
+    });
+
+  const swipeRight = () =>
+    controls.start({
+      x: 1000,
+      opacity: 0,
+      transition: { duration: 0.3 },
+    });
 
   useEffect(() => {
     const handleArrowKey = (e: KeyboardEvent) => {
       e.preventDefault();
       if (active) {
         if (e.key === 'ArrowRight') {
-          console.log('arrow right');
-        }
-        if (e.key === 'ArrowLeft') {
-          console.log('arrow left');
-          handleSwipe('skip');
+          swipeRight();
+          setTimeout(() => {
+            handleSwipe('like'); // TODO: change skip to like
+          }, 300);
+        } else if (e.key === 'ArrowLeft') {
+          swipeLeft();
+          setTimeout(() => {
+            handleSwipe('skip');
+          }, 300);
         }
       }
     };
     document.addEventListener('keydown', handleArrowKey);
-
     return () => document.removeEventListener('keydown', handleArrowKey);
-  }, []);
+  }, [active]);
 
   const onDragEnd = (
     e: MouseEvent | TouchEvent | PointerEvent,
     info: PanInfo,
   ) => {
     if (info.offset.x > 350) {
-      setLeaveX(1000);
-      handleSwipe('like');
-    }
-    if (info.offset.x < -350) {
-      setLeaveX(-1000);
-      handleSwipe('skip');
+      swipeRight();
+      setTimeout(() => {
+        handleSwipe('like'); // TODO: change skip to like
+      }, 300);
+    } else if (info.offset.x < -350) {
+      swipeLeft();
+      setTimeout(() => {
+        handleSwipe('skip');
+      }, 300);
     }
   };
 
   return (
-    <Swipe
+    <motion.div
       className={className}
-      drag={true}
+      drag={active}
+      initial={false}
       dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
+      dragSnapToOrigin
       onDragEnd={onDragEnd}
-      exit={{
-        x: leaveX,
-        opacity: 0,
-        transition: { duration: 0.3 },
-      }}
+      animate={controls}
     >
       {children}
-    </Swipe>
+    </motion.div>
   );
 };
 

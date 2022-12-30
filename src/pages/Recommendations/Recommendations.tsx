@@ -4,7 +4,6 @@ import { useGetRecommendationsQuery } from '../../services/recommendations';
 import { Profile } from '../../types/profile';
 import { PageContent, Stack, StackItem } from './styles';
 import { LikeResponseData, useLikeMutation } from '../../services/like';
-import { AnimatePresence } from 'framer-motion';
 import useModal from '../../hooks/modal';
 import { toast } from 'react-toastify';
 import MatchModal from '../../components/MatchModal';
@@ -27,17 +26,18 @@ const Recommendations: React.FC = () => {
   }, [recommendations]);
 
   const handleSwipe = async (action: 'like' | 'skip') => {
+    if (stack.length === 2) {
+      const nextPage = (page % recommendations!.total_pages) + 1;
+      setPage(nextPage);
+    }
     const copyStack = [...stack];
-    const currentProfile = copyStack[copyStack.length - 1];
-    copyStack.pop();
+    const currentProfile = copyStack.pop();
     setStack(copyStack);
-    console.log(currentProfile);
     if (action === 'like') {
       try {
         const resp = await like({
-          liked_user_id: currentProfile.profile_id,
+          liked_user_id: currentProfile!.profile_id,
         }).unwrap();
-        console.log(resp);
         if (resp.data.match) {
           setMatchData(resp.data);
           openModal();
@@ -46,37 +46,21 @@ const Recommendations: React.FC = () => {
         toast.error('Server error');
       }
     }
-    if (copyStack.length === 3) {
-      const nextPage = (page % recommendations!.total_pages) + 1;
-      setPage(nextPage);
-    }
   };
 
   return (
     <>
       <PageContent>
         <Stack>
-          <AnimatePresence>
-            {stack.map((profile, i) => (
-              <StackItem
-                key={i}
-                handleSwipe={handleSwipe}
-                active={i === stack.length - 1}
-              >
+          {stack.map((profile, i) => {
+            const isTop = i === stack.length - 1;
+            return (
+              <StackItem key={i} handleSwipe={handleSwipe} active={isTop}>
                 <ProfileCard profile={profile} />
               </StackItem>
-            ))}
-          </AnimatePresence>
+            );
+          })}
         </Stack>
-        {/* <ActionButtons>
-        <SkipButton onClick={() => handleSwipe('skip')}>
-          <IoMdClose size={32} />
-        </SkipButton>
-        <p>or</p>
-        <LikeButton onClick={() => handleSwipe('like')}>
-          <IoMdHeart size={32} />
-        </LikeButton>
-      </ActionButtons> */}
       </PageContent>
       <MatchModal
         matchData={matchData}
