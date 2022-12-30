@@ -63,6 +63,11 @@ const MatchDetailModal: React.FC<Props> = ({
 }) => {
   const [photoIndex, setPhotoIndex] = useState(0);
 
+  const handleCloseModal = () => {
+    setPhotoIndex(0);
+    closeModal();
+  };
+
   const nextPhoto = () => {
     setPhotoIndex((photoIndex + 1) % detailData!.photos.length);
   };
@@ -75,10 +80,10 @@ const MatchDetailModal: React.FC<Props> = ({
   };
 
   return (
-    <StyledModal show={show} closeModal={closeModal}>
+    <StyledModal show={show} closeModal={handleCloseModal}>
       <StyledProfileDetail
         profile={detailData}
-        hideDetails={closeModal}
+        hideDetails={handleCloseModal}
         nextPhoto={nextPhoto}
         prevPhoto={prevPhoto}
         photoIndex={photoIndex}
