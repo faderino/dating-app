@@ -37,7 +37,7 @@ const SwipeCard: React.FC<Props> = ({
         if (e.key === 'ArrowRight') {
           swipeRight();
           setTimeout(() => {
-            handleSwipe('like'); // TODO: change skip to like
+            handleSwipe('like');
           }, 300);
         } else if (e.key === 'ArrowLeft') {
           swipeLeft();
@@ -58,7 +58,7 @@ const SwipeCard: React.FC<Props> = ({
     if (info.offset.x > 350) {
       swipeRight();
       setTimeout(() => {
-        handleSwipe('like'); // TODO: change skip to like
+        handleSwipe('like');
       }, 300);
     } else if (info.offset.x < -350) {
       swipeLeft();

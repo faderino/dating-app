@@ -8,6 +8,7 @@ import Register from './pages/Register';
 import Swipe from './pages/Recommendations/Recommendations';
 import { AuthorizeUserRoute } from './ProtectedRoutes';
 import { RoleID } from './types/user';
+import Matches from './pages/Matches';
 
 function App(): JSX.Element {
   return (
@@ -40,6 +41,14 @@ function App(): JSX.Element {
             }
           />
           <Route path="profile/edit" element={<EditProfile />} />
+          <Route
+            path="matches"
+            element={
+              <Layout>
+                <Matches />
+              </Layout>
+            }
+          />
         </Route>
       </Route>
     </Routes>
