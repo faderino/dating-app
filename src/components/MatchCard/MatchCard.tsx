@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import colors from '../../styles/colors';
+import { Profile } from '../../types/profile';
+import { getAge, getFirstName } from '../../utils/format';
 
 const BackgroundImage = styled.div<{ img?: string }>`
   background-image: url(${(props) => props.img});
@@ -29,8 +31,7 @@ const Card = styled.button`
 `;
 
 const CardContent = styled.div`
-  z-index: 1;
-  padding: 0.5rem;
+  padding: 1rem 0.5rem 0.5rem 0.5rem;
   text-align: left;
   position: absolute;
   bottom: 0;
@@ -38,7 +39,7 @@ const CardContent = styled.div`
   color: ${colors.white};
   background-image: linear-gradient(
     to top,
-    rgb(0, 0, 0) 5%,
+    rgb(0, 0, 0) 0%,
     rgba(255, 255, 255, 0) 100%
   );
 `;
@@ -49,14 +50,19 @@ const NameAge = styled.h3`
   }
 `;
 
-const MatchCard: React.FC = () => {
+type Props = {
+  profile?: Profile;
+  onClick: () => void;
+};
+
+const MatchCard: React.FC<Props> = ({ profile, onClick }) => {
   return (
-    <Card>
-      <BackgroundImage img="https://res.cloudinary.com/dovwy5iam/image/upload/v1672112777/dating_apps/pommu3oasymipdb7dcqz.jpg"></BackgroundImage>
+    <Card onClick={onClick}>
+      <BackgroundImage img={profile?.photos[0]?.image_url}></BackgroundImage>
       <CardContent>
         <NameAge>
-          Luffy
-          <span> 16</span>
+          {getFirstName(profile?.name || '')}
+          <span> {getAge(profile?.birthdate || '0')}</span>
         </NameAge>
       </CardContent>
     </Card>

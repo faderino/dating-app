@@ -22,11 +22,16 @@ type Props = {
   active?: boolean;
   hobby: Hobby;
   onClick?: (hobbyId: number) => void;
+  className?: string;
 };
 
-const HobbyBadge: React.FC<Props> = ({ active, hobby, onClick }) => {
+const HobbyBadge: React.FC<Props> = ({ active, hobby, onClick, className }) => {
   return (
-    <Badge active={active} onClick={() => onClick?.(hobby.hobby_id)}>
+    <Badge
+      active={active}
+      onClick={() => onClick?.(hobby.hobby_id)}
+      className={className}
+    >
       {hobby.title}
     </Badge>
   );
