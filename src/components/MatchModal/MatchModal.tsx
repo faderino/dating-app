@@ -2,7 +2,7 @@ import React from 'react';
 import { FaGift } from 'react-icons/fa';
 import styled from 'styled-components';
 import { useAppSelector } from '../../hooks/store';
-import { LikeResponseData } from '../../services/like';
+import { LikeResponseData } from '../../services/like.service';
 import { selectProfile } from '../../store/profile/profileSlice';
 import colors from '../../styles/colors';
 import { PrimaryButton } from '../Button';

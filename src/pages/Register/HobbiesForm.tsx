@@ -8,7 +8,7 @@ import {
 } from '../../store/registerForm/registerFormSlice';
 import styled from 'styled-components';
 import colors from '../../styles/colors';
-import { useGetHobbiesQuery } from '../../services/hobbies';
+import { useGetHobbiesQuery } from '../../services/hobbies.service';
 import HobbyBadge from '../../components/HobbyBadge';
 
 const FormTitle = styled.h1`

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import PhotoInput from '../../components/PhotoInput';
-import { useGetProfileQuery } from '../../services/profile';
+import { useGetProfileQuery } from '../../services/profile.service';
 import { slideUp } from '../../styles/animations';
 import colors from '../../styles/colors';
 

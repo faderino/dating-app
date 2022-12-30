@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import ProfileCard from '../../components/ProfileCard';
-import { useGetRecommendationsQuery } from '../../services/recommendations';
+import { useGetRecommendationsQuery } from '../../services/recommendations.service';
 import { Profile } from '../../types/profile';
 import { PageContent, Stack, StackItem } from './styles';
-import { LikeResponseData, useLikeMutation } from '../../services/like';
+import { LikeResponseData, useLikeMutation } from '../../services/like.service';
 import useModal from '../../hooks/modal';
 import { toast } from 'react-toastify';
 import MatchModal from '../../components/MatchModal';
-import { useGetProfileQuery } from '../../services/profile';
+import { useGetProfileQuery } from '../../services/profile.service';
 
 const Recommendations: React.FC = () => {
   const [page, setPage] = useState<number>(1);

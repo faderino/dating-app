@@ -3,7 +3,7 @@ import { MdEmail, MdLock } from 'react-icons/md';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
-import { LoginRequest, useLoginMutation } from '../../services/auth';
+import { LoginRequest, useLoginMutation } from '../../services/auth.service';
 import { isEmail, isEmpty } from '../../utils/validation';
 import { PrimaryButton } from '../Button';
 import InputField from '../InputField/InputField';
