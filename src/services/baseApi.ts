@@ -13,19 +13,8 @@ const baseQuery = fetchBaseQuery({
   },
 });
 
-// const baseQueryWithAuth: BaseQueryFn = async (args, api, extraOptions) => {
-//   const result = await baseQuery(args, api, extraOptions);
-
-//   if (result?.error?.status === HttpStatusCode.Unauthorized) {
-//     api.dispatch(logout());
-//     window.location.reload();
-//   }
-
-//   return result;
-// };
-
 export const baseApi = createApi({
   baseQuery: baseQuery,
   endpoints: () => ({}),
-  tagTypes: ['Profile', 'Recommendations'],
+  tagTypes: ['Profile', 'Recommendations', 'Matches'],
 });

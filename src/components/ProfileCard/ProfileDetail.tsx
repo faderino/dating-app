@@ -24,7 +24,7 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
-const PhotoSection = styled(Card)`
+export const PhotoSection = styled(Card)`
   height: 50%;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
@@ -32,7 +32,7 @@ const PhotoSection = styled(Card)`
   flex-shrink: 0;
 `;
 
-const DetailSection = styled.div`
+export const DetailSection = styled.div`
   background-color: ${colors.white};
   padding: 1rem 0 54px 0;
   position: relative;
@@ -76,12 +76,17 @@ const DetailTitle = styled.div`
   margin-bottom: 1rem;
 `;
 
+const StyledHobbyBadge = styled(HobbyBadge)`
+  cursor: default;
+`;
+
 type Props = {
   profile?: Profile;
   photoIndex: number;
   hideDetails: () => void;
   nextPhoto: () => void;
   prevPhoto: () => void;
+  className?: string;
 };
 
 const ProfileDetail: React.FC<Props> = ({
@@ -90,10 +95,11 @@ const ProfileDetail: React.FC<Props> = ({
   hideDetails,
   nextPhoto,
   prevPhoto,
+  className,
 }) => {
   const firstName = getFirstName(profile?.name || '');
   return (
-    <Container>
+    <Container className={className}>
       <PhotoSection img={profile?.photos[photoIndex]?.image_url}>
         <PreviousPhoto onClick={prevPhoto} />
         <NextPhoto onClick={nextPhoto} />
@@ -128,7 +134,7 @@ const ProfileDetail: React.FC<Props> = ({
           <DetailTitle>Hobbies</DetailTitle>
           <HobbiesContainer>
             {profile?.hobbies.map((hobby) => (
-              <HobbyBadge key={hobby.hobby_id} hobby={hobby} />
+              <StyledHobbyBadge key={hobby.hobby_id} hobby={hobby} />
             ))}
           </HobbiesContainer>
         </DetailItem>

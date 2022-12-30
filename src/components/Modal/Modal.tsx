@@ -54,6 +54,8 @@ export const ModalContent = styled.div<{ closing: boolean }>`
   @media screen and (min-width: 896px) {
     max-width: 600px;
     height: auto;
+    max-height: 850px;
+    overflow: auto;
     border-radius: 0.75rem;
   }
 `;
@@ -105,6 +107,14 @@ const Modal: React.FC<ModalProps> = ({
   className,
 }) => {
   const [modalState, setModalState] = useState<ModalState>('close');
+
+  useEffect(() => {
+    if (modalState === 'show') {
+      document.body.style.overflow = 'hidden';
+    } else if (modalState === 'close') {
+      document.body.style.overflow = 'unset';
+    }
+  }, [modalState]);
 
   useEffect(() => {
     if (modalState === 'show' && !show) {
