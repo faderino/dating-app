@@ -1,15 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import GiftCard from '../../components/GiftCard';
 import { Content } from '../../components/Layout';
-import useModal from '../../hooks/modal';
 import {
   GiftVoucher,
   useGetGiftVouchersQuery,
 } from '../../services/gifts.service';
 import colors from '../../styles/colors';
-import BuyGiftModal from './BuyGiftModal';
 
 const PageContent = styled(Content)``;
 
@@ -43,13 +41,9 @@ const GiftCardsContainer = styled(Container)`
 
 const Gifts: React.FC = () => {
   const { data: giftVouchers } = useGetGiftVouchersQuery();
-  const { closeModal, openModal, showModal } = useModal();
-  const [selectedGiftVoucher, setSelectedGiftVoucher] = useState<GiftVoucher>();
   const navigate = useNavigate();
 
   const handleBuy = (voucher: GiftVoucher) => {
-    setSelectedGiftVoucher(voucher);
-    openModal();
     navigate('/app/gifts/buy', { state: { voucher } });
   };
 
@@ -72,11 +66,6 @@ const Gifts: React.FC = () => {
           <p>My Gifts</p>
         </Header>
       </PageContent>
-      <BuyGiftModal
-        show={showModal}
-        closeModal={closeModal}
-        selectedGiftVoucher={selectedGiftVoucher}
-      />
     </>
   );
 };
