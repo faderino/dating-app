@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import GiftBagButton from '../../components/GiftBagButton';
 import GiftCard from '../../components/GiftCard';
 import { Content } from '../../components/Layout';
 import {
@@ -19,6 +20,19 @@ const Header = styled.div`
   p {
     max-width: 1024px;
     margin: auto;
+  }
+`;
+
+const GiftCardsHeader = styled(Header)`
+  & > div {
+    max-width: 1024px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    p {
+      margin: 0;
+    }
   }
 `;
 
@@ -50,9 +64,12 @@ const Gifts: React.FC = () => {
   return (
     <>
       <PageContent>
-        <Header>
-          <p>Gift Cards</p>
-        </Header>
+        <GiftCardsHeader>
+          <div>
+            <p>Gift Cards</p>
+            <GiftBagButton></GiftBagButton>
+          </div>
+        </GiftCardsHeader>
         <GiftCardsContainer>
           {giftVouchers?.map((voucher) => (
             <GiftCard

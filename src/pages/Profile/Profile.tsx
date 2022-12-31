@@ -33,7 +33,7 @@ const ProfileSection = styled.div`
     rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
 `;
 
-const ProfilePhotoContainer = styled.div`
+export const ProfilePhotoContainer = styled.div`
   margin: 2rem auto 1rem auto;
   overflow: hidden;
   height: 175px;
@@ -43,7 +43,7 @@ const ProfilePhotoContainer = styled.div`
   flex-shrink: 0;
 `;
 
-const ProfilePhoto = styled.div<{ img?: string }>`
+export const ProfilePhoto = styled.div<{ img?: string }>`
   background-image: url(${(props) => props.img});
   background-size: cover;
   width: 100%;

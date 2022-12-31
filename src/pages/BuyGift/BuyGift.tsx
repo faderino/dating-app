@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { MdMessage, MdPerson } from 'react-icons/md';
-import { useLocation } from 'react-router-dom';
-import styled from 'styled-components';
-import { PrimaryButton } from '../../components/Button';
+import { useLocation, useNavigate } from 'react-router-dom';
 import PreviewGiftCard from '../../components/GiftCard/PreviewGiftCard';
-import { Content } from '../../components/Layout';
 import InputField from '../../components/InputField/InputField';
 import Select from '../../components/Select';
 import TextArea from '../../components/TextArea';
@@ -13,132 +10,60 @@ import {
   useGetGiftVouchersQuery,
 } from '../../services/gifts.service';
 import { useGetMatchesQuery } from '../../services/like.service';
-import colors from '../../styles/colors';
 import { compactCurrency } from '../../utils/format';
 import { isEmpty } from '../../utils/validation';
 import SelectRecipientModal from './SelectRecipientModal';
 import useModal from '../../hooks/modal';
 import { Profile } from '../../types/profile';
-
-const PageContent = styled(Content)`
-  @media screen and (min-width: 896px) {
-    height: 100vh;
-    display: flex;
-    width: 100%;
-  }
-`;
-
-const Preview = styled.div`
-  @media screen and (min-width: 896px) {
-    flex-basis: 50%;
-  }
-`;
-
-const Form = styled.div`
-  @media screen and (min-width: 896px) {
-    flex-basis: 50%;
-  }
-`;
-
-const Header = styled.div<{ mb?: number }>`
-  border-bottom: 1px solid ${colors.gray20};
-  padding: 1rem;
-  font-weight: 700;
-  font-size: 1.2rem;
-  p {
-    max-width: 1024px;
-    margin: auto;
-  }
-  margin-bottom: ${(props) => props.mb}rem;
-`;
-
-const Container = styled.div`
-  width: 95%;
-  max-width: 1024px;
-  margin: auto;
-`;
-
-const PreviewSection = styled.div`
-  background-color: ${colors.gray10};
-  padding: 1rem;
-  margin-bottom: 2rem;
-  @media screen and (min-width: 896px) {
-    height: calc(100% - 54px);
-    padding-top: 15rem;
-  }
-`;
-
-const AddToBagButton = styled(PrimaryButton)`
-  padding: 1rem;
-  margin-bottom: 2rem;
-`;
-
-const SelectRecipient = styled.div`
-  width: 100%;
-  padding: 0.5rem 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const SelectedRecipient = styled.div`
-  flex-basis: 60%;
-  display: flex;
-  align-items: center;
-  color: ${colors.text};
-  gap: 0.7rem;
-  p {
-    font-size: 1.1rem;
-  }
-`;
-
-const SelectRecipientPlaceholder = styled.p`
-  padding: 0.6rem 0;
-`;
-
-const RecipientPhoto = styled.div<{ img?: string }>`
-  width: 2.5rem;
-  aspect-ratio: 1;
-  background-image: url(${(props) => props.img});
-  background-position: 50% 50%;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-color: ${colors.black};
-  border-radius: 50%;
-`;
-
-const SelectMatchBtn = styled.button`
-  border: none;
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  font-weight: 600;
-  cursor: pointer;
-  background-color: ${colors.gray20};
-  color: ${colors.gray60};
-  padding: 0.25rem;
-  border-radius: 0.25rem;
-  :hover {
-    background-color: ${colors.gray30};
-  }
-`;
+import {
+  AddToBagButton,
+  Container,
+  Form,
+  Header,
+  PageContent,
+  Preview,
+  PreviewSection,
+  RecipientPhoto,
+  SelectedRecipient,
+  SelectMatchBtn,
+  SelectRecipient,
+  SelectRecipientPlaceholder,
+} from './style';
+import Spinner from '../../components/Spinner/Spinner';
+import { toast } from 'react-toastify';
+import {
+  addItem,
+  GiftVoucherItem,
+  selectGiftRecipient,
+} from '../../store/giftBag/giftBagSlice';
+import { useAppDispatch, useAppSelector } from '../../hooks/store';
 
 const BuyGift: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const { data: giftVouchers } = useGetGiftVouchersQuery();
   const { data: matches } = useGetMatchesQuery();
-  const [message, setMessage] = useState(
-    'Hope you enjoy this Digidate Gift Card!',
-  );
+  const giftBagRecipient = useAppSelector(selectGiftRecipient);
+  const { closeModal, openModal, showModal } = useModal();
+  const [loading, setLoading] = useState(false);
+
   const [selectedVoucher, setSelectedVoucher] = useState<
     GiftVoucher | undefined
   >(location.state?.voucher);
-  const [selectedRecipient, setSelectedRecipient] = useState<Profile>(
-    location.state?.recipient,
+  const defaultRecipient = location.state?.recipient
+    ? location.state.recipient
+    : giftBagRecipient
+    ? giftBagRecipient
+    : undefined;
+  const [selectedRecipient, setSelectedRecipient] =
+    useState<Profile>(defaultRecipient);
+  const [message, setMessage] = useState(
+    'Hope you enjoy this Digidate Gift Card!',
   );
   const [error, setError] = useState(
     {} as { voucher_id: string; message: string; recipient: string },
   );
-  const { closeModal, openModal, showModal } = useModal();
 
   useEffect(() => {
     if (!selectedVoucher && giftVouchers) {
@@ -176,10 +101,23 @@ const BuyGift: React.FC = () => {
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
+
     const valid = validateForm();
     if (!valid) return;
-    console.log(message);
-    console.log(selectedVoucher);
+
+    const giftVoucherItem: GiftVoucherItem = {
+      voucher_id: selectedVoucher!.voucher_id,
+      amount: selectedVoucher!.amount,
+      message: message,
+    };
+
+    setLoading(true);
+    dispatch(addItem({ giftVoucherItem, recipient: selectedRecipient }));
+    setTimeout(() => {
+      setLoading(false);
+      toast('Item added to bag');
+      navigate('/app/gifts');
+    }, 500);
   };
 
   return (
@@ -243,7 +181,7 @@ const BuyGift: React.FC = () => {
               </InputField>
               <TextArea
                 label="Custom message"
-                placeholder="Example bio..."
+                placeholder="Example message..."
                 type="text"
                 name="message"
                 value={message}
@@ -252,8 +190,8 @@ const BuyGift: React.FC = () => {
                 prepend={<MdMessage size={28} />}
                 onChange={(e) => setMessage(e.target.value)}
               />
-              <AddToBagButton block type="submit">
-                ADD TO BAG
+              <AddToBagButton block type="submit" disabled={loading}>
+                {loading ? <Spinner /> : 'ADD TO BAG'}
               </AddToBagButton>
             </form>
           </Container>
