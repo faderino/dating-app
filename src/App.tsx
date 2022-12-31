@@ -11,6 +11,7 @@ import { RoleID } from './types/user';
 import Matches from './pages/Matches';
 import Gifts from './pages/Gifts';
 import BuyGift from './pages/BuyGift';
+import GiftBag from './pages/GiftBag';
 
 function App(): JSX.Element {
   return (
@@ -64,6 +65,14 @@ function App(): JSX.Element {
             element={
               <Layout>
                 <BuyGift />
+              </Layout>
+            }
+          />
+          <Route
+            path="gifts/bag"
+            element={
+              <Layout>
+                <GiftBag />
               </Layout>
             }
           />
