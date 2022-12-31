@@ -9,6 +9,8 @@ import Swipe from './pages/Recommendations/Recommendations';
 import { AuthorizeUserRoute } from './ProtectedRoutes';
 import { RoleID } from './types/user';
 import Matches from './pages/Matches';
+import Gifts from './pages/Gifts';
+import BuyGift from './pages/BuyGift';
 
 function App(): JSX.Element {
   return (
@@ -46,6 +48,22 @@ function App(): JSX.Element {
             element={
               <Layout>
                 <Matches />
+              </Layout>
+            }
+          />
+          <Route
+            path="gifts"
+            element={
+              <Layout>
+                <Gifts />
+              </Layout>
+            }
+          />
+          <Route
+            path="gifts/buy"
+            element={
+              <Layout>
+                <BuyGift />
               </Layout>
             }
           />

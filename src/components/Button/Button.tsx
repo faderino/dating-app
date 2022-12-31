@@ -2,7 +2,7 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import colors from '../../styles/colors';
 
-const ButtonOverlay = styled.span`
+export const ButtonOverlay = styled.span`
   background-color: ${colors.buttonOverlay};
   position: absolute;
   top: 0;

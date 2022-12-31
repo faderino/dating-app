@@ -69,18 +69,24 @@ type InputFieldProps = {
   hint?: string;
   prepend?: React.ReactNode;
   append?: React.ReactNode;
+  disabled?: boolean;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  children?: React.ReactNode;
 };
 
 const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
-  ({ label, prepend, append, error, hint, ...props }, ref) => {
+  ({ label, prepend, append, error, hint, children, ...props }, ref) => {
     const inputId = useId();
     return (
       <Container>
         <Label htmlFor={inputId}>{label}</Label>
         <StyledInput error={error}>
           {prepend}
-          <Input id={inputId} ref={ref} {...props} autoComplete="off" />
+          {children ? (
+            children
+          ) : (
+            <Input id={inputId} ref={ref} {...props} autoComplete="off" />
+          )}
           {append}
         </StyledInput>
         {error && <ErrorText>{error}</ErrorText>}

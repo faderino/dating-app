@@ -1,5 +1,6 @@
 import React from 'react';
 import { FaGift } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useAppSelector } from '../../hooks/store';
 import { LikeResponseData } from '../../services/like.service';
@@ -109,6 +110,7 @@ type Props = ModalProps & {
 
 const MatchModal: React.FC<Props> = ({ show, closeModal, matchData }) => {
   const profile = useAppSelector(selectProfile);
+  const navigate = useNavigate();
 
   return (
     <StyledModal show={show} closeModal={closeModal}>
@@ -126,7 +128,7 @@ const MatchModal: React.FC<Props> = ({ show, closeModal, matchData }) => {
         <h2>{matchData?.liked_user_name}</h2>
       </Container>
       <ActionContainer>
-        <SendGiftButton>
+        <SendGiftButton onClick={() => navigate('/app/gifts')}>
           <FaGift />
           <p>Send gifts</p>
         </SendGiftButton>

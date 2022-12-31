@@ -108,6 +108,7 @@ const Profile: React.FC = () => {
 
   const handleLogout = () => {
     dispatch(baseApi.util.resetApiState());
+    navigate('/');
     dispatch(logout());
   };
 

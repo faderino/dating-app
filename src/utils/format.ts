@@ -28,3 +28,7 @@ export const displayPreference = (gender?: Gender): string => {
   }
   return 'N/A';
 };
+
+export const compactCurrency = (number: number): string => {
+  return Intl.NumberFormat('en', { notation: 'compact' }).format(number);
+};

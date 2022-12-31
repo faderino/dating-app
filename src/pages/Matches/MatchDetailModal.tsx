@@ -9,6 +9,7 @@ import ProfileDetail, {
 } from '../../components/ProfileCard/ProfileDetail';
 import { Profile } from '../../types/profile';
 import colors from '../../styles/colors';
+import { useNavigate } from 'react-router-dom';
 
 const StyledModal = styled(Modal)`
   ${CloseModalBtn} {
@@ -61,6 +62,7 @@ const MatchDetailModal: React.FC<Props> = ({
   closeModal,
   detailData,
 }) => {
+  const navigate = useNavigate();
   const [photoIndex, setPhotoIndex] = useState(0);
 
   const handleCloseModal = () => {
@@ -93,7 +95,11 @@ const MatchDetailModal: React.FC<Props> = ({
           <FaCalendarDay />
           <p>Meetup</p>
         </ScheduleMeetupBtn>
-        <SendGiftButton>
+        <SendGiftButton
+          onClick={() =>
+            navigate('/app/gifts/buy', { state: { recipient: detailData } })
+          }
+        >
           <FaGift />
           <p>Send gifts</p>
         </SendGiftButton>

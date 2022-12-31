@@ -91,7 +91,7 @@ const Select: React.FC<SelectProps> = ({
         {prepend}
         <SelectInput id={inputId} {...props}>
           <option disabled value={0}>
-            Select a city...
+            Choose options...
           </option>
           {options?.map((option) => (
             <option key={option.value} value={option.value}>
