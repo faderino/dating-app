@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '..';
-import { giftsApi, GiftVoucher } from '../../services/gifts.service';
+import { giftsApi, GiftVoucherType } from '../../services/gifts.service';
 import { Profile } from '../../types/profile';
 
-export type GiftVoucherItem = GiftVoucher & {
+export type GiftVoucherItem = GiftVoucherType & {
   message: string;
 };
 
@@ -66,8 +66,8 @@ const giftBagSlice = createSlice({
       (state, action) => {
         state.subTotal = action.payload.voucher_cost;
         state.shippingCost = action.payload.shipping_cost;
-        state.totalCost = action.payload.voucher_cost;
-        +action.payload.shipping_cost;
+        state.totalCost =
+          action.payload.voucher_cost + action.payload.shipping_cost;
       },
     );
   },

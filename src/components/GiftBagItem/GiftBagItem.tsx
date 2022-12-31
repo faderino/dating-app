@@ -2,7 +2,7 @@ import React from 'react';
 import { FaTimesCircle } from 'react-icons/fa';
 import styled from 'styled-components';
 import { useAppSelector } from '../../hooks/store';
-import { GiftVoucher } from '../../services/gifts.service';
+import { GiftVoucherType } from '../../services/gifts.service';
 import {
   GiftVoucherItem,
   selectGiftRecipient,
@@ -32,7 +32,7 @@ type Props = {
 
 const GiftBagItem: React.FC<Props> = ({ item, deleteItem }) => {
   const recipient = useAppSelector(selectGiftRecipient);
-  const voucher: GiftVoucher = {
+  const voucher: GiftVoucherType = {
     amount: item.amount,
     voucher_id: item.voucher_id,
   };

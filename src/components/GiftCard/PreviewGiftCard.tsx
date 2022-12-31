@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { GiftVoucher } from '../../services/gifts.service';
+import { GiftVoucherType } from '../../services/gifts.service';
 import colors from '../../styles/colors';
 import { Profile } from '../../types/profile';
 import { compactCurrency } from '../../utils/format';
@@ -55,7 +55,7 @@ const Message = styled.div`
 `;
 
 type Props = {
-  voucher?: GiftVoucher;
+  voucher?: GiftVoucherType;
   onBuy: () => void;
   message: string;
   recipient?: Profile;

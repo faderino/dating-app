@@ -1,8 +1,9 @@
 import { GiftVoucherItem } from '../store/giftBag/giftBagSlice';
 import { ResponseAPI } from '../types/api';
+import { Gift } from '../types/gift';
 import { baseApi } from './baseApi';
 
-export type GiftVoucher = {
+export type GiftVoucherType = {
   voucher_id: number;
   amount: 200000 | 300000 | 500000;
 };
@@ -17,14 +18,18 @@ export type CalcTotalCostResponse = {
   shipping_cost: number;
 };
 
+export type SendGiftRequest = CalcTotalCostRequest & {
+  pay_amount: number;
+};
+
 export const giftsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getGiftVouchers: builder.query<GiftVoucher[], void>({
+    getGiftVouchers: builder.query<GiftVoucherType[], void>({
       query: () => ({
         url: '/vouchers',
         method: 'GET',
       }),
-      transformResponse: (response: ResponseAPI<GiftVoucher[]>) =>
+      transformResponse: (response: ResponseAPI<GiftVoucherType[]>) =>
         response.data,
     }),
     calcTotalCost: builder.query<CalcTotalCostResponse, CalcTotalCostRequest>({
@@ -36,7 +41,18 @@ export const giftsApi = baseApi.injectEndpoints({
       transformResponse: (response: ResponseAPI<CalcTotalCostResponse>) =>
         response.data,
     }),
+    sendGift: builder.mutation<ResponseAPI<Gift>, SendGiftRequest>({
+      query: (body) => ({
+        url: '/gifts',
+        method: 'POST',
+        body,
+      }),
+    }),
   }),
 });
 
-export const { useGetGiftVouchersQuery, useLazyCalcTotalCostQuery } = giftsApi;
+export const {
+  useGetGiftVouchersQuery,
+  useLazyCalcTotalCostQuery,
+  useSendGiftMutation,
+} = giftsApi;

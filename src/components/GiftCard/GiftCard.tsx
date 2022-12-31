@@ -1,5 +1,5 @@
 import React from 'react';
-import { GiftVoucher } from '../../services/gifts.service';
+import { GiftVoucherType } from '../../services/gifts.service';
 import colors from '../../styles/colors';
 import { compactCurrency } from '../../utils/format';
 import { Logo } from '../Logo';
@@ -11,7 +11,7 @@ import {
 } from './style';
 
 type Props = {
-  voucher?: GiftVoucher;
+  voucher?: GiftVoucherType;
   onBuy: () => void;
 };
 

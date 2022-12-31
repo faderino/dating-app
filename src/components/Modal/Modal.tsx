@@ -52,7 +52,7 @@ export const ModalContent = styled.div<{ closing: boolean }>`
       animation: ${scaleDown} 0.25s ease-out forwards;
     `}
   @media screen and (min-width: 896px) {
-    max-width: 600px;
+    max-width: 900px;
     height: auto;
     max-height: 850px;
     overflow: auto;

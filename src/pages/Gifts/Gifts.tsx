@@ -5,7 +5,7 @@ import GiftBagButton from '../../components/GiftBagButton';
 import GiftCard from '../../components/GiftCard';
 import { Content } from '../../components/Layout';
 import {
-  GiftVoucher,
+  GiftVoucherType,
   useGetGiftVouchersQuery,
 } from '../../services/gifts.service';
 import colors from '../../styles/colors';
@@ -57,7 +57,7 @@ const Gifts: React.FC = () => {
   const { data: giftVouchers } = useGetGiftVouchersQuery();
   const navigate = useNavigate();
 
-  const handleBuy = (voucher: GiftVoucher) => {
+  const handleBuy = (voucher: GiftVoucherType) => {
     navigate('/app/gifts/buy', { state: { voucher } });
   };
 
