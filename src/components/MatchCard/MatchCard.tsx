@@ -53,11 +53,12 @@ const NameAge = styled.h3`
 type Props = {
   profile?: Profile;
   onClick: () => void;
+  className?: string;
 };
 
-const MatchCard: React.FC<Props> = ({ profile, onClick }) => {
+const MatchCard: React.FC<Props> = ({ profile, onClick, className }) => {
   return (
-    <Card onClick={onClick}>
+    <Card onClick={onClick} className={className}>
       <BackgroundImage img={profile?.photos[0]?.image_url}></BackgroundImage>
       <CardContent>
         <NameAge>

@@ -65,17 +65,18 @@ type InputFieldProps = {
   prepend?: React.ReactNode;
   append?: React.ReactNode;
   onChange?: React.ChangeEventHandler<HTMLTextAreaElement>;
+  rows?: number;
 };
 
 const TextArea = forwardRef<HTMLTextAreaElement, InputFieldProps>(
-  ({ label, prepend, append, error, hint, ...props }, ref) => {
+  ({ label, prepend, append, error, hint, rows, ...props }, ref) => {
     const inputId = useId();
     return (
       <Container>
         <Label htmlFor={inputId}>{label}</Label>
         <StyledInput error={error}>
           {prepend}
-          <TextAreaInput id={inputId} ref={ref} {...props} rows={7} />
+          <TextAreaInput id={inputId} ref={ref} {...props} rows={rows ?? 7} />
           {append}
         </StyledInput>
         {error && <ErrorText>{error}</ErrorText>}

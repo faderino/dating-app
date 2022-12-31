@@ -1,5 +1,6 @@
 import React from 'react';
 import { CgCardDiamonds } from 'react-icons/cg';
+import { FaGift } from 'react-icons/fa';
 import { MdPerson } from 'react-icons/md';
 import { RiHeartsFill } from 'react-icons/ri';
 import styled from 'styled-components';
@@ -52,6 +53,10 @@ const Layout: React.FC<Props> = ({ children, hideHeader }) => {
           {
             to: '/app/recommendations',
             icon: <CgCardDiamonds size={32} />,
+          },
+          {
+            to: '/app/gifts',
+            icon: <FaGift size={32} />,
           },
           { to: '/app/profile', icon: <MdPerson size={32} /> },
         ]}
