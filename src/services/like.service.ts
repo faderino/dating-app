@@ -32,6 +32,7 @@ export const likesApi = baseApi.injectEndpoints({
         method: 'POST',
         body,
       }),
+      invalidatesTags: ['Recommendations'],
     }),
     getMatches: builder.query<PaginationResponse<Match>, void>({
       query: () => ({

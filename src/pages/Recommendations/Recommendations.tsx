@@ -26,7 +26,7 @@ const Recommendations: React.FC = () => {
   }, [recommendations]);
 
   const handleSwipe = async (action: 'like' | 'skip') => {
-    if (stack.length === 2) {
+    if (stack.length === 3) {
       const nextPage = (page % recommendations!.total_pages) + 1;
       setPage(nextPage);
     }
@@ -42,8 +42,8 @@ const Recommendations: React.FC = () => {
           setMatchData(resp.data);
           openModal();
         }
-      } catch (error) {
-        toast.error('Server error');
+      } catch (error: any) {
+        toast.error(error.data.message, { theme: 'colored' });
       }
     }
   };
