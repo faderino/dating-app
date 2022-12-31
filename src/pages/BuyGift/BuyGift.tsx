@@ -92,6 +92,9 @@ const BuyGift: React.FC = () => {
     if (!selectedRecipient) {
       currentError.recipient = 'Select who you want to send this gift';
     }
+    if (message.length < 10 || message.length > 50) {
+      currentError.message = 'Between 10 to 50 characters long';
+    }
     if (isEmpty(message)) {
       currentError.message = 'Write a message';
     }
