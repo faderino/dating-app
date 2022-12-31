@@ -6,7 +6,7 @@ import InputField from '../../components/InputField/InputField';
 import Select from '../../components/Select';
 import TextArea from '../../components/TextArea';
 import {
-  GiftVoucher,
+  GiftVoucherType,
   useGetGiftVouchersQuery,
 } from '../../services/gifts.service';
 import { useGetMatchesQuery } from '../../services/like.service';
@@ -49,7 +49,7 @@ const BuyGift: React.FC = () => {
   const [loading, setLoading] = useState(false);
 
   const [selectedVoucher, setSelectedVoucher] = useState<
-    GiftVoucher | undefined
+    GiftVoucherType | undefined
   >(location.state?.voucher);
   const defaultRecipient = location.state?.recipient
     ? location.state.recipient

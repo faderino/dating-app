@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { GiftVoucher } from '../../services/gifts.service';
+import { GiftVoucherType } from '../../services/gifts.service';
 import colors from '../../styles/colors';
 import { Button, ButtonOverlay } from '../Button';
 
@@ -15,7 +15,9 @@ export const GiftCardContainer = styled.div`
   }
 `;
 
-export const GiftCardContent = styled.div<{ amount?: GiftVoucher['amount'] }>`
+export const GiftCardContent = styled.div<{
+  amount?: GiftVoucherType['amount'];
+}>`
   background-color: ${(props) =>
     props.amount === 500000 ? colors.gold : colors.gray40};
   background-image: ${(props) =>
