@@ -3,6 +3,7 @@ import { AiOutlineHome } from 'react-icons/ai';
 import { MdInfo } from 'react-icons/md';
 import { Profile } from '../../types/profile';
 import { getAge, getFirstName } from '../../utils/format';
+import ProfileBadge from '../ProfileBadge/ProfileBadge';
 import ProfileDetail from './ProfileDetail';
 import {
   Bio,
@@ -70,6 +71,9 @@ const ProfileCard: React.FC<Props> = ({ profile }) => {
       <CardContent>
         {profile?.photos[photoIndex]?.caption ? (
           <PhotoCaption>{profile.photos[photoIndex].caption}</PhotoCaption>
+        ) : null}
+        {profile?.gold_profile ? (
+          <ProfileBadge size="sm" isGold={true} />
         ) : null}
         <NameAge>
           {getFirstName(profile?.name || '')}{' '}
