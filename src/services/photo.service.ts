@@ -7,6 +7,11 @@ export type AddPhotoRequest = {
   caption: string;
 };
 
+export type SetCaptionRequest = {
+  photoId: number;
+  caption: string;
+};
+
 export const photoApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     addPhoto: builder.mutation<ResponseAPI<Photo>, FormData>({
@@ -24,7 +29,19 @@ export const photoApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['Profile'],
     }),
+    setCaption: builder.mutation<ResponseAPI<null>, SetCaptionRequest>({
+      query: ({ photoId, ...body }) => ({
+        url: `/photos/${photoId}`,
+        method: 'PATCH',
+        body,
+      }),
+      invalidatesTags: ['Profile'],
+    }),
   }),
 });
 
-export const { useAddPhotoMutation, useRemovePhotoMutation } = photoApi;
+export const {
+  useAddPhotoMutation,
+  useRemovePhotoMutation,
+  useSetCaptionMutation,
+} = photoApi;
