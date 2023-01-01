@@ -1,12 +1,8 @@
 import React from 'react';
 import { FaTimesCircle } from 'react-icons/fa';
 import styled from 'styled-components';
-import { useAppSelector } from '../../hooks/store';
 import { GiftVoucherType } from '../../services/gifts.service';
-import {
-  GiftVoucherItem,
-  selectGiftRecipient,
-} from '../../store/giftBag/giftBagSlice';
+import { GiftVoucherItem } from '../../store/giftBag/giftBagSlice';
 import colors from '../../styles/colors';
 import { Profile } from '../../types/profile';
 import PreviewGiftCard from '../GiftCard/PreviewGiftCard';

@@ -15,6 +15,7 @@ import Select from '../../components/Select';
 import Spinner from '../../components/Spinner/Spinner';
 import TextArea from '../../components/TextArea';
 import useModal from '../../hooks/modal';
+import { useAppSelector } from '../../hooks/store';
 import { useGetCitiesQuery } from '../../services/cities.service';
 import { useGetHobbiesQuery } from '../../services/hobbies.service';
 import {
@@ -22,6 +23,7 @@ import {
   useEditProfileMutation,
   useGetProfileQuery,
 } from '../../services/profile.service';
+import { selectProfile } from '../../store/profile/profileSlice';
 import colors from '../../styles/colors';
 import { Hobby } from '../../types/profile';
 import { getFirstName } from '../../utils/format';
@@ -112,9 +114,10 @@ const SaveButton = styled(PrimaryButton)`
 `;
 
 const EditProfile: React.FC = () => {
-  const { data: user } = useGetProfileQuery();
+  const { refetch } = useGetProfileQuery();
   const { data: cities } = useGetCitiesQuery();
   const { data: hobbies } = useGetHobbiesQuery();
+  const profile = useAppSelector(selectProfile);
   const [editProfile, { isLoading }] = useEditProfileMutation();
   const inputRef = useRef() as React.MutableRefObject<HTMLTextAreaElement>;
   const [editData, setEditData] = useState<EditProfileRequest>(
@@ -132,23 +135,24 @@ const EditProfile: React.FC = () => {
   const { closeModal, openModal, showModal } = useModal();
 
   useEffect(() => {
-    if (user) {
-      setEditData({
-        name: user.profile.name,
-        city_id: user.profile.location.city_id,
-        height: user.profile.height,
-        weight: user.profile.weight,
-        bio: user.profile.bio,
-        hobbies: user.profile.hobbies.map((hobby) => hobby.hobby_id),
-      });
-
-      setSelectedHobbies(user.profile.hobbies);
-    }
-  }, [user]);
+    inputRef.current.focus();
+    refetch();
+  }, []);
 
   useEffect(() => {
-    inputRef.current.focus();
-  }, []);
+    if (profile) {
+      setEditData({
+        name: profile.name,
+        city_id: profile.location.city_id,
+        height: profile.height,
+        weight: profile.weight,
+        bio: profile.bio,
+        hobbies: profile.hobbies.map((hobby) => hobby.hobby_id),
+      });
+
+      setSelectedHobbies(profile.hobbies);
+    }
+  }, [profile]);
 
   useEffect(() => {
     setEditData({
@@ -228,7 +232,7 @@ const EditProfile: React.FC = () => {
             {[...Array(10)].map((_, i) => (
               <PhotoInput
                 key={i}
-                preview={user?.profile.photos[i]?.image_url}
+                preview={profile?.photos[i]?.image_url}
                 name="files"
                 onChange={() => {}}
                 deleteFile={() => {}}
@@ -244,7 +248,7 @@ const EditProfile: React.FC = () => {
             <form onSubmit={handleSubmit}>
               <TextArea
                 ref={inputRef}
-                label={`About ${getFirstName(user?.profile.name || '')}`}
+                label={`About ${getFirstName(profile?.name || '')}`}
                 placeholder="Example bio..."
                 type="text"
                 name="bio"
