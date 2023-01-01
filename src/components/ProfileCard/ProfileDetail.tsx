@@ -134,7 +134,11 @@ const ProfileDetail: React.FC<Props> = ({
           <DetailTitle>Hobbies</DetailTitle>
           <HobbiesContainer>
             {profile?.hobbies.map((hobby) => (
-              <StyledHobbyBadge key={hobby.hobby_id} hobby={hobby} />
+              <StyledHobbyBadge
+                key={hobby.hobby_id}
+                hobby={hobby}
+                onClick={() => {}}
+              />
             ))}
           </HobbiesContainer>
         </DetailItem>

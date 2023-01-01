@@ -12,6 +12,17 @@ type GetProfileResponseData = {
 
 type GetProfileResponse = ResponseAPI<GetProfileResponseData>;
 
+export type EditProfileRequest = {
+  name: string;
+  city_id: number;
+  height: number;
+  weight: number;
+  hobbies: number[];
+  bio: string;
+};
+
+export type EditProfileResponse = Omit<Profile, 'location'>;
+
 export const profileApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getProfile: builder.query<GetProfileResponseData, void>({
@@ -22,7 +33,17 @@ export const profileApi = baseApi.injectEndpoints({
       transformResponse: (response: GetProfileResponse) => response.data,
       providesTags: ['Profile'],
     }),
+    editProfile: builder.mutation<
+      ResponseAPI<EditProfileResponse>,
+      EditProfileRequest
+    >({
+      query: (body) => ({
+        url: '/profiles',
+        method: 'PUT',
+        body,
+      }),
+    }),
   }),
 });
 
-export const { useGetProfileQuery } = profileApi;
+export const { useGetProfileQuery, useEditProfileMutation } = profileApi;

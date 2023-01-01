@@ -43,7 +43,14 @@ function App(): JSX.Element {
               </Layout>
             }
           />
-          <Route path="profile/edit" element={<EditProfile />} />
+          <Route
+            path="profile/edit"
+            element={
+              <Layout>
+                <EditProfile />
+              </Layout>
+            }
+          />
           <Route
             path="matches"
             element={
