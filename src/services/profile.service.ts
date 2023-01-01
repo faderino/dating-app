@@ -23,6 +23,17 @@ export type EditProfileRequest = {
 
 export type EditProfileResponse = Omit<Profile, 'location'>;
 
+export type GoldProfileType = {
+  gold_profile_type_id: number;
+  duration: 1 | 3 | 7;
+  price: 5000 | 10000 | 17500;
+};
+
+export type SubscribeGoldProfileResponse = ResponseAPI<{
+  paid_amount: number;
+  expirty_date: Date;
+}>;
+
 export const profileApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getProfile: builder.query<GetProfileResponseData, void>({
@@ -44,7 +55,27 @@ export const profileApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['Profile'],
     }),
+    getGoldProfileTypes: builder.query<GoldProfileType[], void>({
+      query: () => ({
+        url: '/gold-profile-types',
+        method: 'GET',
+      }),
+      transformResponse: (response: ResponseAPI<GoldProfileType[]>) =>
+        response.data,
+    }),
+    subscribeGold: builder.mutation<SubscribeGoldProfileResponse, number>({
+      query: (id) => ({
+        url: `/profiles/subscribe/${id}`,
+        method: 'PATCH',
+      }),
+      invalidatesTags: ['Profile'],
+    }),
   }),
 });
 
-export const { useGetProfileQuery, useEditProfileMutation } = profileApi;
+export const {
+  useGetProfileQuery,
+  useEditProfileMutation,
+  useGetGoldProfileTypesQuery,
+  useSubscribeGoldMutation,
+} = profileApi;
