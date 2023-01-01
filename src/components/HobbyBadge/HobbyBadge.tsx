@@ -21,17 +21,13 @@ const Badge = styled.div<Pick<Props, 'active'>>`
 type Props = {
   active?: boolean;
   hobby: Hobby;
-  onClick?: (hobbyId: number) => void;
+  onClick: () => void;
   className?: string;
 };
 
 const HobbyBadge: React.FC<Props> = ({ active, hobby, onClick, className }) => {
   return (
-    <Badge
-      active={active}
-      onClick={() => onClick?.(hobby.hobby_id)}
-      className={className}
-    >
+    <Badge active={active} onClick={onClick} className={className}>
       {hobby.title}
     </Badge>
   );

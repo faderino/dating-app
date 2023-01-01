@@ -22,7 +22,7 @@ export interface RegisterFormState {
   formData: RegisterFormData;
 }
 
-type PhotoAndCaption = {
+export type PhotoAndCaption = {
   file: any;
   caption: string;
 };

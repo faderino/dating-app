@@ -96,7 +96,11 @@ const HobbiesForm: React.FC = () => {
           <HobbyBadge
             key={hobby.hobby_id}
             hobby={hobby}
-            onClick={isSelected(hobby.hobby_id) ? unselectHobby : selectHobby}
+            onClick={
+              isSelected(hobby.hobby_id)
+                ? () => unselectHobby(hobby.hobby_id)
+                : () => selectHobby(hobby.hobby_id)
+            }
             active={isSelected(hobby.hobby_id)}
           />
         ))}
