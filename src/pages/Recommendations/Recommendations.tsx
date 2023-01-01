@@ -28,7 +28,11 @@ const Recommendations: React.FC = () => {
   const handleSwipe = async (action: 'like' | 'skip') => {
     if (stack.length === 3) {
       const nextPage = (page % recommendations!.total_pages) + 1;
-      setPage(nextPage);
+      if (page === 1 && nextPage === 1) {
+        setPage(0);
+      } else {
+        setPage(nextPage);
+      }
     }
     const copyStack = [...stack];
     const currentProfile = copyStack.pop();

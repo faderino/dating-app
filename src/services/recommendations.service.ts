@@ -21,5 +21,4 @@ export const recommendationsApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetRecommendationsQuery, useLazyGetRecommendationsQuery } =
-  recommendationsApi;
+export const { useGetRecommendationsQuery } = recommendationsApi;
