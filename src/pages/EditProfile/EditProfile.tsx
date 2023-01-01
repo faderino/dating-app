@@ -19,6 +19,10 @@ import { useAppSelector } from '../../hooks/store';
 import { useGetCitiesQuery } from '../../services/cities.service';
 import { useGetHobbiesQuery } from '../../services/hobbies.service';
 import {
+  useAddPhotoMutation,
+  useRemovePhotoMutation,
+} from '../../services/photo.service';
+import {
   EditProfileRequest,
   useEditProfileMutation,
   useGetProfileQuery,
@@ -113,12 +117,26 @@ const SaveButton = styled(PrimaryButton)`
   margin-top: 1rem;
 `;
 
+const ToastImageUpload = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    object-position: 50% 50%;
+  }
+`;
+
 const EditProfile: React.FC = () => {
   const { refetch } = useGetProfileQuery();
   const { data: cities } = useGetCitiesQuery();
   const { data: hobbies } = useGetHobbiesQuery();
   const profile = useAppSelector(selectProfile);
   const [editProfile, { isLoading }] = useEditProfileMutation();
+  const [uploadPhoto] = useAddPhotoMutation();
+  const [removePhoto, { isLoading: deleteLoading }] = useRemovePhotoMutation();
   const inputRef = useRef() as React.MutableRefObject<HTMLTextAreaElement>;
   const [editData, setEditData] = useState<EditProfileRequest>(
     {} as EditProfileRequest,
@@ -221,12 +239,44 @@ const EditProfile: React.FC = () => {
     }
   };
 
+  const addPhoto: React.ChangeEventHandler<HTMLInputElement> = async (e) => {
+    e.preventDefault();
+    console.log(e.target.files?.[0]);
+    const formData = new FormData();
+    formData.append('file', e.target.files![0]);
+    formData.append('caption', '');
+    try {
+      const resp = await uploadPhoto(formData).unwrap();
+      toast(
+        <ToastImageUpload>
+          <img src={resp.data.image_url} alt="profile" />
+          <p>Add photo success.</p>
+        </ToastImageUpload>,
+      );
+    } catch (error: any) {
+      toast.error(error.data.message, { theme: 'colored' });
+    }
+  };
+
+  const deletePhoto = async (photoId: number) => {
+    if (profile?.photos.length === 1) {
+      toast.error('Minimum one photo', { theme: 'colored' });
+      return;
+    }
+    try {
+      await removePhoto(photoId).unwrap();
+      toast('Photo deleted');
+    } catch (error: any) {
+      toast.error(error.data.message, { theme: 'colored' });
+    }
+  };
+
   return (
     <>
       <PageContent>
         <PhotoSection>
           <Header mb={1.5}>
-            <p>Photo</p>
+            <p>Edit Photo</p>
           </Header>
           <PhotoInputContainer>
             {[...Array(10)].map((_, i) => (
@@ -234,8 +284,8 @@ const EditProfile: React.FC = () => {
                 key={i}
                 preview={profile?.photos[i]?.image_url}
                 name="files"
-                onChange={() => {}}
-                deleteFile={() => {}}
+                onChange={addPhoto}
+                deleteFile={() => deletePhoto(profile!.photos[i].photo_id)}
               />
             ))}
           </PhotoInputContainer>

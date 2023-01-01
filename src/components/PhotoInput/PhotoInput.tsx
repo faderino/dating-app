@@ -84,7 +84,7 @@ type PhotoInputProps = {
   append?: React.ReactNode;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
   className?: string;
-  deleteFile?: React.MouseEventHandler<HTMLDivElement>;
+  deleteFile?: () => void;
 };
 
 const PhotoInput: React.FC<PhotoInputProps> = ({
@@ -97,10 +97,17 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
   ...props
 }) => {
   const inputId = useId();
+
+  const handleDelete = () => {
+    const inputFile = document.getElementById(inputId) as HTMLInputElement;
+    inputFile.value = '';
+    deleteFile?.();
+  };
+
   return (
     <Container className={className}>
       {preview ? (
-        <DeletePhotoBtn onClick={deleteFile}>
+        <DeletePhotoBtn onClick={handleDelete}>
           <FaTimesCircle color={colors.white} size={24} />
         </DeletePhotoBtn>
       ) : (
