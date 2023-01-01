@@ -5,6 +5,7 @@ import {
   MdMonitorWeight,
   MdPersonSearch,
 } from 'react-icons/md';
+import { FaClosedCaptioning } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { PrimaryButton } from '../../components/Button';
@@ -29,11 +30,12 @@ import {
 } from '../../services/profile.service';
 import { selectProfile } from '../../store/profile/profileSlice';
 import colors from '../../styles/colors';
-import { Hobby } from '../../types/profile';
+import { Hobby, Photo } from '../../types/profile';
 import { getFirstName } from '../../utils/format';
 import { isEmpty } from '../../utils/validation';
 import { SelectMatchBtn } from '../BuyGift/style';
 import SelectHobbiesModal from './SelectHobbiesModal';
+import SetCaptionModal from './SetCaptionModal';
 
 const PageContent = styled(Content)`
   @media screen and (min-width: 896px) {
@@ -44,6 +46,7 @@ const PageContent = styled(Content)`
 `;
 
 const PhotoSection = styled.div`
+  margin-bottom: 2rem;
   @media screen and (min-width: 896px) {
     flex-basis: 50%;
   }
@@ -129,6 +132,21 @@ const ToastImageUpload = styled.div`
   }
 `;
 
+const PhotoInputOverlay = styled.div`
+  position: relative;
+`;
+
+const AddCaptionButton = styled.div`
+  cursor: pointer;
+  position: absolute;
+  top: -0.5rem;
+  right: -0.5rem;
+  background-color: ${colors.white};
+  display: flex;
+  padding: 0.05rem 0.2rem;
+  border-radius: 0.25rem;
+`;
+
 const EditProfile: React.FC = () => {
   const { refetch } = useGetProfileQuery();
   const { data: cities } = useGetCitiesQuery();
@@ -151,6 +169,12 @@ const EditProfile: React.FC = () => {
     hobbies: '',
   });
   const { closeModal, openModal, showModal } = useModal();
+  const {
+    closeModal: closeCaptionModal,
+    openModal: openCaptionModal,
+    showModal: showCaptionModal,
+  } = useModal();
+  const [selectedPhoto, setSelectedPhoto] = useState<Photo>();
 
   useEffect(() => {
     inputRef.current.focus();
@@ -241,7 +265,6 @@ const EditProfile: React.FC = () => {
 
   const addPhoto: React.ChangeEventHandler<HTMLInputElement> = async (e) => {
     e.preventDefault();
-    console.log(e.target.files?.[0]);
     const formData = new FormData();
     formData.append('file', e.target.files![0]);
     formData.append('caption', '');
@@ -271,6 +294,11 @@ const EditProfile: React.FC = () => {
     }
   };
 
+  const toEditCaption = (photo?: Photo) => {
+    setSelectedPhoto(photo);
+    openCaptionModal();
+  };
+
   return (
     <>
       <PageContent>
@@ -280,13 +308,21 @@ const EditProfile: React.FC = () => {
           </Header>
           <PhotoInputContainer>
             {[...Array(10)].map((_, i) => (
-              <PhotoInput
-                key={i}
-                preview={profile?.photos[i]?.image_url}
-                name="files"
-                onChange={addPhoto}
-                deleteFile={() => deletePhoto(profile!.photos[i].photo_id)}
-              />
+              <PhotoInputOverlay key={i}>
+                <PhotoInput
+                  preview={profile?.photos[i]?.image_url}
+                  name="files"
+                  onChange={addPhoto}
+                  deleteFile={() => deletePhoto(profile!.photos[i].photo_id)}
+                />
+                {profile?.photos[i]?.image_url && (
+                  <AddCaptionButton
+                    onClick={() => toEditCaption(profile.photos[i])}
+                  >
+                    <FaClosedCaptioning size={24} color={colors.black} />
+                  </AddCaptionButton>
+                )}
+              </PhotoInputOverlay>
             ))}
           </PhotoInputContainer>
         </PhotoSection>
@@ -368,6 +404,11 @@ const EditProfile: React.FC = () => {
         selectedHobbies={selectedHobbies}
         selectHobby={selectHobby}
         unselectHobby={unselectHobby}
+      />
+      <SetCaptionModal
+        show={showCaptionModal}
+        closeModal={closeCaptionModal}
+        photo={selectedPhoto}
       />
     </>
   );
