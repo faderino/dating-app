@@ -96,12 +96,14 @@ const CheckoutModal: React.FC<Props> = ({
     setLoading(true);
     setError('');
     if (!payAmount) {
-      return setError('Enter pay amount');
+      setError('Enter pay amount');
       setLoading(false);
+      return;
     }
     if (payAmount !== totalCost) {
-      return setError('Enter correct pay amount');
+      setError('Enter correct pay amount');
       setLoading(false);
+      return;
     }
     setTimeout(() => {
       setLoading(false);
