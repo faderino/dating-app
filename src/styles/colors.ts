@@ -23,4 +23,6 @@ export default {
   red50: '#f13b2d',
   red60: '#c62c1e',
   gold: '#ffd700',
+  gold10: '#fff2bf',
+  gold50: '#896707',
 };
