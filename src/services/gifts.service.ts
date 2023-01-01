@@ -1,6 +1,7 @@
 import { GiftVoucherItem } from '../store/giftBag/giftBagSlice';
 import { ResponseAPI } from '../types/api';
 import { Gift } from '../types/gift';
+import { PaginationResponse } from '../types/pagination';
 import { baseApi } from './baseApi';
 
 export type GiftVoucherType = {
@@ -47,6 +48,23 @@ export const giftsApi = baseApi.injectEndpoints({
         method: 'POST',
         body,
       }),
+      invalidatesTags: ['Gifts'],
+    }),
+    getGifts: builder.query<PaginationResponse<Gift>, void>({
+      query: () => ({
+        url: '/gifts',
+        method: 'GET',
+      }),
+      providesTags: ['Gifts'],
+      transformResponse: (response: ResponseAPI<PaginationResponse<Gift>>) =>
+        response.data,
+    }),
+    getGift: builder.query<Gift, number>({
+      query: (giftId: number) => ({
+        url: `/gifts/${giftId}`,
+        method: 'GET',
+      }),
+      transformResponse: (response: ResponseAPI<Gift>) => response.data,
     }),
   }),
 });
@@ -55,4 +73,6 @@ export const {
   useGetGiftVouchersQuery,
   useLazyCalcTotalCostQuery,
   useSendGiftMutation,
+  useGetGiftsQuery,
+  useLazyGetGiftQuery,
 } = giftsApi;

@@ -8,13 +8,14 @@ import {
   selectGiftRecipient,
 } from '../../store/giftBag/giftBagSlice';
 import colors from '../../styles/colors';
+import { Profile } from '../../types/profile';
 import PreviewGiftCard from '../GiftCard/PreviewGiftCard';
 
 const GiftBagItemContainer = styled.div`
   position: relative;
 `;
 
-const RemoveButton = styled.div`
+export const RemoveButton = styled.div`
   display: flex;
   position: absolute;
   top: -0.4rem;
@@ -28,17 +29,22 @@ const RemoveButton = styled.div`
 type Props = {
   item: GiftVoucherItem;
   deleteItem: () => void;
+  className?: string;
+  recipient: Profile | null;
 };
 
-const GiftBagItem: React.FC<Props> = ({ item, deleteItem }) => {
-  const recipient = useAppSelector(selectGiftRecipient);
+const GiftBagItem: React.FC<Props> = ({
+  item,
+  deleteItem,
+  className,
+  recipient,
+}) => {
   const voucher: GiftVoucherType = {
     amount: item.amount,
     voucher_id: item.voucher_id,
   };
   return (
-    <GiftBagItemContainer>
-      {/* <GiftCard voucher={voucher} onBuy={() => {}} /> */}
+    <GiftBagItemContainer className={className}>
       <RemoveButton onClick={deleteItem}>
         <FaTimesCircle color={colors.red50} size={24} />
       </RemoveButton>

@@ -106,6 +106,7 @@ const GiftBag: React.FC = () => {
               <GiftBagItem
                 key={i}
                 item={item}
+                recipient={recipient}
                 deleteItem={() => dispatch(removeItem(i))}
               />
             ))}

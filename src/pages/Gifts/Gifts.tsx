@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import GiftBagButton from '../../components/GiftBagButton';
 import GiftCard from '../../components/GiftCard';
+import GiftItem from '../../components/GiftItem';
 import { Content } from '../../components/Layout';
+import MyGiftModal from '../../components/MyGiftModal/MyGiftModal';
+import useModal from '../../hooks/modal';
 import {
   GiftVoucherType,
+  useGetGiftsQuery,
   useGetGiftVouchersQuery,
 } from '../../services/gifts.service';
 import colors from '../../styles/colors';
@@ -53,12 +57,31 @@ const GiftCardsContainer = styled(Container)`
   }
 `;
 
+const MyGiftsHeader = styled(Header)`
+  margin-bottom: 2rem;
+`;
+
+const MyGiftsContainer = styled(Container)`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+  padding-bottom: 2rem;
+`;
+
 const Gifts: React.FC = () => {
-  const { data: giftVouchers } = useGetGiftVouchersQuery();
   const navigate = useNavigate();
+  const { data: giftVouchers } = useGetGiftVouchersQuery();
+  const { data: gifts } = useGetGiftsQuery();
+  const { closeModal, openModal, showModal } = useModal();
+  const [selectedGiftId, setSelectedGiftId] = useState<number>();
 
   const handleBuy = (voucher: GiftVoucherType) => {
     navigate('/app/gifts/buy', { state: { voucher } });
+  };
+
+  const handleClick = (giftId: number) => {
+    setSelectedGiftId(giftId);
+    openModal();
   };
 
   return (
@@ -79,10 +102,24 @@ const Gifts: React.FC = () => {
             />
           ))}
         </GiftCardsContainer>
-        <Header>
+        <MyGiftsHeader>
           <p>My Gifts</p>
-        </Header>
+        </MyGiftsHeader>
+        <MyGiftsContainer>
+          {gifts?.data.map((gift) => (
+            <GiftItem
+              key={gift.gift_id}
+              gift={gift}
+              onClick={() => handleClick(gift.gift_id)}
+            />
+          ))}
+        </MyGiftsContainer>
       </PageContent>
+      <MyGiftModal
+        show={showModal}
+        closeModal={closeModal}
+        giftId={selectedGiftId}
+      />
     </>
   );
 };
