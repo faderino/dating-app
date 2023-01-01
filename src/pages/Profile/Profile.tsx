@@ -83,7 +83,7 @@ const EditProfileBtn = styled.div`
 `;
 
 const AccountSection = styled.div`
-  padding: 1rem 0;
+  padding: 1rem 0 4rem 0;
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
