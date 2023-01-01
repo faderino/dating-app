@@ -3,7 +3,8 @@ import styled, { css } from 'styled-components';
 import colors from '../../styles/colors';
 
 export const Badge = styled.div<Props>`
-  display: inline-block;
+  display: block;
+  width: fit-content;
   padding: 0.25rem 0.5rem;
   border-radius: 0.25rem;
   text-transform: uppercase;
@@ -23,11 +24,12 @@ export const Badge = styled.div<Props>`
 type Props = {
   isGold?: boolean;
   size?: 'sm' | 'lg';
+  className?: string;
 };
 
-const ProfileBadge: React.FC<Props> = ({ isGold, size = 'sm' }) => {
+const ProfileBadge: React.FC<Props> = ({ isGold, size = 'sm', className }) => {
   return (
-    <Badge isGold={isGold} size={size}>
+    <Badge isGold={isGold} size={size} className={className}>
       {isGold ? 'GOLD' : 'FREE'}
     </Badge>
   );

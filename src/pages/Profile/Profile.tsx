@@ -2,7 +2,7 @@ import React from 'react';
 import { MdEdit } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { Button, CircleButton } from '../../components/Button';
+import { CircleButton } from '../../components/Button';
 import { Content } from '../../components/Layout/Layout';
 import MenuItem, {
   MenuItemValue,
