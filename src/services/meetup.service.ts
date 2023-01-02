@@ -22,7 +22,12 @@ export type ScheduleMeetUpRequest = {
 export type Schedule = {
   schedule_id: number;
   venue_id: number;
-  venue: (Omit<Venue, 'location'> & { city: City }) | null;
+  venue:
+    | (Omit<Venue, 'location'> & {
+        city: City;
+        venue_vouchers: VenueDiscountVoucher[];
+      })
+    | null;
   first_party_user_id: number;
   first_party_user: Profile | null;
   second_party_user_id: number;
@@ -36,10 +41,22 @@ type ScheduleMeetUpResponse = ResponseAPI<Schedule>;
 
 type GetSchedulesResponseData = PaginationResponse<Schedule>;
 
+export type VenueDiscountVoucher = {
+  venue_voucher_id: number;
+  venue_id: number;
+  discount_amount: number;
+  quota: number;
+};
+
 export type RescheduleMeetUpRequest = {
   scheduleId: number;
   venue_id: number;
   date_time: string;
+};
+
+export type ClaimVenueDiscountRequest = {
+  scheduleId: number;
+  venue_voucher_id: number;
 };
 
 export const meetUpApi = baseApi.injectEndpoints({
@@ -99,6 +116,29 @@ export const meetUpApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['Schedules'],
     }),
+    getVenueDiscounts: builder.query<
+      VenueDiscountVoucher[],
+      number | undefined
+    >({
+      query: (venueId) => ({
+        url: `/venues/${venueId}/vouchers`,
+        method: 'GET',
+      }),
+      transformResponse: (response: ResponseAPI<VenueDiscountVoucher[]>) =>
+        response.data,
+      providesTags: ['Discounts'],
+    }),
+    claimVenueDiscount: builder.mutation<
+      ResponseAPI<Schedule>,
+      ClaimVenueDiscountRequest
+    >({
+      query: ({ scheduleId, ...body }) => ({
+        url: `/meetup-schedules/${scheduleId}/claim-discount`,
+        method: 'PATCH',
+        body,
+      }),
+      invalidatesTags: ['Schedules'],
+    }),
   }),
 });
 
@@ -110,4 +150,7 @@ export const {
   useGetMeetUpInvitationsQuery,
   useAcceptInvititationMutation,
   useRescheduleMeetUpMutation,
+  useGetVenueDiscountsQuery,
+  useLazyGetVenueDiscountsQuery,
+  useClaimVenueDiscountMutation,
 } = meetUpApi;
