@@ -49,9 +49,26 @@ const ActionContainer = styled.div`
 const ScheduleMeetupBtn = styled(PrimaryButton)`
   background-image: none;
   background-color: ${colors.text};
+  p {
+    display: none;
+  }
+  @media screen and (min-width: 420px) {
+    p {
+      display: block;
+    }
+  }
 `;
 
-const SendGiftButton = styled(PrimaryButton)``;
+const SendGiftButton = styled(PrimaryButton)`
+  p {
+    display: none;
+  }
+  @media screen and (min-width: 420px) {
+    p {
+      display: block;
+    }
+  }
+`;
 
 type Props = ModalProps & {
   detailData?: Profile;
@@ -91,7 +108,11 @@ const MatchDetailModal: React.FC<Props> = ({
         photoIndex={photoIndex}
       />
       <ActionContainer>
-        <ScheduleMeetupBtn>
+        <ScheduleMeetupBtn
+          onClick={() =>
+            navigate('/app/meet-up/schedule', { state: { match: detailData } })
+          }
+        >
           <FaCalendarDay />
           <p>Meetup</p>
         </ScheduleMeetupBtn>
