@@ -79,7 +79,7 @@ const FormContainer = styled.form`
 
 const TimePicker = styled.div`
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 1rem;
   div {
     flex-basis: 50%;
@@ -180,9 +180,19 @@ const ScheduleMeetUp: React.FC = () => {
       'YYYY-MM-DD HH:mm',
     ).format();
     if (moment().diff(schedule, 'm') >= 0) {
-      currentError.date = 'Incorrect time';
-      currentError.hour = 'Incorrect time';
+      console.log(moment().diff(schedule, 'm'));
       currentError.minute = 'Incorrect time';
+    }
+    if (moment().diff(schedule, 'h') > 0) {
+      console.log(moment().diff(schedule, 'h'));
+      currentError.minute = 'Incorrect time';
+      currentError.hour = 'Incorrect time';
+    }
+    if (moment().diff(schedule, 'd') > 0) {
+      console.log(moment().diff(schedule, 'd'));
+      currentError.minute = 'Incorrect time';
+      currentError.hour = 'Incorrect time';
+      currentError.date = 'Incorrect time';
     }
     if (isEmpty(meetUpSchedule.date)) {
       currentError.date = 'Choose date';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { CgCardDiamonds } from 'react-icons/cg';
-import { FaGift } from 'react-icons/fa';
+import { FaCalendarDay, FaGift } from 'react-icons/fa';
 import { MdPerson } from 'react-icons/md';
 import { RiHeartsFill } from 'react-icons/ri';
 import styled from 'styled-components';
@@ -20,6 +20,7 @@ const Header = styled.div`
   align-items: center;
   padding: 0.5rem 0;
   background-color: ${colors.white};
+  z-index: 1000;
 `;
 
 export const Content = styled.div`
@@ -31,6 +32,7 @@ const Footer = styled(BottomNav)`
   width: 100%;
   bottom: 0;
   background-color: ${colors.white};
+  z-index: 1000;
 `;
 
 type Props = {
@@ -49,16 +51,17 @@ const Layout: React.FC<Props> = ({ children, hideHeader }) => {
       {children}
       <Footer
         items={[
-          { to: '/app/matches', icon: <RiHeartsFill size={30} /> },
+          { to: '/app/matches', icon: <RiHeartsFill size={28} /> },
+          { to: '/app/meet-up', icon: <FaCalendarDay size={24} /> },
           {
             to: '/app/recommendations',
             icon: <CgCardDiamonds size={32} />,
           },
           {
             to: '/app/gifts',
-            icon: <FaGift size={32} />,
+            icon: <FaGift size={28} />,
           },
-          { to: '/app/profile', icon: <MdPerson size={32} /> },
+          { to: '/app/profile', icon: <MdPerson size={28} /> },
         ]}
       />
     </Container>

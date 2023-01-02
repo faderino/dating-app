@@ -1,6 +1,7 @@
 import { ResponseAPI } from '../types/api';
-import { Location } from '../types/location';
+import { City, Location } from '../types/location';
 import { PaginationResponse } from '../types/pagination';
+import { Profile } from '../types/profile';
 import { baseApi } from './baseApi';
 
 export type Venue = {
@@ -21,14 +22,19 @@ export type ScheduleMeetUpRequest = {
 export type Schedule = {
   schedule_id: number;
   venue_id: number;
+  venue: (Omit<Venue, 'location'> & { city: City }) | null;
   first_party_user_id: number;
+  first_party_user: Profile | null;
   second_party_user_id: number;
+  second_party_user: Profile | null;
   date_time: Date;
   approved: boolean;
   claimed_voucher_id: number | null;
 };
 
 type ScheduleMeetUpResponse = ResponseAPI<Schedule>;
+
+type GetSchedulesResponseData = PaginationResponse<Schedule>;
 
 export const meetUpApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -49,6 +55,32 @@ export const meetUpApi = baseApi.injectEndpoints({
         method: 'POST',
         body,
       }),
+      invalidatesTags: ['Schedules'],
+    }),
+    getSchedules: builder.query<GetSchedulesResponseData, string | void>({
+      query: (query) => ({
+        url: `/meetup-schedules?${query}`,
+        method: 'GET',
+      }),
+      transformResponse: (response: ResponseAPI<GetSchedulesResponseData>) =>
+        response.data,
+      providesTags: ['Schedules'],
+    }),
+    getMeetUpInvitations: builder.query<GetSchedulesResponseData, void>({
+      query: () => ({
+        url: '/meetup-schedules/invitations',
+        method: 'GET',
+      }),
+      transformResponse: (response: ResponseAPI<GetSchedulesResponseData>) =>
+        response.data,
+      providesTags: ['Schedules'],
+    }),
+    acceptInvititation: builder.mutation<ResponseAPI<Schedule>, number>({
+      query: (scheduleId) => ({
+        url: `/meetup-schedules/${scheduleId}/approve`,
+        method: 'PATCH',
+      }),
+      invalidatesTags: ['Schedules'],
     }),
   }),
 });
@@ -57,4 +89,7 @@ export const {
   useGetVenueListQuery,
   useLazyGetVenueListQuery,
   useSetMeetUpScheduleMutation,
+  useGetSchedulesQuery,
+  useGetMeetUpInvitationsQuery,
+  useAcceptInvititationMutation,
 } = meetUpApi;

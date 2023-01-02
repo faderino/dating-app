@@ -25,4 +25,11 @@ export default {
   gold: '#ffd700',
   gold10: '#fff2bf',
   gold50: '#896707',
+  green10: '#c8ffd1',
+  green15: '#7cfda3',
+  green20: '#2df187',
+  green30: '#21d07c',
+  green40: '#17af70',
+  green50: '#129e68',
+  green60: '#0b7d58',
 };
