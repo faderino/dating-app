@@ -1,9 +1,11 @@
-import React from 'react';
+import moment from 'moment';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { Content } from '../../components/Layout';
 import MeetUpItem from '../../components/MeetUpItem';
+import useModal from '../../hooks/modal';
 import {
   Schedule,
   useAcceptInvititationMutation,
@@ -11,6 +13,7 @@ import {
   useGetSchedulesQuery,
 } from '../../services/meetup.service';
 import colors from '../../styles/colors';
+import ClaimDiscountModal from './ClaimDiscountModal';
 
 const PageContent = styled(Content)``;
 
@@ -49,6 +52,9 @@ const MeetUp: React.FC = () => {
   const { data: meetUpSchedules } = useGetSchedulesQuery('is=approved');
   const [acceptInvitation] = useAcceptInvititationMutation();
 
+  const { closeModal, openModal, showModal } = useModal();
+  const [selectedSchedule, setSelectedSchedule] = useState<Schedule>();
+
   const handleAccept = async (scheduleId: number) => {
     try {
       const resp = await acceptInvitation(scheduleId).unwrap();
@@ -64,37 +70,69 @@ const MeetUp: React.FC = () => {
     });
   };
 
+  const onClaimDiscount = (schedule: Schedule) => {
+    setSelectedSchedule(schedule);
+    openModal();
+  };
+
   return (
-    <PageContent>
-      {needApprovalSchedules && needApprovalSchedules.count > 0 ? (
-        <NeedApprovalSection>
+    <>
+      <PageContent>
+        {needApprovalSchedules && needApprovalSchedules.count > 0 ? (
+          <NeedApprovalSection>
+            <Header>
+              <p>Invitation</p>
+            </Header>
+            <ScheduleListContainer>
+              {needApprovalSchedules?.data.map((schedule) => {
+                return (
+                  <MeetUpItem
+                    key={schedule.schedule_id}
+                    schedule={schedule}
+                    type="invitation"
+                    onAccept={() => handleAccept(schedule.schedule_id)}
+                    onReschedule={() => handleReschedule(schedule)}
+                  />
+                );
+              })}
+            </ScheduleListContainer>
+          </NeedApprovalSection>
+        ) : null}
+        <ApprovedSchedulesSection>
           <Header>
-            <p>Invitation</p>
+            <p>Meet Up Schedules</p>
           </Header>
           <ScheduleListContainer>
-            {needApprovalSchedules?.data.map((schedule) => (
-              <MeetUpItem
-                key={schedule.schedule_id}
-                schedule={schedule}
-                type="invitation"
-                onAccept={() => handleAccept(schedule.schedule_id)}
-                onReschedule={() => handleReschedule(schedule)}
-              />
-            ))}
+            {meetUpSchedules?.data.map((schedule) => {
+              const dateTime = moment(
+                schedule.date_time,
+                'YYYY-MM-DD HH:mm:ss',
+              ).format();
+              const isExpired = moment().diff(dateTime, 'm') >= 0;
+              const isClaimed = schedule.claimed_voucher_id !== null;
+              const haveDiscounts = schedule.venue!.venue_vouchers.length > 0;
+              return (
+                <MeetUpItem
+                  key={schedule.schedule_id}
+                  schedule={schedule}
+                  type={
+                    isExpired || isClaimed || !haveDiscounts
+                      ? 'schedule'
+                      : 'voucher'
+                  }
+                  onClaimDiscount={() => onClaimDiscount(schedule)}
+                />
+              );
+            })}
           </ScheduleListContainer>
-        </NeedApprovalSection>
-      ) : null}
-      <ApprovedSchedulesSection>
-        <Header>
-          <p>Meet Up Schedules</p>
-        </Header>
-        <ScheduleListContainer>
-          {meetUpSchedules?.data.map((schedule) => (
-            <MeetUpItem key={schedule.schedule_id} schedule={schedule} />
-          ))}
-        </ScheduleListContainer>
-      </ApprovedSchedulesSection>
-    </PageContent>
+        </ApprovedSchedulesSection>
+      </PageContent>
+      <ClaimDiscountModal
+        show={showModal}
+        closeModal={closeModal}
+        schedule={selectedSchedule}
+      />
+    </>
   );
 };
 

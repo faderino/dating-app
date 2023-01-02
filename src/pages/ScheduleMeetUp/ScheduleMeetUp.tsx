@@ -235,14 +235,13 @@ const ScheduleMeetUp: React.FC = () => {
       venue_id: selectedVenue!.venue_id,
     };
 
-    const rescheduleMeetUpRequest: RescheduleMeetUpRequest = {
-      scheduleId: location.state.schedule.schedule_id as number,
-      date_time: schedule,
-      venue_id: selectedVenue!.venue_id,
-    };
-
     try {
       if (location.state?.schedule) {
+        const rescheduleMeetUpRequest: RescheduleMeetUpRequest = {
+          scheduleId: location.state.schedule.schedule_id as number,
+          date_time: schedule,
+          venue_id: selectedVenue!.venue_id,
+        };
         const resp = await rescheduleMeetUp(rescheduleMeetUpRequest).unwrap();
         toast('✅ ' + resp.message);
         navigate('/app/meet-up');

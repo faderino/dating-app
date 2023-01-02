@@ -88,11 +88,17 @@ const RescheduleButton = styled.button`
   color: ${colors.gray40};
 `;
 
+const ClaimDiscountButton = styled.button`
+  border: 2px solid ${colors.primary};
+  color: ${colors.primary};
+`;
+
 type Props = {
   schedule?: Schedule;
   type?: 'invitation' | 'voucher' | 'schedule';
   onAccept?: () => void;
   onReschedule?: () => void;
+  onClaimDiscount?: () => void;
 };
 
 const MeetUpItem: React.FC<Props> = ({
@@ -100,6 +106,7 @@ const MeetUpItem: React.FC<Props> = ({
   type,
   onAccept,
   onReschedule,
+  onClaimDiscount,
 }) => {
   const profile = useAppSelector(selectProfile);
 
@@ -110,6 +117,13 @@ const MeetUpItem: React.FC<Props> = ({
           <RescheduleButton onClick={onReschedule}>RE-SCHED</RescheduleButton>
           <AcceptButton onClick={onAccept}>ACCEPT</AcceptButton>
         </>
+      );
+    }
+    if (type === 'voucher') {
+      return (
+        <ClaimDiscountButton onClick={onClaimDiscount}>
+          CLAIM DISCOUNT
+        </ClaimDiscountButton>
       );
     }
     return null;
