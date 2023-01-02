@@ -86,6 +86,14 @@ function App(): JSX.Element {
             }
           />
           <Route
+            path="meet-up"
+            element={
+              <Layout>
+                <MeetUp />
+              </Layout>
+            }
+          />
+          <Route
             path="meet-up/schedule"
             element={
               <Layout>
@@ -94,10 +102,10 @@ function App(): JSX.Element {
             }
           />
           <Route
-            path="meet-up"
+            path="meet-up/re-schedule"
             element={
               <Layout>
-                <MeetUp />
+                <ScheduleMeetUp />
               </Layout>
             }
           />

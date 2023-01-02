@@ -92,16 +92,22 @@ type Props = {
   schedule?: Schedule;
   type?: 'invitation' | 'voucher' | 'schedule';
   onAccept?: () => void;
+  onReschedule?: () => void;
 };
 
-const MeetUpItem: React.FC<Props> = ({ schedule, type, onAccept }) => {
+const MeetUpItem: React.FC<Props> = ({
+  schedule,
+  type,
+  onAccept,
+  onReschedule,
+}) => {
   const profile = useAppSelector(selectProfile);
 
   const actionContent = () => {
     if (type === 'invitation') {
       return (
         <>
-          <RescheduleButton>RE-SCHED</RescheduleButton>
+          <RescheduleButton onClick={onReschedule}>RE-SCHED</RescheduleButton>
           <AcceptButton onClick={onAccept}>ACCEPT</AcceptButton>
         </>
       );
@@ -148,7 +154,11 @@ const MeetUpItem: React.FC<Props> = ({ schedule, type, onAccept }) => {
       <ScheduleDataSection>
         <h4>{schedule?.venue?.name}</h4>
         <DateTime>
-          <p>{moment(schedule?.date_time).format('MMMM Do YYYY, HH:mm')}</p>
+          <p>
+            {moment(schedule?.date_time, 'YYYY-MM-DD HH:mm:ss').format(
+              'MMMM Do YYYY, HH:mm',
+            )}
+          </p>
         </DateTime>
         <Action>{actionContent()}</Action>
       </ScheduleDataSection>

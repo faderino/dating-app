@@ -22,8 +22,10 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { isEmpty } from '../../utils/validation';
 import moment from 'moment';
 import {
+  RescheduleMeetUpRequest,
   ScheduleMeetUpRequest,
   useLazyGetVenueListQuery,
+  useRescheduleMeetUpMutation,
   useSetMeetUpScheduleMutation,
   Venue,
 } from '../../services/meetup.service';
@@ -124,19 +126,32 @@ const ScheduleMeetUp: React.FC = () => {
   const [getVenueList, { data: venues }] = useLazyGetVenueListQuery();
   const [setMeetUpScheduleMutation, { isLoading }] =
     useSetMeetUpScheduleMutation();
-  const [selectedVenue, setSelectedVenue] = useState<Venue>();
+  const [rescheduleMeetUp, { isLoading: rescheduleLoading }] =
+    useRescheduleMeetUpMutation();
+  const [selectedVenue, setSelectedVenue] = useState<Venue>(
+    location.state?.schedule?.venue,
+  );
   const [selectedMatch, setSelectedMatch] = useState<Profile>(
     location.state?.match,
   );
   const { closeModal, openModal, showModal } = useModal();
   const currentDate = new Date(Date.now());
   const [meetUpSchedule, setMeetupSchedule] = useState({
-    date: `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1)
-      .toString()
-      .padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`,
+    date:
+      location.state?.schedule?.date_time.substring(0, 10) ||
+      `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1)
+        .toString()
+        .padStart(2, '0')}-${currentDate
+        .getDate()
+        .toString()
+        .padStart(2, '0')}`,
     time: {
-      hour: currentDate.getHours().toString(),
-      minute: currentDate.getMinutes().toString(),
+      hour:
+        location.state?.schedule?.date_time.substring(11, 13) ||
+        currentDate.getHours().toString(),
+      minute:
+        location.state?.schedule?.date_time.substring(14, 16) ||
+        currentDate.getMinutes().toString(),
     },
   });
   const [errors, setErrors] = useState({
@@ -150,7 +165,7 @@ const ScheduleMeetUp: React.FC = () => {
   useEffect(() => {
     if (matches) {
       const matchId = matches.data.find(
-        (match) => match.liked_user_id === selectedMatch.profile_id,
+        (match) => match.liked_user_id === selectedMatch?.profile_id,
       )?.like_id;
       getVenueList(matchId!);
     }
@@ -180,16 +195,13 @@ const ScheduleMeetUp: React.FC = () => {
       'YYYY-MM-DD HH:mm',
     ).format();
     if (moment().diff(schedule, 'm') >= 0) {
-      console.log(moment().diff(schedule, 'm'));
       currentError.minute = 'Incorrect time';
     }
     if (moment().diff(schedule, 'h') > 0) {
-      console.log(moment().diff(schedule, 'h'));
       currentError.minute = 'Incorrect time';
       currentError.hour = 'Incorrect time';
     }
     if (moment().diff(schedule, 'd') > 0) {
-      console.log(moment().diff(schedule, 'd'));
       currentError.minute = 'Incorrect time';
       currentError.hour = 'Incorrect time';
       currentError.date = 'Incorrect time';
@@ -223,11 +235,23 @@ const ScheduleMeetUp: React.FC = () => {
       venue_id: selectedVenue!.venue_id,
     };
 
+    const rescheduleMeetUpRequest: RescheduleMeetUpRequest = {
+      scheduleId: location.state.schedule.schedule_id as number,
+      date_time: schedule,
+      venue_id: selectedVenue!.venue_id,
+    };
+
     try {
+      if (location.state?.schedule) {
+        const resp = await rescheduleMeetUp(rescheduleMeetUpRequest).unwrap();
+        toast('✅ ' + resp.message);
+        navigate('/app/meet-up');
+        return;
+      }
       const resp = await setMeetUpScheduleMutation(
         scheduleMeetUpRequest,
       ).unwrap();
-      toast(resp.message);
+      toast('✅ ' + resp.message);
       navigate('/app/matches');
     } catch (error: any) {
       toast.error(error.data.message, { theme: 'colored' });
@@ -258,9 +282,11 @@ const ScheduleMeetUp: React.FC = () => {
                     Select Match
                   </SelectedMatchPlaceholder>
                 )}
-                <SelectMatchBtn type="button" onClick={openModal}>
-                  Select
-                </SelectMatchBtn>
+                {location.state?.schedule ? null : (
+                  <SelectMatchBtn type="button" onClick={openModal}>
+                    Select
+                  </SelectMatchBtn>
+                )}
               </SelectMatch>
             </InputField>
             <InputField
@@ -311,12 +337,12 @@ const ScheduleMeetUp: React.FC = () => {
               />
             </TimePicker>
             <ScheduleMeetupBtn block>
-              {isLoading ? (
+              {isLoading || rescheduleLoading ? (
                 <Spinner />
               ) : (
                 <>
                   <FaCalendarDay />
-                  <p>MEET UP</p>
+                  <p>{location.state?.schedule ? 'RE-SCHEDULE' : 'MEET UP'}</p>
                 </>
               )}
             </ScheduleMeetupBtn>
@@ -333,7 +359,7 @@ const ScheduleMeetUp: React.FC = () => {
                 venue={venue}
                 onClick={() => setSelectedVenue(venue)}
                 recommended={
-                  venue.city_id === selectedMatch.location.city_id ||
+                  venue.city_id === selectedMatch.location?.city_id ||
                   venue.city_id === profile?.location.city_id
                 }
                 active={selectedVenue?.venue_id === venue.venue_id}
