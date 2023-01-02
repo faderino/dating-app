@@ -1,9 +1,11 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { Content } from '../../components/Layout';
 import MeetUpItem from '../../components/MeetUpItem';
 import {
+  Schedule,
   useAcceptInvititationMutation,
   useGetMeetUpInvitationsQuery,
   useGetSchedulesQuery,
@@ -42,6 +44,7 @@ const ScheduleListContainer = styled(Container)`
 `;
 
 const MeetUp: React.FC = () => {
+  const navigate = useNavigate();
   const { data: needApprovalSchedules } = useGetMeetUpInvitationsQuery();
   const { data: meetUpSchedules } = useGetSchedulesQuery('is=approved');
   const [acceptInvitation] = useAcceptInvititationMutation();
@@ -53,6 +56,12 @@ const MeetUp: React.FC = () => {
     } catch (error: any) {
       toast.error(error.data.message, { theme: 'colored' });
     }
+  };
+
+  const handleReschedule = (schedule: Schedule) => {
+    navigate('/app/meet-up/re-schedule', {
+      state: { match: schedule.first_party_user, schedule },
+    });
   };
 
   return (
@@ -69,6 +78,7 @@ const MeetUp: React.FC = () => {
                 schedule={schedule}
                 type="invitation"
                 onAccept={() => handleAccept(schedule.schedule_id)}
+                onReschedule={() => handleReschedule(schedule)}
               />
             ))}
           </ScheduleListContainer>

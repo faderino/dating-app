@@ -36,6 +36,12 @@ type ScheduleMeetUpResponse = ResponseAPI<Schedule>;
 
 type GetSchedulesResponseData = PaginationResponse<Schedule>;
 
+export type RescheduleMeetUpRequest = {
+  scheduleId: number;
+  venue_id: number;
+  date_time: string;
+};
+
 export const meetUpApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getVenueList: builder.query<PaginationResponse<Venue>, number>({
@@ -82,6 +88,17 @@ export const meetUpApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['Schedules'],
     }),
+    rescheduleMeetUp: builder.mutation<
+      ResponseAPI<Schedule>,
+      RescheduleMeetUpRequest
+    >({
+      query: ({ scheduleId, ...body }) => ({
+        url: `/meetup-schedules/${scheduleId}`,
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: ['Schedules'],
+    }),
   }),
 });
 
@@ -92,4 +109,5 @@ export const {
   useGetSchedulesQuery,
   useGetMeetUpInvitationsQuery,
   useAcceptInvititationMutation,
+  useRescheduleMeetUpMutation,
 } = meetUpApi;
