@@ -23,7 +23,6 @@ import { isEmpty } from '../../utils/validation';
 import moment from 'moment';
 import {
   ScheduleMeetUpRequest,
-  useGetVenueListQuery,
   useLazyGetVenueListQuery,
   useSetMeetUpScheduleMutation,
   Venue,
@@ -66,7 +65,9 @@ const Section = styled.div`
   }
 `;
 
-const VenueSection = styled(Section)``;
+const VenueSection = styled(Section)`
+  padding-bottom: 5rem;
+`;
 
 const FormSection = styled(Section)``;
 
@@ -174,8 +175,11 @@ const ScheduleMeetUp: React.FC = () => {
     if (!selectedMatch) {
       currentError.match = 'Select partner';
     }
-    const schedule = `${meetUpSchedule.date}T${meetUpSchedule.time.hour}:${meetUpSchedule.time.minute}:00Z`;
-    if (moment(schedule) < moment()) {
+    const schedule = moment(
+      `${meetUpSchedule.date}T${meetUpSchedule.time.hour}:${meetUpSchedule.time.minute}:00Z`,
+      'YYYY-MM-DD HH:mm',
+    ).format();
+    if (moment().diff(schedule, 'm') >= 0) {
       currentError.date = 'Incorrect time';
       currentError.hour = 'Incorrect time';
       currentError.minute = 'Incorrect time';
@@ -199,7 +203,10 @@ const ScheduleMeetUp: React.FC = () => {
     const valid = validateForm();
     if (!valid) return;
 
-    const schedule = `${meetUpSchedule.date}T${meetUpSchedule.time.hour}:${meetUpSchedule.time.minute}:00Z`;
+    const schedule = moment(
+      `${meetUpSchedule.date}T${meetUpSchedule.time.hour}:${meetUpSchedule.time.minute}:00Z`,
+      'YYYY-MM-DD HH:mm',
+    ).format();
     const scheduleMeetUpRequest: ScheduleMeetUpRequest = {
       date_time: schedule,
       second_party_user_id: selectedMatch.profile_id,
@@ -237,9 +244,9 @@ const ScheduleMeetUp: React.FC = () => {
                     <p>{selectedMatch?.name}</p>
                   </SelectedMatch>
                 ) : (
-                  <SelectRecipientPlaceholder>
+                  <SelectedMatchPlaceholder>
                     Select Match
-                  </SelectRecipientPlaceholder>
+                  </SelectedMatchPlaceholder>
                 )}
                 <SelectMatchBtn type="button" onClick={openModal}>
                   Select
