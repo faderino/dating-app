@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MdDateRange, MdPerson } from 'react-icons/md';
 import styled from 'styled-components';
 import InputField from '../../components/InputField/InputField';
@@ -21,6 +21,18 @@ import { PrimaryButton } from '../../components/Button';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { isEmpty } from '../../utils/validation';
 import moment from 'moment';
+import {
+  ScheduleMeetUpRequest,
+  useGetVenueListQuery,
+  useLazyGetVenueListQuery,
+  useSetMeetUpScheduleMutation,
+  Venue,
+} from '../../services/meetup.service';
+import VenueCard from '../../components/VenueCard';
+import { selectProfile } from '../../store/profile/profileSlice';
+import { useAppSelector } from '../../hooks/store';
+import { toast } from 'react-toastify';
+import Spinner from '../../components/Spinner/Spinner';
 
 const PageContent = styled(Content)`
   @media screen and (min-width: 896px) {
@@ -92,13 +104,26 @@ const MatchPhoto = styled(RecipientPhoto)``;
 
 const SelectedMatchPlaceholder = styled(SelectRecipientPlaceholder)``;
 
+const VenueListContainer = styled.div`
+  margin: 0 auto;
+  width: 90%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem 2rem;
+`;
+
 const hours = [...Array(24)].map((_, n) => n.toString().padStart(2, '0'));
 const minutes = [...Array(60)].map((_, n) => n.toString().padStart(2, '0'));
 
 const ScheduleMeetUp: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const profile = useAppSelector(selectProfile);
   const { data: matches } = useGetMatchesQuery();
+  const [getVenueList, { data: venues }] = useLazyGetVenueListQuery();
+  const [setMeetUpScheduleMutation, { isLoading }] =
+    useSetMeetUpScheduleMutation();
+  const [selectedVenue, setSelectedVenue] = useState<Venue>();
   const [selectedMatch, setSelectedMatch] = useState<Profile>(
     location.state?.match,
   );
@@ -118,15 +143,34 @@ const ScheduleMeetUp: React.FC = () => {
     date: '',
     hour: '',
     minute: '',
+    venue: '',
   });
+
+  useEffect(() => {
+    if (matches) {
+      const matchId = matches.data.find(
+        (match) => match.liked_user_id === selectedMatch.profile_id,
+      )?.like_id;
+      getVenueList(matchId!);
+    }
+  }, [selectedMatch, matches]);
+
+  useEffect(() => {
+    if (errors.venue) {
+      toast.error(errors.venue, { theme: 'colored' });
+    }
+  }, [errors.venue]);
 
   const onSelectMatch = (match: Profile) => {
     setSelectedMatch(match);
   };
 
   const validateForm = (): boolean => {
-    setErrors({ match: '', date: '', hour: '', minute: '' });
+    setErrors({ match: '', date: '', hour: '', minute: '', venue: '' });
     const currentError = {} as typeof errors;
+    if (!selectedVenue) {
+      currentError.venue = 'Select venue';
+    }
     if (!selectedMatch) {
       currentError.match = 'Select partner';
     }
@@ -151,12 +195,26 @@ const ScheduleMeetUp: React.FC = () => {
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
+
     const valid = validateForm();
     if (!valid) return;
-    console.log(selectedMatch);
-    console.log(meetUpSchedule);
+
     const schedule = `${meetUpSchedule.date}T${meetUpSchedule.time.hour}:${meetUpSchedule.time.minute}:00Z`;
-    console.log(schedule);
+    const scheduleMeetUpRequest: ScheduleMeetUpRequest = {
+      date_time: schedule,
+      second_party_user_id: selectedMatch.profile_id,
+      venue_id: selectedVenue!.venue_id,
+    };
+
+    try {
+      const resp = await setMeetUpScheduleMutation(
+        scheduleMeetUpRequest,
+      ).unwrap();
+      toast(resp.message);
+      navigate('/app/matches');
+    } catch (error: any) {
+      toast.error(error.data.message, { theme: 'colored' });
+    }
   };
 
   return (
@@ -235,9 +293,15 @@ const ScheduleMeetUp: React.FC = () => {
                 }
               />
             </TimePicker>
-            <ScheduleMeetupBtn block onClick={() => {}}>
-              <FaCalendarDay />
-              <p>MEET UP</p>
+            <ScheduleMeetupBtn block>
+              {isLoading ? (
+                <Spinner />
+              ) : (
+                <>
+                  <FaCalendarDay />
+                  <p>MEET UP</p>
+                </>
+              )}
             </ScheduleMeetupBtn>
           </FormContainer>
         </FormSection>
@@ -245,6 +309,20 @@ const ScheduleMeetUp: React.FC = () => {
           <Header mb={2}>
             <p>Select Venues</p>
           </Header>
+          <VenueListContainer>
+            {venues?.data.map((venue) => (
+              <VenueCard
+                key={venue.venue_id}
+                venue={venue}
+                onClick={() => setSelectedVenue(venue)}
+                recommended={
+                  venue.city_id === selectedMatch.location.city_id ||
+                  venue.city_id === profile?.location.city_id
+                }
+                active={selectedVenue?.venue_id === venue.venue_id}
+              />
+            ))}
+          </VenueListContainer>
         </VenueSection>
       </PageContent>
       <SelectRecipientModal
