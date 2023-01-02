@@ -81,6 +81,7 @@ const Select: React.FC<SelectProps> = ({
   append,
   error,
   hint,
+  placeholder,
   ...props
 }) => {
   const inputId = useId();
@@ -91,7 +92,7 @@ const Select: React.FC<SelectProps> = ({
         {prepend}
         <SelectInput id={inputId} {...props}>
           <option disabled value={0}>
-            Choose options...
+            {placeholder ? placeholder : 'Choose option...'}
           </option>
           {options?.map((option) => (
             <option key={option.value} value={option.value}>

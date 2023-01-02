@@ -52,7 +52,7 @@ const BirthdateForm: React.FC = () => {
       <h1>My birthday is</h1>
       <InputField
         ref={inputRef}
-        placeholder="example@mail.com"
+        placeholder="Your birthday..."
         type="date"
         name="birthdate"
         value={formData.birthdate}

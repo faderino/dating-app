@@ -12,6 +12,7 @@ import Matches from './pages/Matches';
 import Gifts from './pages/Gifts';
 import BuyGift from './pages/BuyGift';
 import GiftBag from './pages/GiftBag';
+import ScheduleMeetUp from './pages/ScheduleMeetUp/ScheduleMeetUp';
 
 function App(): JSX.Element {
   return (
@@ -80,6 +81,14 @@ function App(): JSX.Element {
             element={
               <Layout>
                 <GiftBag />
+              </Layout>
+            }
+          />
+          <Route
+            path="meet-up/schedule"
+            element={
+              <Layout>
+                <ScheduleMeetUp />
               </Layout>
             }
           />

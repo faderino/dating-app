@@ -28,13 +28,11 @@ const DeletePhotoBtn = styled.div`
   cursor: pointer;
 `;
 
-const StyledInput = styled.div<Pick<PhotoInputProps, 'error' | 'preview'>>`
+const StyledInput = styled.div<PhotoInputProps>`
   ${(props) => css`
     aspect-ratio: 2/3;
-    border: ${props.preview
-      ? 'none'
-      : `2px dashed ${props.error ? colors.red50 : colors.gray20}`};
-    color: ${props.error ? colors.red50 : colors.gray30};
+    border: ${props.preview ? 'none' : `2px dashed ${colors.gray20}`};
+    color: ${colors.gray30};
     border-radius: 0.6rem;
     overflow: hidden;
     background-color: ${props.preview ? 'transparent' : colors.gray10};
@@ -69,28 +67,16 @@ const FileInput = styled.input`
   }
 `;
 
-const ErrorText = styled.p`
-  color: ${colors.red50};
-  font-style: italic;
-  font-size: 0.9rem;
-`;
-
 type PhotoInputProps = {
   preview?: string;
   value?: any;
   name?: string;
-  error?: string;
-  prepend?: React.ReactNode;
-  append?: React.ReactNode;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
   className?: string;
   deleteFile?: () => void;
 };
 
 const PhotoInput: React.FC<PhotoInputProps> = ({
-  prepend,
-  append,
-  error,
   preview,
   className,
   deleteFile,
@@ -115,8 +101,7 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
           <MdAddCircle color={colors.primary} size={28} />
         </Label>
       )}
-      <StyledInput error={error} preview={preview}>
-        {prepend}
+      <StyledInput preview={preview}>
         <FileInput
           id={inputId}
           type="file"
@@ -125,9 +110,7 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
           disabled={Boolean(preview)}
           {...props}
         />
-        {append}
       </StyledInput>
-      {error && <ErrorText>{error}</ErrorText>}
     </Container>
   );
 };
