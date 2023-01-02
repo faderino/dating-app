@@ -13,6 +13,7 @@ import Gifts from './pages/Gifts';
 import BuyGift from './pages/BuyGift';
 import GiftBag from './pages/GiftBag';
 import ScheduleMeetUp from './pages/ScheduleMeetUp/ScheduleMeetUp';
+import MeetUp from './pages/MeetUp';
 
 function App(): JSX.Element {
   return (
@@ -89,6 +90,14 @@ function App(): JSX.Element {
             element={
               <Layout>
                 <ScheduleMeetUp />
+              </Layout>
+            }
+          />
+          <Route
+            path="meet-up"
+            element={
+              <Layout>
+                <MeetUp />
               </Layout>
             }
           />
