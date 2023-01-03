@@ -17,6 +17,7 @@ import MeetUp from './pages/MeetUp';
 import AdminLayout from './pages/AdminPanel/Layout';
 import AdminPanel from './pages/AdminPanel';
 import VenueVouchersPage from './pages/AdminPanel/VenueVouchersPage';
+import LoginAdmin from './pages/AdminPanel/LoginAdmin/LoginAdmin';
 
 function App(): JSX.Element {
   return (
@@ -111,6 +112,7 @@ function App(): JSX.Element {
           }
         />
       </Route>
+      <Route path="/login-admin" element={<LoginAdmin />} />
       <Route
         path="/admin"
         element={<AuthorizeRoleRoute allowedRole={RoleID.Admin} />}
