@@ -130,7 +130,8 @@ const ScheduleMeetUp: React.FC = () => {
   const navigate = useNavigate();
   const profile = useAppSelector(selectProfile);
   const [page, setPage] = useState(1);
-  const { data: matches } = useGetMatchesQuery();
+  const [matchesPage, setMatchesPage] = useState(1);
+  const { data: matches } = useGetMatchesQuery(matchesPage);
   const [getVenueList, { data: venues }] = useLazyGetVenueListQuery();
   const [setMeetUpScheduleMutation, { isLoading }] =
     useSetMeetUpScheduleMutation();
@@ -188,6 +189,10 @@ const ScheduleMeetUp: React.FC = () => {
 
   const changePage = (p: number) => {
     setPage(p);
+  };
+
+  const changeMatchPage = (p: number) => {
+    setMatchesPage(p);
   };
 
   const onSelectMatch = (match: Profile) => {
@@ -393,13 +398,22 @@ const ScheduleMeetUp: React.FC = () => {
           </VenueListContainer>
         </VenueSection>
       </PageContent>
-      <SelectRecipientModal
-        show={showModal}
-        closeModal={closeModal}
-        matches={matches?.data}
-        selectedRecipient={selectedMatch}
-        onSelectRecipient={onSelectMatch}
-      />
+      {matches ? (
+        <SelectRecipientModal
+          show={showModal}
+          closeModal={closeModal}
+          matches={matches?.data}
+          selectedRecipient={selectedMatch}
+          onSelectRecipient={onSelectMatch}
+          changePage={changeMatchPage}
+          pageData={{
+            page: matches.page,
+            count: matches.count,
+            size: matches.size,
+            total_pages: matches.total_pages,
+          }}
+        />
+      ) : null}
     </>
   );
 };

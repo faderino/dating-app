@@ -43,7 +43,8 @@ const BuyGift: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { data: giftVouchers } = useGetGiftVouchersQuery();
-  const { data: matches } = useGetMatchesQuery();
+  const [matchPage, setMatchPage] = useState(1);
+  const { data: matches } = useGetMatchesQuery(matchPage);
   const giftBagRecipient = useAppSelector(selectGiftRecipient);
   const { closeModal, openModal, showModal } = useModal();
   const [loading, setLoading] = useState(false);
@@ -72,6 +73,10 @@ const BuyGift: React.FC = () => {
       );
     }
   }, [giftVouchers]);
+
+  const changeMatchPage = (p: number) => {
+    setMatchPage(p);
+  };
 
   const handleChange: React.ChangeEventHandler<HTMLSelectElement> = (e) => {
     setSelectedVoucher(
@@ -200,13 +205,22 @@ const BuyGift: React.FC = () => {
           </Container>
         </Form>
       </PageContent>
-      <SelectRecipientModal
-        show={showModal}
-        closeModal={closeModal}
-        matches={matches?.data}
-        selectedRecipient={selectedRecipient}
-        onSelectRecipient={onSelectRecipient}
-      />
+      {matches ? (
+        <SelectRecipientModal
+          show={showModal}
+          closeModal={closeModal}
+          matches={matches?.data}
+          selectedRecipient={selectedRecipient}
+          onSelectRecipient={onSelectRecipient}
+          changePage={changeMatchPage}
+          pageData={{
+            page: matches.page,
+            count: matches.count,
+            size: matches.size,
+            total_pages: matches.total_pages,
+          }}
+        />
+      ) : null}
     </>
   );
 };
