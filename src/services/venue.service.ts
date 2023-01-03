@@ -4,7 +4,7 @@ import { PaginationResponse } from '../types/pagination';
 import { baseApi } from './baseApi';
 import { VenueDiscountVoucher } from './meetup.service';
 
-type Venue = {
+export type Venue = {
   venue_id: number;
   name: string;
   address: string;
@@ -12,6 +12,14 @@ type Venue = {
   city: City;
   available: boolean;
   venue_vouchers: VenueDiscountVoucher[];
+};
+
+export type UpdateVenueRequest = {
+  venueId: number;
+  name: string;
+  address: string;
+  city_id: number;
+  available: boolean;
 };
 
 export const venueApi = baseApi.injectEndpoints({
@@ -25,7 +33,18 @@ export const venueApi = baseApi.injectEndpoints({
         response.data,
       providesTags: ['Venues'],
     }),
+    updateVenue: builder.mutation<
+      ResponseAPI<Omit<Venue, 'venue_vouchers'>>,
+      UpdateVenueRequest
+    >({
+      query: ({ venueId, ...body }) => ({
+        url: `/venues/${venueId}`,
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: ['Venues'],
+    }),
   }),
 });
 
-export const { useGetAllVenuesQuery } = venueApi;
+export const { useGetAllVenuesQuery, useUpdateVenueMutation } = venueApi;
