@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { Content } from '../../components/Layout';
 import MeetUpItem from '../../components/MeetUpItem';
+import Pagination from '../../components/Pagination';
 import useModal from '../../hooks/modal';
 import {
   Schedule,
@@ -46,10 +47,21 @@ const ScheduleListContainer = styled(Container)`
   padding-bottom: 2rem;
 `;
 
+const PaginationContainer = styled.div`
+  width: 95%;
+  max-width: 1024px;
+  margin: 0 auto 1rem auto;
+`;
+
 const MeetUp: React.FC = () => {
   const navigate = useNavigate();
-  const { data: needApprovalSchedules } = useGetMeetUpInvitationsQuery();
-  const { data: meetUpSchedules } = useGetSchedulesQuery('is=approved');
+  const [invitationPage, setInvitationPage] = useState(1);
+  const [meetupPage, setMeetupPage] = useState(1);
+  const { data: needApprovalSchedules } =
+    useGetMeetUpInvitationsQuery(invitationPage);
+  const { data: meetUpSchedules } = useGetSchedulesQuery(
+    `is=approved&page=${meetupPage}`,
+  );
   const [acceptInvitation] = useAcceptInvititationMutation();
 
   const { closeModal, openModal, showModal } = useModal();
@@ -75,6 +87,14 @@ const MeetUp: React.FC = () => {
     openModal();
   };
 
+  const changeInvitationPage = (p: number) => {
+    setInvitationPage(p);
+  };
+
+  const changeMeetupPage = (p: number) => {
+    setMeetupPage(p);
+  };
+
   return (
     <>
       <PageContent>
@@ -83,6 +103,19 @@ const MeetUp: React.FC = () => {
             <Header>
               <p>Invitation</p>
             </Header>
+            <PaginationContainer>
+              {needApprovalSchedules ? (
+                <Pagination
+                  pageData={{
+                    page: needApprovalSchedules.page,
+                    count: needApprovalSchedules.count,
+                    size: needApprovalSchedules.size,
+                    total_pages: needApprovalSchedules.total_pages,
+                  }}
+                  changePage={changeInvitationPage}
+                />
+              ) : null}
+            </PaginationContainer>
             <ScheduleListContainer>
               {needApprovalSchedules?.data.map((schedule) => {
                 return (
@@ -102,6 +135,19 @@ const MeetUp: React.FC = () => {
           <Header>
             <p>Meet Up Schedules</p>
           </Header>
+          <PaginationContainer>
+            {meetUpSchedules ? (
+              <Pagination
+                pageData={{
+                  page: meetUpSchedules.page,
+                  count: meetUpSchedules.count,
+                  size: meetUpSchedules.size,
+                  total_pages: meetUpSchedules.total_pages,
+                }}
+                changePage={changeMeetupPage}
+              />
+            ) : null}
+          </PaginationContainer>
           <ScheduleListContainer>
             {meetUpSchedules?.data.map((schedule) => {
               const dateTime = moment(

@@ -92,9 +92,9 @@ export const meetUpApi = baseApi.injectEndpoints({
         response.data,
       providesTags: ['Schedules'],
     }),
-    getMeetUpInvitations: builder.query<GetSchedulesResponseData, void>({
-      query: () => ({
-        url: '/meetup-schedules/invitations',
+    getMeetUpInvitations: builder.query<GetSchedulesResponseData, number>({
+      query: (page) => ({
+        url: `/meetup-schedules/invitations?page=${page}`,
         method: 'GET',
       }),
       transformResponse: (response: ResponseAPI<GetSchedulesResponseData>) =>
