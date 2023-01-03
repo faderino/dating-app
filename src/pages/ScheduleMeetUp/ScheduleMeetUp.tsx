@@ -34,6 +34,7 @@ import { selectProfile } from '../../store/profile/profileSlice';
 import { useAppSelector } from '../../hooks/store';
 import { toast } from 'react-toastify';
 import Spinner from '../../components/Spinner/Spinner';
+import Pagination from '../../components/Pagination';
 
 const PageContent = styled(Content)`
   @media screen and (min-width: 896px) {
@@ -115,6 +116,12 @@ const VenueListContainer = styled.div`
   gap: 1rem 2rem;
 `;
 
+const PaginationContainer = styled.div`
+  margin: 0 auto;
+  width: 90%;
+  margin-bottom: 1rem;
+`;
+
 const hours = [...Array(24)].map((_, n) => n.toString().padStart(2, '0'));
 const minutes = [...Array(60)].map((_, n) => n.toString().padStart(2, '0'));
 
@@ -122,6 +129,7 @@ const ScheduleMeetUp: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const profile = useAppSelector(selectProfile);
+  const [page, setPage] = useState(1);
   const { data: matches } = useGetMatchesQuery();
   const [getVenueList, { data: venues }] = useLazyGetVenueListQuery();
   const [setMeetUpScheduleMutation, { isLoading }] =
@@ -167,15 +175,20 @@ const ScheduleMeetUp: React.FC = () => {
       const matchId = matches.data.find(
         (match) => match.liked_user_id === selectedMatch?.profile_id,
       )?.like_id;
-      getVenueList(matchId!);
+      const req = { matchId: matchId!, page: page };
+      getVenueList(req);
     }
-  }, [selectedMatch, matches]);
+  }, [selectedMatch, matches, page]);
 
   useEffect(() => {
     if (errors.venue) {
       toast.error(errors.venue, { theme: 'colored' });
     }
   }, [errors.venue]);
+
+  const changePage = (p: number) => {
+    setPage(p);
+  };
 
   const onSelectMatch = (match: Profile) => {
     setSelectedMatch(match);
@@ -351,6 +364,19 @@ const ScheduleMeetUp: React.FC = () => {
           <Header mb={2}>
             <p>Select Venues</p>
           </Header>
+          <PaginationContainer>
+            {venues ? (
+              <Pagination
+                pageData={{
+                  page: venues.page,
+                  size: venues.size,
+                  count: venues.count,
+                  total_pages: venues.total_pages,
+                }}
+                changePage={changePage}
+              />
+            ) : null}
+          </PaginationContainer>
           <VenueListContainer>
             {venues?.data.map((venue) => (
               <VenueCard

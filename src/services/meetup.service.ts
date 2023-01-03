@@ -61,9 +61,12 @@ export type ClaimVenueDiscountRequest = {
 
 export const meetUpApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getVenueList: builder.query<PaginationResponse<Venue>, number>({
-      query: (matchId) => ({
-        url: `/meetup-venues/${matchId}`,
+    getVenueList: builder.query<
+      PaginationResponse<Venue>,
+      { matchId: number; page: number }
+    >({
+      query: ({ matchId, page }) => ({
+        url: `/meetup-venues/${matchId}?page=${page}`,
         method: 'GET',
       }),
       transformResponse: (response: ResponseAPI<PaginationResponse<Venue>>) =>
