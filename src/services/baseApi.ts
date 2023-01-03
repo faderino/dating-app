@@ -23,5 +23,6 @@ export const baseApi = createApi({
     'Gifts',
     'Schedules',
     'Discounts',
+    'Venues',
   ],
 });

@@ -32,4 +32,5 @@ export default {
   green40: '#17af70',
   green50: '#129e68',
   green60: '#0b7d58',
+  blue: '#166efb',
 };
