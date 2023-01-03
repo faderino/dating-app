@@ -50,9 +50,9 @@ export const giftsApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['Gifts'],
     }),
-    getGifts: builder.query<PaginationResponse<Gift>, void>({
-      query: () => ({
-        url: '/gifts',
+    getGifts: builder.query<PaginationResponse<Gift>, number>({
+      query: (page) => ({
+        url: `/gifts?page=${page}`,
         method: 'GET',
       }),
       providesTags: ['Gifts'],

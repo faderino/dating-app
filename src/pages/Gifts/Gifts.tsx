@@ -6,6 +6,7 @@ import GiftCard from '../../components/GiftCard';
 import GiftItem from '../../components/GiftItem';
 import { Content } from '../../components/Layout';
 import MyGiftModal from '../../components/MyGiftModal/MyGiftModal';
+import Pagination from '../../components/Pagination';
 import useModal from '../../hooks/modal';
 import {
   GiftVoucherType,
@@ -68,10 +69,17 @@ const MyGiftsContainer = styled(Container)`
   padding-bottom: 2rem;
 `;
 
+const PaginationContainer = styled.div`
+  width: 95%;
+  max-width: 1024px;
+  margin: 0 auto 1rem auto;
+`;
+
 const Gifts: React.FC = () => {
   const navigate = useNavigate();
   const { data: giftVouchers } = useGetGiftVouchersQuery();
-  const { data: gifts } = useGetGiftsQuery();
+  const [page, setPage] = useState(1);
+  const { data: gifts } = useGetGiftsQuery(page);
   const { closeModal, openModal, showModal } = useModal();
   const [selectedGiftId, setSelectedGiftId] = useState<number>();
 
@@ -82,6 +90,10 @@ const Gifts: React.FC = () => {
   const handleClick = (giftId: number) => {
     setSelectedGiftId(giftId);
     openModal();
+  };
+
+  const changePage = (p: number) => {
+    setPage(p);
   };
 
   return (
@@ -105,6 +117,19 @@ const Gifts: React.FC = () => {
         <MyGiftsHeader>
           <p>My Gifts</p>
         </MyGiftsHeader>
+        <PaginationContainer>
+          {gifts ? (
+            <Pagination
+              pageData={{
+                page: gifts.page,
+                count: gifts.count,
+                size: gifts.size,
+                total_pages: gifts.total_pages,
+              }}
+              changePage={changePage}
+            />
+          ) : null}
+        </PaginationContainer>
         <MyGiftsContainer>
           {gifts?.data.map((gift) => (
             <GiftItem
