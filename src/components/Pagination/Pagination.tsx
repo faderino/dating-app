@@ -7,6 +7,7 @@ import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
 export const Container = styled.div`
   display: flex;
   align-items: center;
+  justify-content: end;
   gap: 0.25rem;
 `;
 
@@ -18,14 +19,14 @@ const PaginationButton = styled.button<{ active?: boolean }>`
   color: ${colors.text};
   cursor: pointer;
   :hover {
-    background-color: ${colors.gray10};
-    color: ${colors.text};
+    background-color: ${colors.text};
+    color: ${colors.white};
   }
   ${({ active }) =>
     active &&
     css`
-      background-color: ${colors.gray10};
-      color: ${colors.text};
+      background-color: ${colors.text};
+      color: ${colors.white};
     `}
 `;
 
@@ -54,7 +55,7 @@ export const NextButton = styled(PrevNextPageButton)`
 
 export const JumpPageButton = styled(PaginationButton)`
   font-size: 0.8rem;
-  border-radius: 2px;
+  border-radius: 2.5px;
 `;
 
 export const Arrow = styled.div`

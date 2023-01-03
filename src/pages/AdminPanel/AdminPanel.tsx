@@ -3,6 +3,8 @@ import { MdSearch } from 'react-icons/md';
 import styled from 'styled-components';
 import InputField from '../../components/InputField/InputField';
 import Pagination from '../../components/Pagination';
+import Select from '../../components/Select';
+import { useGetCitiesQuery } from '../../services/cities.service';
 import { useGetAllVenuesQuery } from '../../services/venue.service';
 import colors from '../../styles/colors';
 import { debounce } from '../../utils/debounce';
@@ -63,9 +65,9 @@ const EditButton = styled(ActionButton)`
 `;
 
 const Toolbar = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+  align-items: flex-end;
   padding: 1rem 0;
   gap: 1rem;
 `;
@@ -73,13 +75,28 @@ const Toolbar = styled.div`
 const SearchContainer = styled.div`
   div {
     margin: 0;
+    label {
+      margin: 0.25rem;
+    }
+  }
+`;
+
+const FilterCityContainer = styled.div`
+  div {
+    margin: 0;
+    label {
+      margin: 0.25rem;
+    }
   }
 `;
 
 const AdminPanel: React.FC = () => {
+  const { data: cities } = useGetCitiesQuery();
   const [query, setQuery] = useState<{ [key: string]: any }>({});
   const [queryString, setQueryString] = useState('');
   const { data: venues } = useGetAllVenuesQuery(queryString);
+
+  const options = [{ text: 'All', value: '' }];
 
   const [search, setSearch] = useState('');
 
@@ -106,11 +123,48 @@ const AdminPanel: React.FC = () => {
       <Toolbar>
         <SearchContainer>
           <InputField
-            placeholder="Search by name..."
+            label="Search by name"
+            placeholder="Search..."
             prepend={<MdSearch size={28} />}
             onChange={(e) => setSearch(e.target.value)}
           />
         </SearchContainer>
+        <FilterCityContainer>
+          {cities ? (
+            <Select
+              label="Filter city"
+              placeholder="Filter City"
+              options={[
+                ...options,
+                ...cities.map((city) => {
+                  return {
+                    value: city.city_id,
+                    text: city.name,
+                  };
+                }),
+              ]}
+              onChange={(e) => setQuery({ ...query, city: e.target.value })}
+            />
+          ) : null}
+        </FilterCityContainer>
+        <FilterCityContainer>
+          <Select
+            label="Sort"
+            placeholder="Sort venues"
+            options={[
+              { value: 'asc', text: 'Oldest' },
+              { value: 'desc', text: 'Newest' },
+            ]}
+            onChange={(e) =>
+              setQuery({
+                ...query,
+                sortBy: 'created_at',
+                sortDir: e.target.value,
+              })
+            }
+          />
+        </FilterCityContainer>
+        <div />
         {venues ? (
           <Pagination
             pageData={{
