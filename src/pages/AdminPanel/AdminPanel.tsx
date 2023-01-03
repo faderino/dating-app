@@ -96,8 +96,6 @@ const AdminPanel: React.FC = () => {
   const [queryString, setQueryString] = useState('');
   const { data: venues } = useGetAllVenuesQuery(queryString);
 
-  const options = [{ text: 'All', value: '' }];
-
   const [search, setSearch] = useState('');
 
   useEffect(() => {
@@ -126,7 +124,10 @@ const AdminPanel: React.FC = () => {
             label="Search by name"
             placeholder="Search..."
             prepend={<MdSearch size={28} />}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => {
+              setQuery({ ...query, page: 1 });
+              setSearch(e.target.value);
+            }}
           />
         </SearchContainer>
         <FilterCityContainer>
@@ -135,7 +136,7 @@ const AdminPanel: React.FC = () => {
               label="Filter city"
               placeholder="Filter City"
               options={[
-                ...options,
+                { text: 'All', value: '' },
                 ...cities.map((city) => {
                   return {
                     value: city.city_id,
@@ -143,7 +144,9 @@ const AdminPanel: React.FC = () => {
                   };
                 }),
               ]}
-              onChange={(e) => setQuery({ ...query, city: e.target.value })}
+              onChange={(e) =>
+                setQuery({ ...query, page: 1, city: e.target.value })
+              }
             />
           ) : null}
         </FilterCityContainer>
@@ -158,6 +161,7 @@ const AdminPanel: React.FC = () => {
             onChange={(e) =>
               setQuery({
                 ...query,
+                page: 1,
                 sortBy: 'created_at',
                 sortDir: e.target.value,
               })
