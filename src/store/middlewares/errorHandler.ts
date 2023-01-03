@@ -10,7 +10,6 @@ export const handleUnauthorized: Middleware =
       isRejectedWithValue(action) &&
       action.payload.status === HttpStatusCode.Unauthorized
     ) {
-      console.log(action);
       if (action.meta.arg.endpointName === 'login') {
         return next(action);
       }

@@ -4,15 +4,13 @@ import styled from 'styled-components';
 import InputField from '../../../components/InputField/InputField';
 import { ModalProps } from '../../../components/Modal';
 import Modal, { CloseModalBtn } from '../../../components/Modal/Modal';
-import Select from '../../../components/Select';
 import Spinner from '../../../components/Spinner/Spinner';
+import { VenueDiscountVoucher } from '../../../services/meetup.service';
 import {
-  UpdateVenueRequest,
-  useUpdateVenueMutation,
-  Venue,
+  UpdateVenueVoucherRequest,
+  useUpdateVenueVoucherMutation,
 } from '../../../services/venue.service';
 import colors from '../../../styles/colors';
-import { City } from '../../../types/location';
 import { SaveButton } from '../../EditProfile/style';
 
 const StyledModal = styled(Modal)`
@@ -41,49 +39,41 @@ const FormContainer = styled.form`
 `;
 
 type Props = ModalProps & {
-  venue?: Venue;
-  cities: City[];
+  voucher?: VenueDiscountVoucher;
 };
 
-const EditVenueModal: React.FC<Props> = ({
+const EditVenueVoucherModal: React.FC<Props> = ({
   show,
   closeModal,
-  venue,
-  cities,
+  voucher,
 }) => {
-  const [updateVenue, { isLoading }] = useUpdateVenueMutation();
+  const [updateVenueVoucher, { isLoading }] = useUpdateVenueVoucherMutation();
   const [editData, setEditData] = useState({
-    name: '',
-    address: '',
-    city_id: 0,
-    available: 0,
+    discount_amount: 0,
+    quota: 0,
   });
   const [errors, setErrors] = useState({} as Record<string, string>);
 
   useEffect(() => {
-    if (venue) {
+    if (voucher) {
       setEditData({
-        name: venue.name,
-        address: venue.address,
-        city_id: venue.city_id,
-        available: venue.available ? 1 : 0,
+        discount_amount: voucher.discount_amount,
+        quota: voucher.quota,
       });
     }
-  }, [venue]);
+  }, [voucher]);
 
   const validateForm = (): boolean => {
     setErrors({
-      name: '',
-      address: '',
-      city_id: '',
-      available: '',
+      discount_amount: '',
+      quota: '',
     });
     const currentErrors = {} as typeof errors;
-    if (!editData.name) {
-      currentErrors.name = 'Enter venue name';
+    if (!editData.discount_amount) {
+      currentErrors.discount_amount = 'Enter discount amount';
     }
-    if (!editData.address) {
-      currentErrors.address = 'Enter venue address';
+    if (!editData.quota) {
+      currentErrors.quota = 'Enter quota';
     }
     setErrors(currentErrors);
     return Boolean(Object.keys(currentErrors).length === 0);
@@ -93,15 +83,13 @@ const EditVenueModal: React.FC<Props> = ({
     e.preventDefault();
     const valid = validateForm();
     if (!valid) return;
-    const updateVenueRequest: UpdateVenueRequest = {
-      venueId: venue!.venue_id,
-      name: editData.name,
-      address: editData.address,
-      city_id: editData.city_id,
-      available: editData.available === 1 ? true : false,
+    const updateVenueVoucherRequest: UpdateVenueVoucherRequest = {
+      venueVoucherId: voucher!.venue_voucher_id,
+      discount_amount: +editData.discount_amount,
+      quota: +editData.quota,
     };
     try {
-      const resp = await updateVenue(updateVenueRequest).unwrap();
+      const resp = await updateVenueVoucher(updateVenueVoucherRequest).unwrap();
       toast('✅ ' + resp.message);
       closeModal();
     } catch (error: any) {
@@ -122,51 +110,21 @@ const EditVenueModal: React.FC<Props> = ({
       </Header>
       <FormContainer onSubmit={handleSubmit}>
         <InputField
-          label="Venue name"
-          placeholder="Venue name"
-          type="text"
-          name="name"
-          value={editData.name}
-          error={errors.name}
+          label="Discount amount"
+          placeholder="Discount amount"
+          type="number"
+          name="discount_amount"
+          value={editData.discount_amount}
+          error={errors.discount_amount}
           onChange={handleChange}
         />
         <InputField
-          label="Address"
-          placeholder="Address"
-          type="text"
-          name="name"
-          value={editData.address}
-          error={errors.address}
-          onChange={handleChange}
-        />
-        <Select
-          options={cities.map((city) => ({
-            value: city.city_id,
-            text: city.name,
-          }))}
-          label="Select City"
-          name="city_id"
-          placeholder="Select city..."
-          value={editData.city_id}
-          error={errors.city_id}
-          onChange={handleChange}
-        />
-        <Select
-          options={[
-            {
-              value: 1,
-              text: 'Available',
-            },
-            {
-              value: 0,
-              text: 'Unavailable',
-            },
-          ]}
-          label="Set availability"
-          name="available"
-          placeholder="Set availability."
-          value={editData.available}
-          error={errors.available}
+          label="Quota"
+          placeholder="Quota"
+          type="number"
+          name="quota"
+          value={editData.quota}
+          error={errors.quota}
           onChange={handleChange}
         />
         <SaveButton block type="submit">
@@ -177,4 +135,4 @@ const EditVenueModal: React.FC<Props> = ({
   );
 };
 
-export default EditVenueModal;
+export default EditVenueVoucherModal;
