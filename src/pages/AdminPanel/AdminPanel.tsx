@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { MdSearch } from 'react-icons/md';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import InputField from '../../components/InputField/InputField';
 import Pagination from '../../components/Pagination';
@@ -16,18 +17,18 @@ import Table from './components/Table';
 import { TableRow, TableRowData } from './components/Table/style';
 import EditVenueModal from './EditVenueModal';
 
-const PageContent = styled.div`
+export const PageContent = styled.div`
   max-width: 1024px;
   margin: 0 auto;
   width: 90%;
   padding: 2rem 0;
 `;
 
-const TableWrapper = styled.div`
+export const TableWrapper = styled.div`
   margin-bottom: 2rem;
 `;
 
-const VenueVoucherRow = styled.div`
+export const VenueVoucherRow = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -40,34 +41,34 @@ const VenueVoucherRow = styled.div`
   }
 `;
 
-const ShowVouchersButton = styled(Chip)`
+export const ShowVouchersButton = styled(Chip)`
   cursor: pointer;
   background-color: ${colors.text};
   color: ${colors.white};
 `;
 
-const ActionButtons = styled.div`
+export const ActionButtons = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
   justify-content: end;
 `;
 
-const ActionButton = styled.button`
+export const ActionButton = styled.button`
   border: none;
   border-radius: 0.25rem;
   padding: 0.6rem 1.2rem;
   cursor: pointer;
 `;
 
-const EditButton = styled(ActionButton)`
+export const EditButton = styled(ActionButton)`
   background-color: ${colors.blue};
   color: ${colors.white};
   font-size: 0.85rem;
   font-weight: 700;
 `;
 
-const Toolbar = styled.div`
+export const Toolbar = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
   align-items: flex-end;
@@ -75,7 +76,7 @@ const Toolbar = styled.div`
   gap: 1rem;
 `;
 
-const SearchContainer = styled.div`
+export const SearchContainer = styled.div`
   div {
     margin: 0;
     label {
@@ -84,7 +85,7 @@ const SearchContainer = styled.div`
   }
 `;
 
-const FilterCityContainer = styled.div`
+export const FilterCityContainer = styled.div`
   div {
     margin: 0;
     label {
@@ -94,6 +95,7 @@ const FilterCityContainer = styled.div`
 `;
 
 const AdminPanel: React.FC = () => {
+  const navigate = useNavigate();
   const { data: cities } = useGetCitiesQuery();
   const [query, setQuery] = useState<{ [key: string]: any }>({});
   const [queryString, setQueryString] = useState('');
@@ -222,7 +224,13 @@ const AdminPanel: React.FC = () => {
                     {venue.venue_vouchers.length > 0 ? (
                       <p>{venue.venue_vouchers.length}x</p>
                     ) : null}
-                    <ShowVouchersButton>SHOW</ShowVouchersButton>
+                    <ShowVouchersButton
+                      onClick={() =>
+                        navigate(`/admin/venues/${venue.venue_id}/vouchers`)
+                      }
+                    >
+                      SHOW
+                    </ShowVouchersButton>
                   </VenueVoucherRow>
                 </TableRowData>
                 <TableRowData>

@@ -22,6 +22,12 @@ export type UpdateVenueRequest = {
   available: boolean;
 };
 
+export type UpdateVenueVoucherRequest = {
+  venueVoucherId: number;
+  discount_amount: number;
+  quota: number;
+};
+
 export const venueApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllVenues: builder.query<PaginationResponse<Venue>, string>({
@@ -44,7 +50,32 @@ export const venueApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['Venues'],
     }),
+    getVenueVouchers: builder.query<VenueDiscountVoucher[], number>({
+      query: (venueId) => ({
+        url: `/venue-vouchers/${venueId}`,
+        method: 'GET',
+      }),
+      transformResponse: (response: ResponseAPI<VenueDiscountVoucher[]>) =>
+        response.data,
+      providesTags: ['VenueVouchers'],
+    }),
+    updateVenueVoucher: builder.mutation<
+      ResponseAPI<VenueDiscountVoucher>,
+      UpdateVenueVoucherRequest
+    >({
+      query: ({ venueVoucherId, ...body }) => ({
+        url: `/venue-vouchers/${venueVoucherId}`,
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: ['VenueVouchers'],
+    }),
   }),
 });
 
-export const { useGetAllVenuesQuery, useUpdateVenueMutation } = venueApi;
+export const {
+  useGetAllVenuesQuery,
+  useUpdateVenueMutation,
+  useGetVenueVouchersQuery,
+  useUpdateVenueVoucherMutation,
+} = venueApi;
