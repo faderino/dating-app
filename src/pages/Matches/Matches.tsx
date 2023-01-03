@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Content } from '../../components/Layout';
 import MatchCard from '../../components/MatchCard';
+import Pagination from '../../components/Pagination';
 import useModal from '../../hooks/modal';
 import { useAppSelector } from '../../hooks/store';
 import { Match, useGetMatchesQuery } from '../../services/like.service';
@@ -54,8 +55,13 @@ const MatchesContainer = styled.div`
   }
 `;
 
+const PaginationContainer = styled.div`
+  margin-bottom: 1rem;
+`;
+
 const Matches: React.FC = () => {
-  const { data: matches } = useGetMatchesQuery();
+  const [page, setPage] = useState(1);
+  const { data: matches } = useGetMatchesQuery(page);
   const profile = useAppSelector(selectProfile);
   const matchCount = matches?.data.length;
   const { closeModal, openModal, showModal } = useModal();
@@ -64,6 +70,10 @@ const Matches: React.FC = () => {
   const handleOpenModal = (match: Match) => {
     setDetailData(match.liked_user);
     openModal();
+  };
+
+  const changePage = (p: number) => {
+    setPage(p);
   };
 
   return (
@@ -76,6 +86,19 @@ const Matches: React.FC = () => {
           {!profile?.gold_profile && (
             <Ads>Upgrade to Gold to match more people.</Ads>
           )}
+          <PaginationContainer>
+            {matches ? (
+              <Pagination
+                pageData={{
+                  page: matches.page,
+                  size: matches.size,
+                  count: matches.count,
+                  total_pages: matches.total_pages,
+                }}
+                changePage={changePage}
+              />
+            ) : null}
+          </PaginationContainer>
           <MatchesContainer>
             {matches?.data.map((match) => (
               <MatchCard

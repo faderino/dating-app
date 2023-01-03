@@ -5,6 +5,7 @@ import MatchCard from '../../components/MatchCard';
 import { Match } from '../../services/like.service';
 import colors from '../../styles/colors';
 import { Profile } from '../../types/profile';
+import Pagination, { PageData } from '../../components/Pagination/Pagination';
 
 const StyledModal = styled(Modal)`
   ${CloseModalBtn} {
@@ -65,10 +66,16 @@ const StyledMatchCard = styled(MatchCard)<{ active?: boolean }>`
     `}
 `;
 
+const PaginationContainer = styled.div`
+  margin-bottom: 1rem;
+`;
+
 type Props = ModalProps & {
   matches?: Match[];
   selectedRecipient?: Profile;
   onSelectRecipient: (recipient: Profile) => void;
+  changePage?: (p: number) => void;
+  pageData?: PageData;
 };
 
 const SelectRecipientModal: React.FC<Props> = ({
@@ -77,6 +84,8 @@ const SelectRecipientModal: React.FC<Props> = ({
   matches,
   selectedRecipient,
   onSelectRecipient,
+  changePage,
+  pageData,
 }) => {
   const matchCount = matches?.length;
 
@@ -86,6 +95,11 @@ const SelectRecipientModal: React.FC<Props> = ({
       <Header>
         <p>{matchCount} Matches</p>
       </Header>
+      <PaginationContainer>
+        {matches ? (
+          <Pagination pageData={pageData!} changePage={changePage!} />
+        ) : null}
+      </PaginationContainer>
       <MatchesContainer>
         {matches?.map((match) => (
           <StyledMatchCard

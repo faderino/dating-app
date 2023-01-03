@@ -34,9 +34,9 @@ export const likesApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['Recommendations'],
     }),
-    getMatches: builder.query<PaginationResponse<Match>, void>({
-      query: () => ({
-        url: '/matches',
+    getMatches: builder.query<PaginationResponse<Match>, number>({
+      query: (page) => ({
+        url: `/matches?${page}`,
         method: 'GET',
       }),
       transformResponse: (response: MatchesResponse) => response.data,
