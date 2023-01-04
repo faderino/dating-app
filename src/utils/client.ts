@@ -1,7 +1,7 @@
 import axios, {
   AxiosError,
   AxiosRequestConfig,
-  AxiosRequestHeaders,
+  RawAxiosRequestHeaders,
 } from 'axios';
 import { ResponseAPI } from '../types/api';
 import { HttpStatusCode } from '../types/httpStatus';
@@ -13,7 +13,8 @@ const axiosClient = axios.create({
 type ClientConfig = {
   body?: any;
   token?: string;
-  headers?: AxiosRequestHeaders;
+  method?: 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE';
+  headers?: RawAxiosRequestHeaders;
 };
 
 type ClientFn = <T = any>(
@@ -21,8 +22,11 @@ type ClientFn = <T = any>(
   clientConfig?: ClientConfig,
 ) => Promise<ResponseAPI<T>>;
 
-const client: ClientFn = async (endpoint, { body, ...customConfig } = {}) => {
-  const headers = {} as AxiosRequestHeaders;
+const client: ClientFn = async (
+  endpoint,
+  { body: data, ...customConfig } = {},
+) => {
+  const headers = {} as RawAxiosRequestHeaders;
 
   if (customConfig.token) {
     headers.Authorization = `Bearer ${customConfig.token}`;
@@ -30,7 +34,7 @@ const client: ClientFn = async (endpoint, { body, ...customConfig } = {}) => {
 
   const config: AxiosRequestConfig = {
     url: endpoint,
-    method: body ? 'POST' : 'GET',
+    method: data ? 'POST' : 'GET',
     ...customConfig,
     headers: {
       ...headers,
@@ -39,7 +43,7 @@ const client: ClientFn = async (endpoint, { body, ...customConfig } = {}) => {
   };
 
   return axiosClient(config)
-    .then((resp) => resp.data as ResponseAPI)
+    .then((resp) => resp.data)
     .catch((error: AxiosError) => {
       if (error.response?.status === HttpStatusCode.Unauthorized) {
         window.location.reload();
