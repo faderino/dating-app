@@ -66,6 +66,7 @@ Unlimited likes and Spotlight with DigidateGold Profile.
 - [Typescript](https://www.typescriptlang.org/) – language
 - [Styled-components](https://styled-components.com/) – styling
 - [Redux](https://redux-toolkit.js.org/) – state management
+- [Framer motion](https://www.framer.com/motion/) - swipe animation
 
 ### Backend
 
