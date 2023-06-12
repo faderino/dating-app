@@ -1,6 +1,6 @@
-<a href="https://dating-app-smoky.vercel.app">
-  <h1 align="center">Digidate</h1>
-</a>
+<h1 align="center">
+    <a href="https://dating-app-smoky.vercel.app">Digidate</a>
+</h1>
 
 <p align="center">
   <a href="#introduction"><strong>Introduction</strong></a> ·
