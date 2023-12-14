@@ -71,6 +71,6 @@ Unlimited likes and Spotlight with DigidateGold Profile.
 ### Backend
 
 - [Go](https://go.dev/) – language
-- [Gin](https://gin-gonic.com/) – http server
+- [Gin](https://gin-gonic.com/) – web server framework
 - [GORM](https://gorm.io/) – orm
 - [PostgreSQL](https://www.postgresql.org/) – database
