@@ -26,37 +26,37 @@ Here are some of the features:
 
 Swipe right (or right arrow) to like, swipe left (or left arrow) to skip.
 
-![swipe](swipe.png)
+![swipe](/screenshot/swipe.png)
 
 Match.
 
-![match](match.png)
+![match](/screenshot/match.png)
 
 ### Gifts
 
 Send and receive gifts to and from your matches.
 
-![gifts](gifts.png)
+![gifts](/screenshot/gifts.png)
 
 ### Meetup
 
 Arrange a meetup in nearby location with your matches.
 
-![meetup1](meetup1.png)
+![meetup1](/screenshot/meetup1.png)
 
 ### Profile Management
 
 Register.
 
-![register1](register1.png) ![register2](register2.png) ![register3](register3.png) ![register4](register4.png)
+![register1](/screenshot/register1.png) ![register2](/screenshot/register2.png) ![register3](/screenshot/register3.png) ![register4](/screenshot/register4.png)
 
 Add photo & caption.
 
-![photo](photo.png)
+![photo](/screenshot/photo.png)
 
 Unlimited likes and Spotlight with DigidateGold Profile.
 
-![goldprofile](goldprofile.png)
+![goldprofile](/screenshot/goldprofile.png)
 
 ## Tech Stack
 
